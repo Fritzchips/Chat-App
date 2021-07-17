@@ -1,7 +1,10 @@
 import React from 'react';
 import ChannelNavBar from './ChannelNavBar';
-import MessageScreen from './MessageScreen';
+import CodingChannel from './CodingChannel';
 import Container from 'react-bootstrap/Container';
+import { Route, Switch } from 'react-router-dom';
+import RandomChannel from './RandomChannel';
+import GeneralChannel from './GeneralChannel';
 
 
 
@@ -16,8 +19,12 @@ const MainScreen = () => {
                     <ChannelNavBar />
                 </span>
 
-                <span style={{width: "100%"}}>
-                    <MessageScreen />
+                <span style={{ width: "100%" }}>
+                    <Switch>
+                        <Route exact path="/" component={GeneralChannel} />
+                        <Route exact path="/random" component={RandomChannel} />
+                        <Route exact path="/coding" component={CodingChannel} />
+                    </Switch>
                 </span>
             </span>
         </Container>
