@@ -3,6 +3,7 @@ import './App.css';
 import LoginPage from './components/LoginPage';
 import MainScreen from './components/MainScreen';
 
+
 function App() {
     const [loggedIn, setLoggedIn] = useState(false);
 
@@ -19,8 +20,8 @@ function App() {
 
   return (
     <div className="App">
-          <h1>Hey there Welcome to the start of awesomeness</h1>
-          {loggedIn ? (<MainScreen  />) : (<LoginPage />)}
+          {loggedIn ? (<MainScreen />) : (<LoginPage />)}
+          <br></br>
           <button onClick={ loginHandler}>Change Screen</button>
     </div>
   );

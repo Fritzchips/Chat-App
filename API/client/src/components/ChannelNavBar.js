@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-import CodingChannel from './CodingChannel';
-import GeneralChannel from './GeneralChannel';
-import RandomChannel from './RandomChannel';
+import Container from 'react-bootstrap/Container';
 
 
 const ChannelNavBar = () => {
@@ -13,18 +11,23 @@ const ChannelNavBar = () => {
         setCurrentChannel(e.target.value);
     }
 
-     //make the words into links
+    //make the words into links
     return (
-        <div>
-            <button>Drop Down</button>
-            <button onClick={channelHandler} value="general">General</button>
-            <button onClick={channelHandler} value="random">Random</button>
-            <button onClick={channelHandler} value="coding">Coding</button>
-
-            {currentChannel === 'coding' ? (<CodingChannel />) : currentChannel === 'random' ? (<RandomChannel />) : (<GeneralChannel />)}
-
-        </div>
-    );
+        <>
+            <Container>
+                <h1>Channels</h1>
+                <div>
+                    <div><button onClick={channelHandler}  value="general">General</button></div>
+                    <div><button onClick={channelHandler} value="random">Random</button></div>
+                    <div> <button onClick={channelHandler} value="coding">Coding</button></div>
+                </div>
+                <br></br>
+                <div><h1>Users</h1></div>
+                <div>Hello</div>
+            </Container>
+        </>
+        )
 }
+
 
 export default ChannelNavBar;
