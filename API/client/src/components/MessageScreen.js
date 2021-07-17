@@ -9,7 +9,7 @@ const MessageScreen = () => {
 
         <Container className="d-flex flex-column " style={{minHeight: "100%"}} >
             <div style={{ width: "100%", height: "80vh",  border: "3px solid black", borderRadius: "5px" }}>
-                <div style={{backgroundColor: "grey"}}><strong>Welcome to this channel</strong></div>
+                <div style={{backgroundColor: "grey", padding: "10px", fontSize: "25px"}}><strong>Welcome to this channel</strong></div>
                 <br></br>
                 <div style={{textAlign: "start"}}>
                     <p>Fritz</p>

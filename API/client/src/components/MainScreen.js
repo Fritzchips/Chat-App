@@ -16,7 +16,7 @@ const MainScreen = () => {
                     <ChannelNavBar />
                 </span>
 
-                <span style={{width: "100vw"}}>
+                <span style={{width: "100%"}}>
                     <MessageScreen />
                 </span>
             </span>
