@@ -8,10 +8,10 @@ namespace API.Controllers
 {
     public class CodingChannelController : BaseApiController
     {
-       [HttpGet]
+       //[HttpGet]
        //get coding channel messages
 
-       [HttpPost]
+       //[HttpPost]
        //adding messages to channel
     }
 }
