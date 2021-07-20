@@ -2,9 +2,22 @@ import React, { useState } from 'react';
 import Container from 'react-bootstrap/Container';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Button from 'react-bootstrap/Button';
+import axios from 'axios';
 
 const GeneralChannel = () => {
-    const [messages, setMessages] = useState([]);
+    const [name, setName] = useState();
+    const [password, setPassword] = useState();
+
+    const messageHandler = (e) => {
+        e.preventDefault();
+        console.log(`Your name is ${name} and password is ${password}`);
+        sendToDB(name, password);
+    }
+
+    function sendToDB(name, password) {
+        axios.get(`generalchannel/user/${name}/${password}`);
+    }
+
     return (
 
         <Container className="d-flex flex-column " style={{ minHeight: "100%" }} >
@@ -27,9 +40,11 @@ const GeneralChannel = () => {
                 {/*    />*/}
                 {/*    <Button variant="outline-secondary" id="button-addon2">Post</Button>*/}
                 {/*</InputGroup>*/}
-
-                <input type="text" required style={{ width: "80%" }} />
+                <form onSubmit={messageHandler}>
+                    <input type="text" required style={{ width: "80%" }} onChange={(e) => setName([e.target.value])} />
+                    <input type="text" required style={{ width: "80%" }} onChange={(e) => setPassword([e.target.value])} />
                 <button>Post</button>
+                </form>
             </div>
         </Container>
 

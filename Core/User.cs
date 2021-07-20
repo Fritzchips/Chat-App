@@ -6,11 +6,10 @@ using System.Threading.Tasks;
 
 namespace Core
 {
-    class User
+    public class User
     {
-        public Guid Id { get; set; }
-        public string Name { get; set; }
-        public string Password { get; set; }
-        public bool Active { get; set; }
+        public virtual int Id { get; set; }
+        public virtual string Name { get; set; }
+        public virtual string Password { get; set; }
     }
 }
