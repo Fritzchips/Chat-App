@@ -12,42 +12,37 @@ namespace API.Controllers
    
     public class GeneralChannelController : BaseApiController
     {
+        // /generalchannel
         public ActionResult Index()
-        {
-            IList<User> users;
-
-            using (ISession session = NhibernateSession.OpenSession())  
-            {
-                users = session.Query<User>().ToList(); 
-            }
-
-            return Ok("you have");
-        }
-
-        [HttpPost]
-        public ActionResult Create()
         {
             try
             {
-                User user = new User();     
-                user.Name = "scott";
-                user.Password = "cool";
-
-          
-                using (ISession session = NhibernateSession.OpenSession())
+                var person = new User()
                 {
-                    using (ITransaction transaction = session.BeginTransaction())  
-                    {
-                        session.Save(user); 
-                        transaction.Commit();   
-                    }
+                    Name = "George",
+                    Password = "Jungle"
+                    };
+
+            using (ISession session = NhibernateSession.OpenSession())  
+            {
+                using (ITransaction transaction = session.BeginTransaction())   //  Begin a transaction
+                {
+                    session.Save(person); //  Save the person in session
+                    transaction.Commit();   //  Commit the changes to the database
                 }
-                return Ok("created");
+
+            }
+
+            return Ok("completed");
             }
             catch (Exception e)
             {
-                return BadRequest(e);
+                
+                return BadRequest(e.Message);
             }
+            
         }
+
+    
     }
 }
