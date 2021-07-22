@@ -1,14 +1,26 @@
-import React from 'react';
+import React, { useState , useEffect} from 'react';
 import ChannelNavBar from './ChannelNavBar';
-import CodingChannel from './CodingChannel';
 import Container from 'react-bootstrap/Container';
-import { Route, Switch } from 'react-router-dom';
-import RandomChannel from './RandomChannel';
-import GeneralChannel from './GeneralChannel';
+import ChatScreen from './ChatScreen';
+import axios from 'axios';
 
 
 
 const MainScreen = () => {
+    const [channel, setChannel] = useState('general');
+    const [user, setUser] = useState('');
+    const [messageList, setMessageList] = useState([]);
+
+    useEffect(() => {
+        console.log(`you're in ${channel}`)
+        //getChannelMessages(channel);
+    }, [channel]);
+
+    //async function getChannelMessages(channel) {
+    // const data = await axios.get(`/api/messages/${channel}`);
+    // setMessageList([...data]);
+    //}
+
     return (
         <Container fluid className="d-flex flex-column" style={{height: "100vh"}}>
        
@@ -20,11 +32,7 @@ const MainScreen = () => {
                 </span>
 
                 <span style={{ width: "100%" }}>
-                    <Switch>
-                        <Route exact path="/" component={GeneralChannel} />
-                        <Route exact path="/random" component={RandomChannel} />
-                        <Route exact path="/coding" component={CodingChannel} />
-                    </Switch>
+                   <ChatScreen  />
                 </span>
             </span>
         </Container>

@@ -42,7 +42,21 @@ namespace API.Controllers
             }
 
         }
-    
+
+
+       
+
+        //[Route("/Name")]
+        //[Route("/Name/{id?}")]
+        //Endpoints 
+        //Actions return View or Json Data
+        //Try [Fromheader] parameter
+        //try [FromBody]
+
+        //return Json({})
+        //return content()
+
+
     }
 
    

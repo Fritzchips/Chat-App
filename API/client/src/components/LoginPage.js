@@ -1,24 +1,38 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import axios from 'axios';
 
 const LoginPage = () => {
-    const [formDisplay, setFormDisplay] = useState('signIn')
+    const [formDisplay, setFormDisplay] = useState('signIn');
+    const [name, setName] = useState('');
+    const [password, setPassword] = useState('');
 
-    const requestHandler = (e) => {
+    useEffect(() => {
+        setName('');
+        setPassword('');
+    }, [formDisplay]);
+
+    const formChangeHandler = (e) => {
         setFormDisplay(e.target.value);
-        console.log('you are', formDisplay);
-    }
+    };
 
     const guestHandler = (e) => {
         e.preventDefault();
-        console.log("you signed in as guest");
-    }
+        verifyDataWithServer('guest', 'Guest', "0000");
+    };
 
-    const formHandler = (e) => {
+    const submitHandler = (e) => {
         e.preventDefault();
-        console.log(`you ${formDisplay}`)
-    }
+        verifyDataWithServer(formDisplay, name, password);
+    };
+
+    const verifyDataWithServer = (formDisplay, name, password) => {
+        console.log(`you are ${formDisplay} with user: ${name} , password: ${password}  `);
+        //change to async
+        //await axios get("`/api/${formDisplay}/${name}/${password}`)
+        //controller will control from here
+    };
 
     return (
         <div>
@@ -26,23 +40,23 @@ const LoginPage = () => {
             <div style={{maxWidth: "80%"}}>
                 <div>
 
-                    <Form onSubmit={formHandler}>
+                    <Form onSubmit={submitHandler}>
                         <Form.Group className="mb-3" controlId="usernamel">
                             <Form.Label>User Name:</Form.Label>
-                            <Form.Control type="text" placeholder="Enter user name" required />
+                            <Form.Control type="text" placeholder="Enter user name" required value={name} onChange={(e)=> setName(e.target.value) }/>
                             <Form.Text className="text-muted"> We'll never share your email with anyone else.</Form.Text>
                         </Form.Group>
 
                         <Form.Group className="mb-3" controlId="password">
                             <Form.Label>Password:</Form.Label>
-                            <Form.Control type="password" placeholder="Password" required />
+                            <Form.Control type="password" placeholder="Password" required value={password} onChange={(e) => setPassword(e.target.value)}/>
                         </Form.Group>
                         <Button variant="primary" type="submit">{formDisplay}</Button>
                     </Form>
 
             
-                    <button onClick={requestHandler} value="Sign In">Log In</button>
-                        <button onClick={requestHandler} value="Sign Up">New User</button>
+                    <button onClick={formChangeHandler} value="Sign In">Log In</button>
+                    <button onClick={formChangeHandler} value="Sign Up">New User</button>
                  </div>
            
             
