@@ -8,10 +8,10 @@
 			NHibernate.Driver.NpgsqlDriver
 		</property>
 		<property name="connection.connection_string">
-			Server=127.0.0.1;Port=5432;Database=twinkle;User Id=postgres;Password=Marian0321;
+			Server=127.0.0.1;Port=5432;Database=twinkle_db;User Id=postgres;Password=Marian0321;
 		</property>
 		<property name="dialect">
-			NHibernate.Dialect.PostgreSQLDialect
+			NHibernate.Dialect.PostgreSQL83Dialect
 		</property>
 	</session-factory>
 </hibernate-configuration>

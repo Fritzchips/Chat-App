@@ -5,10 +5,11 @@
 				   namespace="Core">
 
 	<class name="User" table="users" lazy="true">
-		<id name="Id" column="id">
-			<generator class="native" />
+		<id name="Id" column="user_uid" type="guid">
+			<generator class="guid.comb" />
 		</id>
 		<property name="Name" column="name"/>
 		<property name="Password" column="password"/>
+		
 	</class>
 </hibernate-mapping>

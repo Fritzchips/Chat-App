@@ -21,28 +21,29 @@ namespace API.Controllers
                 {
                     Name = "George",
                     Password = "Jungle"
-                    };
+                };
 
-            using (ISession session = NhibernateSession.OpenSession())  
-            {
-                using (ITransaction transaction = session.BeginTransaction())   //  Begin a transaction
+                using (ISession session = NhibernateSession.OpenSession())
                 {
-                    session.Save(person); //  Save the person in session
-                    transaction.Commit();   //  Commit the changes to the database
+                    using (ITransaction transaction = session.BeginTransaction())   //  Begin a transaction
+                    {
+                        session.Save(person); //  Save the person in session
+                        transaction.Commit();   //  Commit the changes to the database
+                    }
+
                 }
 
-            }
-
-            return Ok("completed");
+                return Ok("completed");
             }
             catch (Exception e)
             {
-                
+
                 return BadRequest(e.Message);
             }
-            
-        }
 
+        }
     
     }
+
+   
 }

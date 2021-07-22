@@ -8,8 +8,9 @@ namespace Core
 {
     public class User
     {
-        public virtual int Id { get; set; }
+        public virtual Guid Id { get; set; }
         public virtual string Name { get; set; }
         public virtual string Password { get; set; }
+        //public virtual Guid MessageId { get; set; }
     }
 }
