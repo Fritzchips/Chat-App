@@ -13,8 +13,4 @@
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="client\src\components\" />
-  </ItemGroup>
-
 </Project>

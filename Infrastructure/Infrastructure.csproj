@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <PackageReference Include="NHibernate" Version="5.3.9" />
+    <PackageReference Include="NHibernate.Extensions.NpgSql" Version="5.0.8" />
     <PackageReference Include="Npgsql" Version="5.0.7" />
   </ItemGroup>
 

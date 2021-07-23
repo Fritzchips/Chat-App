@@ -6,13 +6,10 @@ using System.Threading.Tasks;
 
 namespace Core
 {
-    public class User
+    public class Message
     {
         public virtual Guid Id { get; set; }
-        public virtual string Name { get; set; }
-        public virtual string Password { get; set; }
-        //public virtual Guid MessageId { get; set; }
-
-        
+        public virtual DateTime Date { get; set; }
+        public virtual string Context { get; set; }
     }
 }

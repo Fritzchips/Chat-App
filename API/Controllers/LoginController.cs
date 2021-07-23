@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace API.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class BaseApiController : ControllerBase
+    public class LoginController : Controller
     {
+        public IActionResult Index()
+        {
+            return View();
+        }
     }
-
-
 }

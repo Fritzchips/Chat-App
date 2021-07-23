@@ -9,12 +9,12 @@ const ChatMessages = () => {
 
     return (
         <Container fluid className="d-flex flex-column" style={{ height: "100vh" }}>
-            {messageList.map(message => (
-                <div key={message.key}>
-                    <h1>{ message.name}</h1>
-                    <p>{ message.text}</p>
-                </div>
-                )}
+            {/*{messageList.map(message => (*/}
+            {/*    <div key={message.key}>*/}
+            {/*        <h1>{ message.name}</h1>*/}
+            {/*        <p>{ message.text}</p>*/}
+            {/*    </div>*/}
+            {/*    )}*/}
         </Container>
     );
 }
