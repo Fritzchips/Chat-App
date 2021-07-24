@@ -114,7 +114,7 @@ namespace API.Controllers
                 {
                     using(ITransaction transaction = session.BeginTransaction())
                     {
-                        var dataCopy = session.Query<User>().ToList<User>();
+                        var dataCopy = session.Query<User>().ToList();
                         userTable = dataCopy;
                         transaction.Commit();
                     }
@@ -137,21 +137,25 @@ namespace API.Controllers
         {
             try
             {
+                
+                Guid id;
                 Message textMessage = new Message()
                 {
                     Date = DateTime.Now,
                     Context = "This actually worked eh, great job today. You are awesome!"
                 };
 
+                
                 using(ISession session = MessageSession.OpenSession())
                 {
                     using(ITransaction transaction = session.BeginTransaction())
                     {
                         session.Save(textMessage);
                         transaction.Commit();
+                        id = textMessage.Id;
                     }
                 }
-                return Ok("message sent");
+                return Ok(id);
             }
             catch (Exception)
             {
@@ -159,6 +163,8 @@ namespace API.Controllers
                 return BadRequest("couldn't create message");
             }
         }
+
+
 
 
         //get all messages from channel
@@ -173,7 +179,7 @@ namespace API.Controllers
                 {
                     using (ITransaction transaction = session.BeginTransaction())
                     {
-                        var dataCopy = session.Query<Message>().ToList<Message>();
+                        var dataCopy = session.Query<Message>().ToList();
                         userTable = dataCopy;
                         transaction.Commit();
                     }
@@ -187,6 +193,90 @@ namespace API.Controllers
                 return BadRequest("request was rejected");
             }
         }
+
+        //creating a new channel
+        //[Route("{action}")]
+        //public ActionResult CreateChannel()
+        //{
+        //    try
+        //    {
+        //        Channel general = new Channel()
+        //        {
+        //            Name = "coding"
+        //        };
+
+        //        using(ISession session = ChannelSession.OpenSession())
+        //        {
+        //            using(ITransaction transaction = session.BeginTransaction())
+        //            {
+        //                session.Save(general);
+        //                transaction.Commit();
+        //            }
+        //        }
+
+        //        return Ok($"{general} was created");
+        //    }
+        //    catch (Exception)
+        //    {
+
+        //        return BadRequest("couldnt make channel");
+        //    }
+        //}
+
+        //Getting single channel by name and returning object
+        [Route("{action}/{name}")]
+        public ActionResult GetChannel(string name)
+        {
+            List<Channel> channelId;
+            try
+            {
+                using (ISession session = ChannelSession.OpenSession())
+                {
+                    using (ITransaction transaction = session.BeginTransaction())
+                    {
+                        var person = session.Query<Channel>().Where(x =>x.Name == name).ToList();
+                        
+                        transaction.Commit();
+                        channelId = person;
+                    }
+                }
+                return Ok(channelId);
+            }
+            catch (Exception)
+            {
+
+                return BadRequest("user not found");
+            }
+        }
+
+        //get all messages from channel
+        [Route("{action}/{channelId}")]
+        public ActionResult channelMessage(Guid channelId)
+        {
+            try
+            {
+                List<Message> userTable = new List<Message>();
+
+                using (ISession session = MessageSession.OpenSession())
+                {
+                    using (ITransaction transaction = session.BeginTransaction())
+                    {
+                        var dataCopy = session.Query<Message>().Where(x =>x.ChannelId == channelId).ToList();
+                        userTable = dataCopy;
+                        transaction.Commit();
+                    }
+                }
+
+                return Ok(userTable);
+            }
+            catch (Exception)
+            {
+
+                return BadRequest("request was rejected");
+            }
+        }
+
+
 
         //Add foreign Key
         //create channel uuid

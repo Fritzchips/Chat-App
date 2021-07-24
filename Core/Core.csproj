@@ -5,11 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Mappings\Channel.hbm.xml" />
     <None Remove="Mappings\Message.hbm.xml" />
     <None Remove="Mappings\User.hbm.xml" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Mappings\Channel.hbm.xml" />
     <EmbeddedResource Include="Mappings\Message.hbm.xml" />
     <EmbeddedResource Include="Mappings\User.hbm.xml" />
   </ItemGroup>
