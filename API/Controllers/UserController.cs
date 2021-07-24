@@ -25,7 +25,7 @@ namespace API.Controllers
                 };
 
 
-                using (ISession session = NhibernateSession.OpenSession())
+                using (ISession session = UserSession.OpenSession())
                 {
                     using (ITransaction transaction = session.BeginTransaction())   //  Begin a transaction
                     {
@@ -57,7 +57,7 @@ namespace API.Controllers
                     Password = "sky"
                 };
 
-                using (ISession session = NhibernateSession.OpenSession())
+                using (ISession session = UserSession.OpenSession())
                 {
                     using (ITransaction transaction = session.BeginTransaction())   //  Begin a transaction
                     {
@@ -83,7 +83,7 @@ namespace API.Controllers
             User name = new User();
             try
             {
-                using(ISession session = NhibernateSession.OpenSession())
+                using(ISession session = UserSession.OpenSession())
                 {
                     using(ITransaction transaction = session.BeginTransaction())
                     {
@@ -104,13 +104,13 @@ namespace API.Controllers
 
         //get all users
         [Route("{action}/all")]
-        public ActionResult FullTable()
+        public ActionResult FullUser()
         {
             try
             {
                 List<User> userTable = new List<User>();
 
-                using(ISession session = NhibernateSession.OpenSession())
+                using(ISession session = UserSession.OpenSession())
                 {
                     using(ITransaction transaction = session.BeginTransaction())
                     {
@@ -130,11 +130,66 @@ namespace API.Controllers
         }
 
 
-        //get all messages from channel
+        
         //create/post chat message
-        
-        
-        
-        
+        [Route("{action}")]
+        public ActionResult CreateMessage()
+        {
+            try
+            {
+                Message textMessage = new Message()
+                {
+                    Date = DateTime.Now,
+                    Context = "This actually worked eh, great job today. You are awesome!"
+                };
+
+                using(ISession session = MessageSession.OpenSession())
+                {
+                    using(ITransaction transaction = session.BeginTransaction())
+                    {
+                        session.Save(textMessage);
+                        transaction.Commit();
+                    }
+                }
+                return Ok("message sent");
+            }
+            catch (Exception)
+            {
+
+                return BadRequest("couldn't create message");
+            }
+        }
+
+
+        //get all messages from channel
+        [Route("{action}/all")]
+        public ActionResult FullMessage()
+        {
+            try
+            {
+                List<Message> userTable = new List<Message>();
+
+                using (ISession session = MessageSession.OpenSession())
+                {
+                    using (ITransaction transaction = session.BeginTransaction())
+                    {
+                        var dataCopy = session.Query<Message>().ToList<Message>();
+                        userTable = dataCopy;
+                        transaction.Commit();
+                    }
+                }
+
+                return Ok(userTable);
+            }
+            catch (Exception)
+            {
+
+                return BadRequest("request was rejected");
+            }
+        }
+
+        //Add foreign Key
+        //create channel uuid
+        //accept parameters for endpoints
     }
 }

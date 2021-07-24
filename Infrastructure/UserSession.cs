@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure
 {
-    public class NhibernateSession
+    public class UserSession
     {
         public static ISession OpenSession()
         {
