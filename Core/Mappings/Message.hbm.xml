@@ -11,7 +11,7 @@
 		
 		<property name="Date" column="date_created"/>
 		<property name="Context" column="context"/>
-		<many-to-one name="ChannelId" column="channel_uid" type="guid"/>
-		<!--<many-to-one name="UserId" column="user_uid" type="guid"/>-->
+		<!--<many-to-one name="ChannelId" column="channel_uid" type="guid"/>
+		<many-to-one name="UserId" column="user_uid" type="guid"/>-->
 	</class>
 </hibernate-mapping>

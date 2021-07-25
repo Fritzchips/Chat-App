@@ -11,6 +11,6 @@ namespace Core
         public virtual Guid Id { get; set; }
         public virtual string Name { get; set; }
 
-        public virtual ISet<Message> Message { get; set; }
+        //public virtual ISet<Message> Message { get; set; }
     }
 }
