@@ -14,5 +14,6 @@ namespace Core
         public virtual DateTime Date { get; set; }
         public virtual string Context { get; set; }
 
+
     }
 }

@@ -10,5 +10,10 @@
 
 
 		<property name="Name" column="name"/>
+		
+		<set name = "Message" table = "messages">
+			<key column = "channel_uid"/>
+			<one-to-many class = "Message"/>
+		</set>
 	</class>
 </hibernate-mapping>
