@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -54,6 +55,32 @@ namespace API
             app.UseRouting();
 
             app.UseAuthorization();
+
+            //app.UseWebSockets();
+
+            //app.Use(async (http, next) =>
+            //{
+            //    if (http.WebSockets.IsWebSocketRequest && http.Request.Path == "/ws")
+            //    {
+            //        Program.wb = await http.WebSockets.AcceptWebSocketAsync();
+            //        await Task.Run(async () =>
+            //        {
+                        
+            //            while (Program.wb.State == System.Net.WebSockets.WebSocketState.Open)
+            //            {
+            //                byte[] bt = new byte[1024];
+            //                System.Net.WebSockets.WebSocketReceiveResult rc = await Program.wb.ReceiveAsync(bt, CancellationToken.None);
+            //                string txt = System.Text.Encoding.UTF8.GetString(bt);
+            //                await Program.wb.SendAsync(System.Text.Encoding.UTF8.GetBytes(txt),System.Net.WebSockets.WebSocketMessageType.Text,true, CancellationToken.None);
+            //            }
+            //        });
+            //    }
+            //    else
+            //    {
+            //        await next();
+            //    }
+                
+            //});
 
             app.UseSpaStaticFiles();
 

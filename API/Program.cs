@@ -15,29 +15,9 @@ namespace API
 {
     public class Program
     {
+        //public static System.Net.WebSockets.WebSocket wb = null;
         public static void Main(string[] args)
         {
-            //This is how Nhibernate connects to the database
-            //var cfg = new Configuration();
-            //cfg.DataBaseIntegration(x =>
-            //{
-            //    x.ConnectionString = "Server=localhost;Database=Twinkle;Intergrated Security=SSPI;";
-            //    //what sql type you are using
-            //    x.Driver<NpgsqlDriver>();
-            //    //Which version are you using
-            //    x.Dialect<PostgreSQL83Dialect>();
-
-            //});
-
-            //cfg.AddAssembly(Assembly.GetExecutingAssembly());
-            //var sessionFactory = cfg.BuildSessionFactory();
-            //using (var session = sessionFactory.OpenSession())
-            //using (var tx = session.BeginTransaction())
-            //{
-            //    //perform database logic
-            //    tx.Commit();
-            //}
-
                 CreateHostBuilder(args).Build().Run();
         }
 

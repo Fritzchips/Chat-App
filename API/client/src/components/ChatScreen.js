@@ -3,12 +3,27 @@ import Container from 'react-bootstrap/Container';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Button from 'react-bootstrap/Button';
 import ChatMessages from './ChatMessages';
+import axios from 'axios';
+import { v4 as uuidv4 , parse as uuidParse} from 'uuid';
 
 const ChatScreen = () => {
     const [message , setMessage] = useState([]);
 
-    const postHandler = (e) => {
+    const postHandler = async (e) => {
         e.preventDefault();
+        var item = {
+            Id: uuidv4(),
+            ChannelId: '495da565-a839-467f-8eb9-ad6f0124bcbd',
+            UserId: 'e53e4185-16e9-4c1c-b87e-ad6e0164acb7',
+            Date: new Date(),
+            Context: message
+        }
+
+        var convertData = JSON.stringify(item);
+
+        const data = await axios.get(`/api/user/createmessage/${convertData}`);
+
+        console.log(data);
 
     }
     return (

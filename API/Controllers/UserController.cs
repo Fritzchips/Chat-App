@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 
 namespace API.Controllers
@@ -132,35 +133,38 @@ namespace API.Controllers
 
         
         //create/post chat message
-        [Route("{action}")]
-        public ActionResult CreateMessage()
+        [Route("{action}/{message}")]
+        public ActionResult CreateMessage(string message)
         {
             try
             {
                 
-                Guid id;
-                Message textMessage = new Message()
-                {
-                    Date = DateTime.Now,
-                    Context = "This actually worked eh, great job today. You are awesome!"
-                };
+                var messageData = JsonConvert.DeserializeObject<Message>(message);
+                
+
+                //Message textMessage = new Message()
+                //{
+                //    Date = DateTime.Now,
+                //    Context = "This actually worked eh, great job today. You are awesome!"
+                //};
 
                 
                 using(ISession session = MessageSession.OpenSession())
                 {
                     using(ITransaction transaction = session.BeginTransaction())
                     {
-                        session.Save(textMessage);
+                        
+                        session.Save(messageData);
                         transaction.Commit();
-                        id = textMessage.Id;
+                        
                     }
                 }
-                return Ok(id);
+                return Ok(messageData);
             }
-            catch (Exception)
+            catch (Exception e )
             {
 
-                return BadRequest("couldn't create message");
+                return BadRequest(e.Message);
             }
         }
 
