@@ -4,10 +4,12 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import Button from 'react-bootstrap/Button';
 import ChatMessages from './ChatMessages';
 import axios from 'axios';
-import { v4 as uuidv4 , parse as uuidParse} from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 
 const ChatScreen = () => {
-    const [message , setMessage] = useState([]);
+    const [message, setMessage] = useState('');
+    const [database, setDatabase] = useState({});
+
 
     const postHandler = async (e) => {
         e.preventDefault();
@@ -22,8 +24,10 @@ const ChatScreen = () => {
         var convertData = JSON.stringify(item);
 
         const data = await axios.get(`/api/user/createmessage/${convertData}`);
-
-        console.log(data);
+        setMessage('');
+        setDatabase({ ...data.data } );
+        console.log(data.data);
+        console.log(database);
 
     }
     return (
@@ -31,7 +35,9 @@ const ChatScreen = () => {
         <Container className="d-flex flex-column " style={{minHeight: "100%"}} >
             <div style={{ width: "100%", height: "80vh",  border: "3px solid black", borderRadius: "5px" }}>
                 <div style={{backgroundColor: "grey", padding: "10px", fontSize: "25px"}}><strong>Welcome to Coding channel</strong></div>
-                <ChatMessages  />
+                {/*<ChatMessages />*/}
+                <p>{database.context }</p>
+                
             </div>
 
             <div style={{ height: "10vh", width: "100%", marginTop: "20px" }} className="align-self-baseline">

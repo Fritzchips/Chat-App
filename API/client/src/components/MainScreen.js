@@ -5,7 +5,7 @@ import ChatScreen from './ChatScreen';
 import axios from 'axios';
 import { w3cwebsocket as W3CWebSocket } from "websocket";
 
-const client = new W3CWebSocket('ws://localhost:5000/ws');
+
 
 
 
@@ -14,26 +14,22 @@ const MainScreen = () => {
     const [user, setUser] = useState('');
     const [messageList, setMessageList] = useState([]);
 
-    useEffect(() => {
-        client.onopen = () => {
-            console.log('Websocket client connected');
-        };
-        client.onmessage = (message) => {
-            const dataFromServer = JSON.parse(message.data);
-            console.log(`got reply ${dataFromServer}`);
-        };
+    const client = new W3CWebSocket("ws://localhost:5000/ws");
 
-        console.log(`you're in ${channel}`)
-        //getChannelMessages(channel);
-    },);
-
+        
     const chatHandler = (e) => {
         e.preventDefault();
         if (user) {
+            client.onopen = () => {
+            console.log("Websocket client connected");
+            };
             client.send(JSON.stringify({
-                type: "message",
                 msg: user
             }));
+            client.onmessage = (message) => {
+            console.log(`got reply ${message.data}`);
+            };
+
         }
         
     }
