@@ -10,6 +10,7 @@ namespace API.Hubs
     {
         public Task SendMessageAll(string message)
         {
+            Console.WriteLine(message);
             return Clients.All.SendAsync("ReceiveMessage", message);
         }
     }

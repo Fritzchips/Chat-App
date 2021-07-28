@@ -3,13 +3,14 @@ import ChannelNavBar from './ChannelNavBar';
 import Container from 'react-bootstrap/Container';
 import ChatScreen from './ChatScreen';
 import { v4 as uuidv4 } from 'uuid';
-import * as signalR from '@microsoft/signalr';
+
 
 export const ChatContext = React.createContext();
 
 export const PAGE_CONTROL = {
-    INPUT,
-    SUBMIT
+    INPUT: "input",
+    SUBMIT: "submit",
+    CHANNEL_CHANGE: "channel change"
 };
 
 const initialState = {
@@ -23,9 +24,13 @@ const initialState = {
 const reducer = (state, action) => {
     switch (action.type) {
         case PAGE_CONTROL.INPUT:
-            return (state = { ...action.value });
+            return (state = { ...state, message: action.value });
         case PAGE_CONTROL.SUBMIT:
-            chatHandler();
+            messageList.push(action.value);
+            message = '';
+            return state;
+        case PAGE_CONTROL.CHANNEL_CHANGE:
+            return (state = { ...state, channel: action.value });
 
 
 
@@ -37,44 +42,12 @@ const reducer = (state, action) => {
 };
 
 
-
 const MainScreen = () => {
     const [chatRoom, dispatch] = useReducer(reducer, initialState);
 
-
-    const connection = new signalR.HubConnectionBuilder().withUrl("/general").build();
-
-    connection.start().catch(function (err) {
-        return console.error(err);
-    });
-
-    connection.on("ReceiveMessage", function (repliedMsg) {
-        console.log(`${repliedMsg} was received from server`);
-    });
-
-        
-    const chatHandler = (e) => {
-        e.preventDefault();
-        if (message) {
-
-            var message = JSON.stringify({
-                    Id: uuidv4(),
-                    ChannelId: channelId,
-                    UserId: userId,
-                    Date: new Date(),
-                    Context: message
-                });
-
-            connection.invoke("SendMessageAll", message).catch(function (err) {
-                console.error(err);
-            });
-
-            //    /*const data = await axios.get(`/api/user/createmessage/${message.data}`);*/
-
-        }
-
-    }
-
+    useEffect(() => {
+        console.log(chatRoom);
+    }, [chatRoom]);
 
     return (
         <ChatContext.Provider value={{chatRoom: chatRoom, dispatch: dispatch }}>
@@ -90,11 +63,6 @@ const MainScreen = () => {
                         <ChatScreen  />
                     </span>
                 </span>
-
-                {/*<form onSubmit={ chatHandler}>*/}
-                {/*    <input type="text" value={userId} onChange={e => setUserId(e.target.value)} />*/}
-                {/*    <button>submit</button>*/}
-                {/*</form>*/}
             </Container>
          </ChatContext.Provider>
     );
