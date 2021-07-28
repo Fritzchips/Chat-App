@@ -17,7 +17,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-
+using Microsoft.AspNetCore.SignalR;
+using API.Hubs;
 
 namespace API
 {
@@ -35,6 +36,7 @@ namespace API
         {
 
             services.AddControllers();
+            services.AddSignalR();
             services.AddSpaStaticFiles(config =>
             {
                 config.RootPath = "client/build";
@@ -61,84 +63,12 @@ namespace API
 
             app.UseAuthorization();
 
-
-            //app.UseWebSockets();
-
-
-            //app.Use(async (http, next) =>
-            //{
-            //    if (http.WebSockets.IsWebSocketRequest && http.Request.Path == "/ws")
-            //    {
-            //        Program.wb = await http.WebSockets.AcceptWebSocketAsync();
-            //        await Task.Run(async () =>
-            //        {
-
-            //            while (Program.wb.State == WebSocketState.Open)
-            //            {
-            //                byte[] bt = new byte[1024];
-            //                WebSocketReceiveResult rc = await Program.wb.ReceiveAsync(bt, CancellationToken.None);
-            //                string txt = Encoding.UTF8.GetString(bt);
-            //                await Program.wb.SendAsync(Encoding.UTF8.GetBytes(txt), WebSocketMessageType.Text, true, CancellationToken.None);
-            //            }
-            //        });
-            //    }
-            //    else
-            //    {
-            //        await next();
-            //    }
-
-            //});
-
-            app.UseWebSockets();
-
-            var webSocketOptions = new WebSocketOptions()
-            {
-                KeepAliveInterval = TimeSpan.FromSeconds(120),
-            };
-
-            app.UseWebSockets(webSocketOptions);
-
-            app.Use(async (context, next) =>
-            {
-                if (context.Request.Path == "/ws")
-                {
-                    if (context.WebSockets.IsWebSocketRequest)
-                    {
-                        using (WebSocket webSocket = await context.WebSockets.AcceptWebSocketAsync())
-                        {
-                            await Echo(context, webSocket);
-                        }
-                    }
-                    else
-                    {
-                        context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                    }
-                }
-                else
-                {
-                    await next();
-                }
-
-            });
-
-            //app.Use(async (context, next) =>
-            //{
-            //    using (WebSocket webSocket = await context.WebSockets.AcceptWebSocketAsync())
-            //    {
-            //        var socketFinishedTcs = new TaskCompletionSource<object>();
-
-            //        BackgroundSocketProcessor.AddSocket(webSocket, socketFinishedTcs);
-
-            //        await socketFinishedTcs.Task;
-            //    }
-            //});
-
             app.UseSpaStaticFiles();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-
+                endpoints.MapHub<GeneralHub>("/general");
             });
 
             app.UseSpa(configuration: spa =>
@@ -152,17 +82,6 @@ namespace API
             
         }
 
-        private async Task Echo(HttpContext context, WebSocket webSocket)
-        {
-            var buffer = new byte[1024 * 4];
-            WebSocketReceiveResult result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
-            while (!result.CloseStatus.HasValue)
-            {
-                await webSocket.SendAsync(new ArraySegment<byte>(buffer, 0, result.Count), result.MessageType, result.EndOfMessage, CancellationToken.None);
-
-                result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
-            }
-            await webSocket.CloseAsync(result.CloseStatus.Value, result.CloseStatusDescription, CancellationToken.None);
-        }
+        
     }
 }

@@ -11,11 +11,12 @@ using NHibernate.Cfg;
 using NHibernate.Dialect;
 using NHibernate.Driver;
 
+
 namespace API
 {
     public class Program
     {
-        //public static System.Net.WebSockets.WebSocket wb = null;
+        
         public static void Main(string[] args)
         {
                 CreateHostBuilder(args).Build().Run();
