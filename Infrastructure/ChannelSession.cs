@@ -15,8 +15,8 @@ namespace Infrastructure
             var configuration = new Configuration();
             var configurationPath = "../Core/hibernate.cfg.xml";
             configuration.Configure(configurationPath);
-            var bookConfigurationFile = "../Core/Mappings/Channel.hbm.xml";
-            configuration.AddFile(bookConfigurationFile);
+            var channelConfigurationFile = "../Core/Mappings/Channel.hbm.xml";
+            configuration.AddFile(channelConfigurationFile);
             ISessionFactory sessionFactory = configuration.BuildSessionFactory();
             return sessionFactory.OpenSession();
         }

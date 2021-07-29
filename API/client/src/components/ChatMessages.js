@@ -9,12 +9,13 @@ const ChatMessages = () => {
 
     return (
         <Container fluid className="d-flex flex-column" style={{ height: "100vh" }}>
-            {chat.messageList > 0 ? chat.messageList.map(message => (
-                <div key={message.Id}>
-                    <h1>{message.ChannelId}</h1>
-                    <p>{message.Context}</p>
+            {chat.chatRoom.messageList.length > 0 ? chat.chatRoom.messageList.map(message => (
+                <div key={message.id}>
+                    <p>{message.channelId} says:</p>
+                    <p>{message.context}</p>
+                    <p>Created: {message.date}</p>
                 </div>
-            )) : (<></>)};
+            )) : (<></>)}
         </Container>
     );
 }

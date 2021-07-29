@@ -3,6 +3,8 @@ import ChannelNavBar from './ChannelNavBar';
 import Container from 'react-bootstrap/Container';
 import ChatScreen from './ChatScreen';
 import { v4 as uuidv4 } from 'uuid';
+import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
+
 
 
 export const ChatContext = React.createContext();
@@ -10,15 +12,19 @@ export const ChatContext = React.createContext();
 export const PAGE_CONTROL = {
     INPUT: "input",
     SUBMIT: "submit",
-    CHANNEL_CHANGE: "channel change"
+    CHANNEL_CHANGE: "channel change",
+    CONNECTION: "hub connection",
+    CHANNEL_DATA: "database messages"
 };
 
 const initialState = {
     channel: 'general',
+    user: 'John',
     userId: 'e53e4185-16e9-4c1c-b87e-ad6e0164acb7',
     channelId: '495da565-a839-467f-8eb9-ad6f0124bcbd',
     message: '',
-    messageList: []
+    messageList: [],
+    hubConnection: null
 };
 
 const reducer = (state, action) => {
@@ -26,15 +32,17 @@ const reducer = (state, action) => {
         case PAGE_CONTROL.INPUT:
             return (state = { ...state, message: action.value });
         case PAGE_CONTROL.SUBMIT:
-            messageList.push(action.value);
-            message = '';
-            return state;
+            state.messageList.push(action.value);
+            return (state = {...state, message: ''});
         case PAGE_CONTROL.CHANNEL_CHANGE:
             return (state = { ...state, channel: action.value });
 
-
-
-
+        case PAGE_CONTROL.CONNECTION:
+            state.hubConnection = action.value;
+            return state;
+        case PAGE_CONTROL.CHANNEL_DATA:
+            state.messageList = [...action.value];
+            return (state = { ...state });
 
         default:
             return state;
@@ -45,9 +53,40 @@ const reducer = (state, action) => {
 const MainScreen = () => {
     const [chatRoom, dispatch] = useReducer(reducer, initialState);
 
-    useEffect(() => {
-        console.log(chatRoom);
-    }, [chatRoom]);
+    useEffect(async () => {
+
+        try {
+            const connection = new HubConnectionBuilder().withUrl("/general")
+                .configureLogging(LogLevel.Information).build();
+
+            dispatch({ type: PAGE_CONTROL.CONNECTION, value: connection });
+
+            connection.on("ReceiveGreeting", function (repliedMsg) {
+                console.log(`${repliedMsg}`);
+            });
+
+            connection.on("ReceiveMessage", function (allMessage) {
+                dispatch({ type: PAGE_CONTROL.SUBMIT, value: allMessage });
+            });
+
+            connection.on("DataReceived", function (messageTable) {
+                dispatch({ type: PAGE_CONTROL.CHANNEL_DATA, value: messageTable });
+                console.log(chatRoom.messageList);
+            });
+
+            await connection.start();
+
+            await connection.invoke("JoinRoom", chatRoom.user, chatRoom.channelId).catch(function (err) {
+                console.error(err);
+
+            });
+
+        } catch (e) {
+            console.error(e);
+        }
+
+    }, []);
+
 
     return (
         <ChatContext.Provider value={{chatRoom: chatRoom, dispatch: dispatch }}>

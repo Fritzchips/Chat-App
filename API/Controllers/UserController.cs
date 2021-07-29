@@ -172,8 +172,8 @@ namespace API.Controllers
 
 
         //get all messages from channel
-        [Route("{action}/all")]
-        public ActionResult FullMessage()
+        [Route("{action}/{channelId}")]
+        public ActionResult FullMessage(Guid channelId)
         {
             try
             {
@@ -183,9 +183,15 @@ namespace API.Controllers
                 {
                     using (ITransaction transaction = session.BeginTransaction())
                     {
-                        var dataCopy = session.Query<Message>().ToList();
+                        var dataCopy = session.Query<Message>()
+                        .OrderBy(x => x.Date)
+                        .Where(x => x.ChannelId == channelId)
+                        .ToList();
                         userTable = dataCopy;
-                        transaction.Commit();
+
+                        //var dataCopy = session.Query<Message>().ToList();
+                        //userTable = dataCopy;
+                        //transaction.Commit();
                     }
                 }
 
