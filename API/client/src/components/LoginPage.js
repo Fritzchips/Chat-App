@@ -27,12 +27,15 @@ const LoginPage = () => {
         verifyDataWithServer(formDisplay, name, password);
     };
 
-    const verifyDataWithServer = (formDisplay, name, password) => {
-        console.log(`you are ${formDisplay} with user: ${name} , password: ${password}  `);
-        //change to async
-        //await axios get("`/api/${formDisplay}/${name}/${password}`)
-        //controller will control from here
-    };
+    //const verifyDataWithServer = async (formDisplay, name, password) => {
+    //    console.log(`you are ${formDisplay} with user: ${name} , password: ${password}  `);
+    //    //change to async
+    //    //await axios get("`/api/${formDisplay}/${name}/${password}`)
+    //    //controller will control from here
+
+    //    await axios.get(`api/login/${formDisplay}/${name}/${password}`);
+    //    //redirect
+    //};
 
     return (
         <div>

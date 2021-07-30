@@ -17,8 +17,15 @@ const ChannelNavBar = () => {
                     <div> <button onClick={e => chat.dispatch({ type: PAGE_CONTROL.CHANNEL_CHANGE, value: e.target.value })} value="coding">Coding</button></div>
                 </div>
                 <br></br>
-                <div><h1>Users</h1></div>
-                <div>Hello</div>
+                <div>
+                    <h1>Active Users</h1>
+                    {chat.chatRoom.activeUsers.length > 0 ? chat.chatRoom.activeUsers.map((user, index) => (
+                        <div key={index}>
+                            <p>{user}</p>
+                        </div>
+                        )) : (<></>)}
+                </div>
+                
             </Container>
         </>
         )

@@ -14,7 +14,8 @@ export const PAGE_CONTROL = {
     SUBMIT: "submit",
     CHANNEL_CHANGE: "channel change",
     CONNECTION: "hub connection",
-    CHANNEL_DATA: "database messages"
+    CHANNEL_DATA: "database messages",
+    ACTIVE_USERS: "active users"
 };
 
 const initialState = {
@@ -24,6 +25,7 @@ const initialState = {
     channelId: '495da565-a839-467f-8eb9-ad6f0124bcbd',
     message: '',
     messageList: [],
+    activeUsers: [],
     hubConnection: null
 };
 
@@ -42,6 +44,9 @@ const reducer = (state, action) => {
             return state;
         case PAGE_CONTROL.CHANNEL_DATA:
             state.messageList = [...action.value];
+            return (state = { ...state });
+        case PAGE_CONTROL.ACTIVE_USERS:
+            state.activeUsers.push(action.value);
             return (state = { ...state });
 
         default:
@@ -63,6 +68,7 @@ const MainScreen = () => {
 
             connection.on("ReceiveGreeting", function (repliedMsg) {
                 console.log(`${repliedMsg}`);
+                dispatch({ type: PAGE_CONTROL.ACTIVE_USERS, value: repliedMsg });
             });
 
             connection.on("ReceiveMessage", function (allMessage) {

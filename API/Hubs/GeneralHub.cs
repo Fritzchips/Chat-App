@@ -12,6 +12,9 @@ namespace API.Hubs
 {
     public class GeneralHub : Hub
     {
+        //make property of List<User>
+        //return that user list to people who join room with table list
+        //on disconnect remove that user from active list
         public async Task SendMessageAll(string message)
         {
             var convertedMsg = JsonConvert.DeserializeObject<Message>(message);
@@ -34,7 +37,6 @@ namespace API.Hubs
         {
            
             List<Message> messageTable = new List<Message>();
-            
 
             using (ISession session = MessageSession.OpenSession())
             {
@@ -50,9 +52,19 @@ namespace API.Hubs
                 }
             }
             await Clients.Client(Context.ConnectionId).SendAsync("DataReceived", messageTable);
-            await Clients.All.SendAsync("ReceiveGreeting", $"{message} has joined the general room {Context.ConnectionId}");
+            await Clients.All.SendAsync("ReceiveGreeting", message);
 
         }
-        
+
+        public override Task OnConnectedAsync()
+        {
+            return base.OnConnectedAsync();
+        }
+
+        public override Task OnDisconnectedAsync(Exception exception)
+        {
+            return base.OnDisconnectedAsync(exception); 
+        }
+
     }
 }
