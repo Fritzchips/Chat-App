@@ -15,6 +15,8 @@ namespace API.Hubs
         //make property of List<User>
         //return that user list to people who join room with table list
         //on disconnect remove that user from active list
+        private readonly Dictionary<string, string> hubMembers = new Dictionary<string, string>();
+
         public async Task SendMessageAll(string message)
         {
             var convertedMsg = JsonConvert.DeserializeObject<Message>(message);
@@ -51,7 +53,8 @@ namespace API.Hubs
                     transaction.Commit();
                 }
             }
-            await Clients.Client(Context.ConnectionId).SendAsync("DataReceived", messageTable);
+            hubMembers.Add(message, Context.ConnectionId);
+            await Clients.Client(Context.ConnectionId).SendAsync("DataReceived", messageTable, hubMembers);
             await Clients.All.SendAsync("ReceiveGreeting", message);
 
         }

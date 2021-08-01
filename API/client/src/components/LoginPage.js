@@ -19,12 +19,12 @@ const LoginPage = () => {
 
     const guestHandler = (e) => {
         e.preventDefault();
-        verifyDataWithServer('guest', 'Guest', "0000");
+        //verifyDataWithServer('guest', 'Guest', "0000");
     };
 
     const submitHandler = (e) => {
         e.preventDefault();
-        verifyDataWithServer(formDisplay, name, password);
+        //verifyDataWithServer(formDisplay, name, password);
     };
 
     //const verifyDataWithServer = async (formDisplay, name, password) => {

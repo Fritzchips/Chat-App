@@ -19,6 +19,9 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.SignalR;
 using API.Hubs;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+
 
 namespace API
 {
@@ -39,8 +42,45 @@ namespace API
             services.AddSignalR();
             services.AddSpaStaticFiles(config =>
             {
-                config.RootPath = "client/build";
+                    config.RootPath = "client/build";
+                });
+            var tokenKey = Configuration.AddValue<string>("TokenKey");
+            var key = Encoding.ASCII.GetBytes(tokenKey);
+            services.AddAuthentication(x =>
+                {
+                    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
+                }).AddJwtBearer(x => 
+                {
+                    x.RequireHttpsMetadata = false;
+                    x.SaveToken = true;
+                    x.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(key)),
+                        ValidateIssuer = false,
+                        ValidateAudience = false
+                    };
             });
+
+            
+            services.AddSingleton<IJwtAuthenticationManager>(new JwtAuthenticationManager(tokenKey));
+            //services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            //    .AddJwtBearer(options =>
+            //   {
+            //       options.TokenValidationParameters = new TokenValidationParameters
+            //       {
+            //           ValidationIssuer = true,
+            //           ValidationAudience = true,
+            //           ValidationLifetime = true,
+            //           ValidationIssuerSigningKey = true,
+            //           ValidIssuer = "",
+            //           ValidAudience = "",
+            //           IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(""))
+            //       };
+            //   });
+
             //services.AddSwaggerGen(c =>
             //{
             //    c.SwaggerDoc("v1", new OpenApiInfo { Title = "API", Version = "v1" });
@@ -60,6 +100,8 @@ namespace API
             //app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

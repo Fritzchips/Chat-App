@@ -75,9 +75,10 @@ const MainScreen = () => {
                 dispatch({ type: PAGE_CONTROL.SUBMIT, value: allMessage });
             });
 
-            connection.on("DataReceived", function (messageTable) {
+            connection.on("DataReceived", function (messageTable, listOfUsers) {
                 dispatch({ type: PAGE_CONTROL.CHANNEL_DATA, value: messageTable });
                 console.log(chatRoom.messageList);
+                console.log(listOfUsers);
             });
 
             await connection.start();
