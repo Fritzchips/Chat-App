@@ -24,18 +24,19 @@ const LoginPage = () => {
 
     const submitHandler = (e) => {
         e.preventDefault();
-        //verifyDataWithServer(formDisplay, name, password);
+        verifyDataWithServer(formDisplay, name, password);
     };
 
-    //const verifyDataWithServer = async (formDisplay, name, password) => {
-    //    console.log(`you are ${formDisplay} with user: ${name} , password: ${password}  `);
-    //    //change to async
-    //    //await axios get("`/api/${formDisplay}/${name}/${password}`)
-    //    //controller will control from here
+    const verifyDataWithServer = async (formDisplay, name, password) => {
+        console.log(`you are ${formDisplay} with user: ${name} , password: ${password}  `);
+        //change to async
+        //await axios get("`/api/${formDisplay}/${name}/${password}`)
+        //controller will control from here
 
-    //    await axios.get(`api/login/${formDisplay}/${name}/${password}`);
-    //    //redirect
-    //};
+        const formSent = await axios.get(`api/login/${formDisplay}/${name}/${password}`);
+        console.log(`response: ${formSent}`);
+        //redirect
+    };
 
     return (
         <div>
@@ -58,8 +59,8 @@ const LoginPage = () => {
                     </Form>
 
             
-                    <button onClick={formChangeHandler} value="Sign In">Log In</button>
-                    <button onClick={formChangeHandler} value="Sign Up">New User</button>
+                    <button onClick={formChangeHandler} value="signIn">Log In</button>
+                    <button onClick={formChangeHandler} value="signUp">New User</button>
                  </div>
            
             

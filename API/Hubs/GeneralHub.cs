@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using Core;
 using NHibernate;
 using Infrastructure;
+using System.Collections;
 
 namespace API.Hubs
 {
@@ -15,7 +16,12 @@ namespace API.Hubs
         //make property of List<User>
         //return that user list to people who join room with table list
         //on disconnect remove that user from active list
-        private readonly Dictionary<string, string> hubMembers = new Dictionary<string, string>();
+        public readonly Dictionary<string, string> hubMembers = new Dictionary<string,string>();
+
+        public GeneralHub(IDictionary dictionary)
+        {
+            hubMembers = dictionary;
+        }
 
         public async Task SendMessageAll(string message)
         {
@@ -53,21 +59,25 @@ namespace API.Hubs
                     transaction.Commit();
                 }
             }
-            hubMembers.Add(message, Context.ConnectionId);
-            await Clients.Client(Context.ConnectionId).SendAsync("DataReceived", messageTable, hubMembers);
+            hubMembers.Add(Context.ConnectionId, message );
+
+            var items = hubMembers;
+            
+  
+            await Clients.Client(Context.ConnectionId).SendAsync("DataReceived", messageTable, items);
             await Clients.All.SendAsync("ReceiveGreeting", message);
 
         }
 
-        public override Task OnConnectedAsync()
-        {
-            return base.OnConnectedAsync();
-        }
+        //public override Task OnConnectedAsync()
+        //{
+        //    return base.OnConnectedAsync();
+        //}
 
-        public override Task OnDisconnectedAsync(Exception exception)
-        {
-            return base.OnDisconnectedAsync(exception); 
-        }
+        //public override Task OnDisconnectedAsync(Exception exception)
+        //{
+        //    return base.OnDisconnectedAsync(exception); 
+        //}
 
     }
 }

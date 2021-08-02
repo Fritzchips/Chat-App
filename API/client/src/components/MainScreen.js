@@ -15,7 +15,9 @@ export const PAGE_CONTROL = {
     CHANNEL_CHANGE: "channel change",
     CONNECTION: "hub connection",
     CHANNEL_DATA: "database messages",
+    USER_DATA: "database users",
     ACTIVE_USERS: "active users"
+
 };
 
 const initialState = {
@@ -44,6 +46,9 @@ const reducer = (state, action) => {
             return state;
         case PAGE_CONTROL.CHANNEL_DATA:
             state.messageList = [...action.value];
+            return (state = { ...state });
+        case PAGE_CONTROL.USER_DATA:
+            state.activeUsers = [...action.value];
             return (state = { ...state });
         case PAGE_CONTROL.ACTIVE_USERS:
             state.activeUsers.push(action.value);
@@ -77,8 +82,9 @@ const MainScreen = () => {
 
             connection.on("DataReceived", function (messageTable, listOfUsers) {
                 dispatch({ type: PAGE_CONTROL.CHANNEL_DATA, value: messageTable });
+                //dispatch({ type: PAGE_CONTROL.USER_DATA, value: listOfUsers });
                 console.log(chatRoom.messageList);
-                console.log(listOfUsers);
+                console.log(`this is the list of users ${listOfUsers}`);
             });
 
             await connection.start();
