@@ -237,14 +237,14 @@ namespace API.Controllers
         [Route("{action}/{name}")]
         public ActionResult GetChannel(string name)
         {
-            List<Channel> channelId;
+            Channel channelId;
             try
             {
                 using (ISession session = ChannelSession.OpenSession())
                 {
                     using (ITransaction transaction = session.BeginTransaction())
                     {
-                        var person = session.Query<Channel>().Where(x =>x.Name == name).ToList();
+                        var person = session.Query<Channel>().Where(x =>x.Name == name).FirstOrDefault();
                         
                         transaction.Commit();
                         channelId = person;

@@ -113,6 +113,8 @@ namespace API
             {
                 endpoints.MapControllers();
                 endpoints.MapHub<GeneralHub>("/general");
+                endpoints.MapHub<RandomHub>("/random");
+                endpoints.MapHub<CodingHub>("/coding");
             });
 
             app.UseSpa(configuration: spa =>

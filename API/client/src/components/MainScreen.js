@@ -4,6 +4,7 @@ import Container from 'react-bootstrap/Container';
 import ChatScreen from './ChatScreen';
 import { v4 as uuidv4 } from 'uuid';
 import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
+import axios from 'axios';
 
 
 
@@ -16,7 +17,8 @@ export const PAGE_CONTROL = {
     CONNECTION: "hub connection",
     CHANNEL_DATA: "database messages",
     USER_DATA: "database users",
-    ACTIVE_USERS: "active users"
+    ACTIVE_USERS: "active users",
+    CHANNEL_ID: "channel Id"
 
 };
 
@@ -24,7 +26,7 @@ const initialState = {
     channel: 'general',
     user: 'John',
     userId: 'e53e4185-16e9-4c1c-b87e-ad6e0164acb7',
-    channelId: '495da565-a839-467f-8eb9-ad6f0124bcbd',
+    channelId: '',
     message: '',
     messageList: [],
     activeUsers: [],
@@ -35,21 +37,30 @@ const reducer = (state, action) => {
     switch (action.type) {
         case PAGE_CONTROL.INPUT:
             return (state = { ...state, message: action.value });
+
         case PAGE_CONTROL.SUBMIT:
             state.messageList.push(action.value);
-            return (state = {...state, message: ''});
+            return (state = { ...state, message: '' });
+
         case PAGE_CONTROL.CHANNEL_CHANGE:
             return (state = { ...state, channel: action.value });
+
+        case PAGE_CONTROL.CHANNEL_ID:
+            state.channelId = action.value;
+            return (state = { ...state });
 
         case PAGE_CONTROL.CONNECTION:
             state.hubConnection = action.value;
             return state;
+
         case PAGE_CONTROL.CHANNEL_DATA:
             state.messageList = [...action.value];
             return (state = { ...state });
+
         case PAGE_CONTROL.USER_DATA:
             state.activeUsers = [...action.value];
             return (state = { ...state });
+
         case PAGE_CONTROL.ACTIVE_USERS:
             state.activeUsers.push(action.value);
             return (state = { ...state });
@@ -64,27 +75,30 @@ const MainScreen = () => {
     const [chatRoom, dispatch] = useReducer(reducer, initialState);
 
     useEffect(async () => {
+        if (chatRoom.hubConnection != null) {
+            await chatRoom.hubConnection.stop();
+        };
+        const channelInfo = await axios.get(`/api/user/getchannel/${chatRoom.channel}`);
+        const result = channelInfo.data;
+        dispatch({ type: PAGE_CONTROL.CHANNEL_ID, value: result.id });
+      
 
         try {
-            const connection = new HubConnectionBuilder().withUrl("/general")
+            const connection = new HubConnectionBuilder().withUrl(`/${chatRoom.channel}`)
                 .configureLogging(LogLevel.Information).build();
 
             dispatch({ type: PAGE_CONTROL.CONNECTION, value: connection });
 
             connection.on("ReceiveGreeting", function (repliedMsg) {
-                console.log(`${repliedMsg}`);
-                dispatch({ type: PAGE_CONTROL.ACTIVE_USERS, value: repliedMsg });
+                console.log(`greetings ${repliedMsg}`);
             });
 
             connection.on("ReceiveMessage", function (allMessage) {
                 dispatch({ type: PAGE_CONTROL.SUBMIT, value: allMessage });
             });
 
-            connection.on("DataReceived", function (messageTable, listOfUsers) {
+            connection.on("DataReceived", function (messageTable) {
                 dispatch({ type: PAGE_CONTROL.CHANNEL_DATA, value: messageTable });
-                //dispatch({ type: PAGE_CONTROL.USER_DATA, value: listOfUsers });
-                console.log(chatRoom.messageList);
-                console.log(`this is the list of users ${listOfUsers}`);
             });
 
             await connection.start();
@@ -98,7 +112,7 @@ const MainScreen = () => {
             console.error(e);
         }
 
-    }, []);
+    }, [chatRoom.channel]);
 
 
     return (

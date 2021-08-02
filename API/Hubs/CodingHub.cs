@@ -1,31 +1,17 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using Core;
+using Infrastructure;
+using Microsoft.AspNetCore.SignalR;
+using Newtonsoft.Json;
+using NHibernate;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
-using Core;
-using NHibernate;
-using Infrastructure;
-using System.Collections;
 
 namespace API.Hubs
 {
-    public class GeneralHub : Hub
+    public class CodingHub : Hub
     {
-        //make property of List<User>
-        //return that user list to people who join room with table list
-        //on disconnect remove that user from active list
-        //public readonly IDictionary<string, UserConnection> hubMembers;
-
-        //public GeneralHub(IDictionary<string, UserConnection> dictionary)
-        //{
-        //    hubMembers = dictionary;
-        //}
-
-        //on connect pass in group channel
-        //on disconnect leave the channel
-
         public async Task SendMessageAll(string message)
         {
             var convertedMsg = JsonConvert.DeserializeObject<Message>(message);
@@ -43,12 +29,15 @@ namespace API.Hubs
         }
 
         public async Task JoinRoom(string message, Guid channelId)
-        {           
+        {
+
             List<Message> messageTable = new List<Message>();
+
             using (ISession session = MessageSession.OpenSession())
             {
                 using (ITransaction transaction = session.BeginTransaction())
                 {
+
                     var dataCopy = session.Query<Message>()
                         .OrderBy(x => x.Date)
                         .Where(x => x.ChannelId == channelId)
@@ -60,16 +49,5 @@ namespace API.Hubs
             await Clients.Client(Context.ConnectionId).SendAsync("DataReceived", messageTable);
             await Clients.All.SendAsync("ReceiveGreeting", message);
         }
-
-        //public override async Task OnConnectedAsync()
-        //{
-        //    await base.OnConnectedAsync();
-        //}
-
-        //public override Task OnDisconnectedAsync(Exception exception)
-        //{
-        //    await base.OnDisconnectedAsync(exception); 
-        //}
-
     }
 }
