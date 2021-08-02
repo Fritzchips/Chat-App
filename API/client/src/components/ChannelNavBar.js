@@ -1,6 +1,7 @@
-import React, { useState, useContext } from 'react';
+import React, { useContext } from 'react';
 import Container from 'react-bootstrap/Container';
-import { ChatContext, PAGE_CONTROL } from './MainScreen'
+import { ChatContext} from '../App';
+import { PAGE_CONTROL } from '../hooks/useData';
 
 
 const ChannelNavBar = () => {

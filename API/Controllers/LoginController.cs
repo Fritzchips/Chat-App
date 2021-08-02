@@ -110,24 +110,27 @@ namespace API.Controllers
             try
             {
                 string person;
+                User client;
                 using (ISession session = UserSession.OpenSession())
                 {
                     using (ITransaction transaction = session.BeginTransaction())
                     {
-                        var checkUser = session.Query<User>().Where(x => x.Name == name && x.Password == password).ToList();
-                        if (checkUser.Count > 0)
+                        var checkUser = session.Query<User>().Where(x => x.Name == name && x.Password == password).FirstOrDefault();
+                        if (checkUser != null)
                         {
                             person = "user exist";
                             transaction.Commit();
+                            client = checkUser;
 
                         } else
                         {
                             person = "user doesn't exist";
                             transaction.Commit();
+                            client = null;
                         }
                     }
                 }
-                return Ok($"here is the User data {person}");
+                return Ok(client);
             }
             catch (Exception)
             {

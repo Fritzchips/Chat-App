@@ -1,9 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import axios from 'axios';
+import { ChatContext } from '../App';
+import { PAGE_CONTROL } from '../hooks/useData';
 
 const LoginPage = () => {
+    const chat = useContext(ChatContext);
     const [formDisplay, setFormDisplay] = useState('signIn');
     const [name, setName] = useState('');
     const [password, setPassword] = useState('');
@@ -19,7 +22,7 @@ const LoginPage = () => {
 
     const guestHandler = (e) => {
         e.preventDefault();
-        //verifyDataWithServer('guest', 'Guest', "0000");
+        //verifyDataWithServer('signIn', 'Guest', "0000");
     };
 
     const submitHandler = (e) => {
@@ -29,12 +32,15 @@ const LoginPage = () => {
 
     const verifyDataWithServer = async (formDisplay, name, password) => {
         console.log(`you are ${formDisplay} with user: ${name} , password: ${password}  `);
-        //change to async
-        //await axios get("`/api/${formDisplay}/${name}/${password}`)
-        //controller will control from here
-
+      
         const formSent = await axios.get(`api/login/${formDisplay}/${name}/${password}`);
-        console.log(`response: ${formSent}`);
+        const result = formSent.data;
+        if (result) {
+            chat.dispatch({type: PAGE_CONTROL.LOGIN , value: result})
+            console.log(`user: ${chat.chatRoom.user} with id ${chat.chatRoom.userId}`)
+        }
+      
+       
         //redirect
     };
 

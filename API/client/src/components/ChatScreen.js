@@ -3,7 +3,8 @@ import Container from 'react-bootstrap/Container';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Button from 'react-bootstrap/Button';
 import ChatMessages from './ChatMessages';
-import { ChatContext, PAGE_CONTROL } from './MainScreen'
+import { ChatContext } from '../App';
+import { PAGE_CONTROL } from '../hooks/useData';
 import { v4 as uuidv4 } from 'uuid';
 import axios from 'axios';
 

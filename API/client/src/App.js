@@ -2,27 +2,20 @@ import React, { useState } from 'react';
 import './App.css';
 import LoginPage from './components/LoginPage';
 import MainScreen from './components/MainScreen';
+import useData from './hooks/useData';
 
+export const ChatContext = React.createContext();
 
 function App() {
-    const [loggedIn, setLoggedIn] = useState(false);
-
-    //useEffect to check for loggedIn or database
-
-    const loginHandler = (e) => {
-        e.preventDefault();
-        if (loggedIn) {
-            setLoggedIn(false)
-        } else {
-            setLoggedIn(true)
-        }
-    }
+    const [chatRoom, dispatch] = useData();
 
   return (
-    <div className="App">
-          {loggedIn ? (<MainScreen />) : (<LoginPage />)}
-          <br></br>
-          <button onClick={ loginHandler}>Change Screen</button>
+      <div className="App">
+          <ChatContext.Provider value={{ chatRoom: chatRoom, dispatch: dispatch }}>
+
+          {chatRoom.loggedIn ? (<MainScreen />) : (<LoginPage />)}
+
+          </ChatContext.Provider >
     </div>
   );
 }
