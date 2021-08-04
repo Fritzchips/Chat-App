@@ -17,18 +17,18 @@ namespace API.Controllers
     //[Authorize]
     public class LoginController : BaseApiController
     {
-        private readonly IJwtAuthenticationManager jwtAuthenticationManager;
+        private readonly IJwtAuthenticationManager _jwtAuthenticationManager;
 
         public LoginController(IJwtAuthenticationManager jwtAuthenticationManager)
         {
-            this.jwtAuthenticationManager = jwtAuthenticationManager;
+            _jwtAuthenticationManager = jwtAuthenticationManager;
         }
 
         [AllowAnonymous]
         [HttpPost("authenticate")]
         public IActionResult Authenticate([FromBody] UserCred userCred)
         {
-            var token = jwtAuthenticationManager.TokenCreation(userCred.Username, userCred.Password);
+            var token = _jwtAuthenticationManager.TokenCreation(userCred.Username, userCred.Password);
             if (token == null)
                 return Unauthorized();
             return Ok(token);
@@ -108,7 +108,7 @@ namespace API.Controllers
         [Route("{action}/{name}/{userId}")]
         public ActionResult newToken(string name, string userId)
         {
-           var token = jwtAuthenticationManager.TokenCreation(name, userId);
+           var token = _jwtAuthenticationManager.TokenCreation(name, userId);
             return Ok(token);
         }
     }

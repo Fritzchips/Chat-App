@@ -11,23 +11,13 @@ namespace API
 {
     public class JwtAuthenticationManager : IJwtAuthenticationManager
     {
-        //change for database
-
+        
         private readonly string _key;
 
         public JwtAuthenticationManager(string key)
         {
             _key = key;
         }
-
-        //http request to database Nhibernate to check users where username and pass == inputs
-        //logic stays in Nhibernate
-        //if user exist, return back ok and that specific user info
-        //Go throught this process and get a token
-        //If user doesn't exist return a failed message prompting front end client to try again
-
-        //First check will be from the Token
-        //Exist or Expired? Then database will check it after if needed or just stays in the server
 
         public string TokenCreation(string username, string userId)
         {
@@ -44,9 +34,7 @@ namespace API
                 SigningCredentials = new SigningCredentials(
                 new SymmetricSecurityKey(tokenKey),
                 SecurityAlgorithms.HmacSha256Signature)
-
             };
-            //gives back security token
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
 

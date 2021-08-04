@@ -41,30 +41,6 @@ namespace API
             
             services.Configure<JwtConfig>(_configuration.GetSection("JwtConfig"));
 
-            //services.AddAuthentication(options =>
-            //{
-            //    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            //    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-            //    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            //}).AddJwtBearer(jwt =>
-            //{
-            //    var key = Encoding.ASCII.GetBytes(_configuration["JwtConfig:Secret"]);
-
-            //    jwt.SaveToken = true;
-            //    jwt.TokenValidationParameters = new TokenValidationParameters
-            //    {
-            //        ValidateIssuerSigningKey = true,
-            //        IssuerSigningKey = new SymmetricSecurityKey(key),
-            //        //update later
-            //        ValidateIssuer = false,
-            //        ValidateAudience = false,
-            //        ValidateLifetime = true,
-            //        RequireExpirationTime = false
-            //    };
-            //});
-
-            //services.AddSingleton<IJwtAuthenticationManager>(new JwtAuthenticationManager(key));
-
             services.AddControllers();
             services.AddSignalR();
             services.AddSpaStaticFiles(config =>
@@ -72,7 +48,6 @@ namespace API
                     config.RootPath = "client/build";
                 });
 
-            
             services.AddAuthentication(x =>
                 {
                     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -94,24 +69,25 @@ namespace API
                     };
                 });
 
+                    //services.AddAuthentication()
+                    //    .AddJwtBearer(options =>
+                    //    {
+                    //        options.Events = new JwtBearerEvents
+                    //        {
+                    //            OnMessageReceived = context =>
+                    //            {
+                    //                var accessToken = context.Request.Query["access_token"];
+                    //                if (string.IsNullOrEmpty(accessToken) == false)
+                    //                {
+                    //                    context.Token = accessToken;
+                    //                }
+                    //                return Task.CompletedTask;
+                    //            }
+                    //        };
+                    //    });
 
-            services.AddSingleton<IJwtAuthenticationManager>(new JwtAuthenticationManager(_configuration["JwtConfig:Secret"]));
 
-
-            //services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            //    .AddJwtBearer(options =>
-            //   {
-            //       options.TokenValidationParameters = new TokenValidationParameters
-            //       {
-            //           ValidationIssuer = true,
-            //           ValidationAudience = true,
-            //           ValidationLifetime = true,
-            //           ValidationIssuerSigningKey = true,
-            //           ValidIssuer = "",
-            //           ValidAudience = "",
-            //           IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(""))
-            //       };
-            //   });
+                    services.AddSingleton<IJwtAuthenticationManager>(new JwtAuthenticationManager(_configuration["JwtConfig:Secret"]));
 
             //services.AddSwaggerGen(c =>
             //{

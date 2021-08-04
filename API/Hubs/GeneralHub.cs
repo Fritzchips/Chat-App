@@ -8,9 +8,11 @@ using Core;
 using NHibernate;
 using Infrastructure;
 using System.Collections;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API.Hubs
 {
+    [Authorize]
     public class GeneralHub : Hub
     {
         //make property of List<User>

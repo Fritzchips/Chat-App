@@ -7,13 +7,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-
+using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers
 {
     public class UserController : BaseApiController
     {
         //Getting single channel by name and returning object
+        [Authorize]
         [Route("{action}/{name}")]
         public ActionResult GetChannel(string name)
         {

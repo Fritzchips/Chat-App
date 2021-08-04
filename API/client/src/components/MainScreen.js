@@ -8,20 +8,32 @@ import axios from 'axios';
 import { ChatContext } from '../App';
 import { PAGE_CONTROL } from '../hooks/useData';
 
+
+
 const MainScreen = () => {
 
     const chat = useContext(ChatContext);
+
+    const authAxios = axios.create({
+        headers: {
+            Accept: 'application/json',
+            Authorization: `Bearer ${chat.chatRoom.jwToken}`
+        }
+    });
+
 
     useEffect(async () => {
         if (chat.chatRoom.hubConnection != null) {
             await chat.chatRoom.hubConnection.stop();
         };
-        const channelInfo = await axios.get(`/api/user/getchannel/${chat.chatRoom.channel}`);
+        const channelInfo = await authAxios.get(`/api/user/getchannel/${chat.chatRoom.channel}`);
         const result = channelInfo.data;
         chat.dispatch({ type: PAGE_CONTROL.CHANNEL_ID, value: result.id });
       
         try {
-            const connection = new HubConnectionBuilder().withUrl(`/${chat.chatRoom.channel}`)
+            const connection = new HubConnectionBuilder().withUrl(`/${chat.chatRoom.channel}`, {
+                accessTokenFactory: () => `${chat.chatRoom.jwToken}`
+            })
                 .configureLogging(LogLevel.Information).build();
 
             chat.dispatch({ type: PAGE_CONTROL.CONNECTION, value: connection });

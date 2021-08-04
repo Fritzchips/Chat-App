@@ -1,5 +1,6 @@
 ﻿using Core;
 using Infrastructure;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using Newtonsoft.Json;
 using NHibernate;
@@ -10,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace API.Hubs
 {
+    [Authorize]
     public class CodingHub : Hub
     {
         public async Task SendMessageAll(string message)

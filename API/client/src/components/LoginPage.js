@@ -25,6 +25,9 @@ const LoginPage = () => {
         // refesh token
         //log in by setting the state
 
+        //const boolean = authenticateToken(data.jwToken);
+        //if(boolean) ? createToken(data.user, data.userId) : delete local storage
+
         //if token is expired
         //delete local storage
         // nothing happens
@@ -36,14 +39,22 @@ const LoginPage = () => {
         //save loading and token to state
         //save to localhost
         
-    },[]);
+    }, []);
+    const authenticateToken = async (token) => {
+        const checkValue = await axios.get(`api/login/authenticate/${token}`);
+        if (checkValue.data) {
+            return true
+        } else {
+            return false
+        };
+    };
 
-    const guestHandler = (e) => {
+    const guestHandler = e => {
         e.preventDefault();
         loginAccount('Guest', "0000");
     };
 
-    const submitHandler = (e) => {
+    const submitHandler = e => {
         e.preventDefault();
         if (formDisplay === 'signUp') {
             createAccount(name, password);
@@ -54,25 +65,23 @@ const LoginPage = () => {
 
     const createAccount = async (name, password) => {
         console.log(`creating account with ${name} and ${password}`);
-
-        const formSent = await axios.get(`api/login/signup/${name}/${password}`);
-        const result = formSent.data;
-        console.log(`your results: ${result}`);
+        await axios.post(`api/login/signup/${name}/${password}`);
         setFormDisplay('signIn');
     };
 
     const loginAccount = async ( name, password) => {
-        console.log(`user: ${name} , password: ${password}  `);
-      
         const formSent = await axios.get(`api/login/signin/${name}/${password}`);
         const result = formSent.data;
         if (result) {
             chat.dispatch({type: PAGE_CONTROL.LOGIN , value: result})
             console.log(`user: ${chat.chatRoom.user} with id ${chat.chatRoom.userId}`)
         }
-        const createToken = await axios.get(`api/login/newtoken/${result.name}/${result.id}`);
-        chat.dispatch({ type: PAGE_CONTROL.TOKEN_CREATION, value: createToken.data });
-        
+        createToken(result.name, result.id);
+    };
+
+    const createToken = async (name, id) => {
+        const token = await axios.get(`api/login/newtoken/${name}/${id}`);
+        chat.dispatch({ type: PAGE_CONTROL.TOKEN_CREATION, value: token.data });
     };
 
     return (
