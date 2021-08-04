@@ -21,7 +21,8 @@ using Microsoft.AspNetCore.SignalR;
 using API.Hubs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-
+using API.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace API
 {
@@ -37,6 +38,32 @@ namespace API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            
+            services.Configure<JwtConfig>(_configuration.GetSection("JwtConfig"));
+
+            //services.AddAuthentication(options =>
+            //{
+            //    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            //    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            //    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            //}).AddJwtBearer(jwt =>
+            //{
+            //    var key = Encoding.ASCII.GetBytes(_configuration["JwtConfig:Secret"]);
+
+            //    jwt.SaveToken = true;
+            //    jwt.TokenValidationParameters = new TokenValidationParameters
+            //    {
+            //        ValidateIssuerSigningKey = true,
+            //        IssuerSigningKey = new SymmetricSecurityKey(key),
+            //        //update later
+            //        ValidateIssuer = false,
+            //        ValidateAudience = false,
+            //        ValidateLifetime = true,
+            //        RequireExpirationTime = false
+            //    };
+            //});
+
+            //services.AddSingleton<IJwtAuthenticationManager>(new JwtAuthenticationManager(key));
 
             services.AddControllers();
             services.AddSignalR();
@@ -44,28 +71,31 @@ namespace API
             {
                     config.RootPath = "client/build";
                 });
-            //var tokenKey = Configuration.AddValue<string>("TokenKey");
-            //var key = Encoding.ASCII.GetBytes(tokenKey);
-            //services.AddAuthentication(x =>
-            //    {
-            //        x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            //        x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-
-            //    }).AddJwtBearer(x => 
-            //    {
-            //        x.RequireHttpsMetadata = false;
-            //        x.SaveToken = true;
-            //        x.TokenValidationParameters = new TokenValidationParameters
-            //        {
-            //            ValidateIssuerSigningKey = true,
-            //            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(key)),
-            //            ValidateIssuer = false,
-            //            ValidateAudience = false
-            //        };
-            //});
 
             
-            //services.AddSingleton<IJwtAuthenticationManager>(new JwtAuthenticationManager(tokenKey));
+            services.AddAuthentication(x =>
+                {
+                    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
+                }).AddJwtBearer(x =>
+                {
+                    var tokenKey = Encoding.ASCII.GetBytes(_configuration["JwtConfig:Secret"]);
+
+                    x.RequireHttpsMetadata = false;
+                    x.SaveToken = true;
+                    x.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(tokenKey),
+                        ValidateIssuer = false,
+                        ValidateAudience = false
+                    };
+                });
+
+
+            services.AddSingleton<IJwtAuthenticationManager>(new JwtAuthenticationManager(_configuration["JwtConfig:Secret"]));
 
 
             //services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -103,7 +133,7 @@ namespace API
 
             app.UseRouting();
 
-            //app.UseAuthentication();
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

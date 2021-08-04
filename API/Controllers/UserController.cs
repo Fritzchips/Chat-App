@@ -20,7 +20,7 @@ namespace API.Controllers
             Channel channelData;
             try
             {
-                using (ISession session = ChannelSession.OpenSession())
+                using (ISession session = NhibernateSession.OpenSession())
                 {
                     using (ITransaction transaction = session.BeginTransaction())
                     {

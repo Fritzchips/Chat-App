@@ -7,6 +7,6 @@ namespace API
 {
     public interface IJwtAuthenticationManager
     {
-        string Authenticate(string username, string password);
+        string TokenCreation(string username, string password);
     } 
 }

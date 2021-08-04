@@ -12,13 +12,12 @@ namespace API
     public class JwtAuthenticationManager : IJwtAuthenticationManager
     {
         //change for database
-        private readonly IDictionary<string, string> users = new Dictionary<string, string>
-        { { "hello", "world"}, { "yes", "sir"} };
-        private readonly string key;
+
+        private readonly string _key;
 
         public JwtAuthenticationManager(string key)
         {
-            this.key = key;
+            _key = key;
         }
 
         //http request to database Nhibernate to check users where username and pass == inputs
@@ -30,20 +29,16 @@ namespace API
         //First check will be from the Token
         //Exist or Expired? Then database will check it after if needed or just stays in the server
 
-        public string Authenticate(string username, string password)
+        public string TokenCreation(string username, string userId)
         {
-            if (!users.Any(u => u.Key == username && u.Value == password))
-            {
-                return null;
-            }
-
             var tokenHandler = new JwtSecurityTokenHandler();
-            var tokenKey = Encoding.ASCII.GetBytes(key);
+            var tokenKey = Encoding.ASCII.GetBytes(_key);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(ClaimTypes.Name, username)
+                    new Claim(ClaimTypes.Name, username),
+                    new Claim(ClaimTypes.NameIdentifier, userId)
                 }),
                 Expires = DateTime.UtcNow.AddHours(1),
                 SigningCredentials = new SigningCredentials(

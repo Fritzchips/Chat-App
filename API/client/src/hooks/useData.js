@@ -9,7 +9,8 @@ export const PAGE_CONTROL = {
     USER_DATA: "database users",
     ACTIVE_USERS: "active users",
     CHANNEL_ID: "channel Id",
-    LOGIN: "user login"
+    LOGIN: "user login",
+    TOKEN_CREATION: "save token"
 
 };
 
@@ -22,7 +23,8 @@ const initialState = {
     messageList: [],
     activeUsers: [],
     hubConnection: null,
-    loggedIn: false
+    loggedIn: false,
+    jwToken: null
 };
 
 const reducer = (state, action) => {
@@ -60,6 +62,10 @@ const reducer = (state, action) => {
         case PAGE_CONTROL.LOGIN:
             state.user = action.value.name;
             state.userId = action.value.id;
+            return (state = { ...state });
+
+        case PAGE_CONTROL.TOKEN_CREATION:
+            state.jwToken = action.value;
             state.loggedIn = true;
             return (state = { ...state });
 

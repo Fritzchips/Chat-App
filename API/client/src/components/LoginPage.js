@@ -16,32 +16,63 @@ const LoginPage = () => {
         setPassword('');
     }, [formDisplay]);
 
-    const formChangeHandler = (e) => {
-        setFormDisplay(e.target.value);
-    };
+    useEffect(() => {
+       //if localstorage exist
+        //load it up
+        //take state token
+        // authenticate(token);
+        //if response is good to go
+        // refesh token
+        //log in by setting the state
+
+        //if token is expired
+        //delete local storage
+        // nothing happens
+
+        //signing in
+        // verify credentials get user object
+        //set state
+        // create authentication token
+        //save loading and token to state
+        //save to localhost
+        
+    },[]);
 
     const guestHandler = (e) => {
         e.preventDefault();
-        //verifyDataWithServer('signIn', 'Guest', "0000");
+        loginAccount('Guest', "0000");
     };
 
     const submitHandler = (e) => {
         e.preventDefault();
-        verifyDataWithServer(formDisplay, name, password);
+        if (formDisplay === 'signUp') {
+            createAccount(name, password);
+        } else {
+            loginAccount(name, password);
+        }  
     };
 
-    const verifyDataWithServer = async (formDisplay, name, password) => {
-        console.log(`you are ${formDisplay} with user: ${name} , password: ${password}  `);
+    const createAccount = async (name, password) => {
+        console.log(`creating account with ${name} and ${password}`);
+
+        const formSent = await axios.get(`api/login/signup/${name}/${password}`);
+        const result = formSent.data;
+        console.log(`your results: ${result}`);
+        setFormDisplay('signIn');
+    };
+
+    const loginAccount = async ( name, password) => {
+        console.log(`user: ${name} , password: ${password}  `);
       
-        const formSent = await axios.get(`api/login/${formDisplay}/${name}/${password}`);
+        const formSent = await axios.get(`api/login/signin/${name}/${password}`);
         const result = formSent.data;
         if (result) {
             chat.dispatch({type: PAGE_CONTROL.LOGIN , value: result})
             console.log(`user: ${chat.chatRoom.user} with id ${chat.chatRoom.userId}`)
         }
-      
-       
-        //redirect
+        const createToken = await axios.get(`api/login/newtoken/${result.name}/${result.id}`);
+        chat.dispatch({ type: PAGE_CONTROL.TOKEN_CREATION, value: createToken.data });
+        
     };
 
     return (
@@ -49,7 +80,6 @@ const LoginPage = () => {
             <h1>Wecome to Twinkle</h1>
             <div style={{maxWidth: "80%"}}>
                 <div>
-
                     <Form onSubmit={submitHandler}>
                         <Form.Group className="mb-3" controlId="usernamel">
                             <Form.Label>User Name:</Form.Label>
@@ -65,12 +95,9 @@ const LoginPage = () => {
                     </Form>
 
             
-                    <button onClick={formChangeHandler} value="signIn">Log In</button>
-                    <button onClick={formChangeHandler} value="signUp">New User</button>
+                    <button onClick={e => setFormDisplay(e.target.value)} value="signIn">Log In</button>
+                    <button onClick={e => setFormDisplay(e.target.value)} value="signUp">New User</button>
                  </div>
-           
-            
-
                 <button onClick={guestHandler}>Continue as Guest</button>
             </div>
         </div>

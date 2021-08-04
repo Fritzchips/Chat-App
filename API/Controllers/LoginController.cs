@@ -17,54 +17,23 @@ namespace API.Controllers
     //[Authorize]
     public class LoginController : BaseApiController
     {
-        //private readonly IJwtAuthenticationManager jwtAuthenticationManager;
+        private readonly IJwtAuthenticationManager jwtAuthenticationManager;
 
-        //public LoginController(IJwtAuthenticationManager jwtAuthenticationManager)
-        //{
-        //    this.jwtAuthenticationManager = jwtAuthenticationManager;
-        //}
+        public LoginController(IJwtAuthenticationManager jwtAuthenticationManager)
+        {
+            this.jwtAuthenticationManager = jwtAuthenticationManager;
+        }
 
-        //[HttpGet]
-        //public IEnumerable<string> Get()
-        //{
-        //    return new string[] { "john", "doe" };
-        //}
+        [AllowAnonymous]
+        [HttpPost("authenticate")]
+        public IActionResult Authenticate([FromBody] UserCred userCred)
+        {
+            var token = jwtAuthenticationManager.TokenCreation(userCred.Username, userCred.Password);
+            if (token == null)
+                return Unauthorized();
+            return Ok(token);
+        }
 
-
-
-
-        //[AllowAnonymous]
-        //[HttpPost("authenticate")]
-        //public IActionResult Authenticate([FromBody] UserCred userCred)
-        //{
-        //    var token = jwtAuthenticationManager.Authenticate(userCred.Username, userCred.Password);
-        //    if (token == null)
-        //        return Unauthorized();
-        //    return Ok(token);
-        //}
-
-        //[HttpGet("/{action}/{method}/{name}/{password}")]
-        //public IActionResult veryifyUser(string method, string name, string password)
-        //{
-        //    var newUser;
-        //    using (ISession session = UserSession.OpenSession())
-        //    {
-        //        using (ITransaction transaction = session.BeginTransaction())
-        //        {
-
-
-        //            var checkUser = session.Query<User>().Where(x => x.Name == name && x.Password == password).ToList();
-        //            newUser = checkUser;
-
-        //            transaction.Commit();
-        //        }
-        //    }
-        //    if (newUser)
-        //        return Ok("user is already in the database");
-
-
-        //    return Redirect($"/{method}/{name}/{password}");
-        //}
 
         [Route("{action}/{name}/{password}")]
         public ActionResult signUp(string name, string password)
@@ -77,7 +46,7 @@ namespace API.Controllers
                     Name = name,
                     Password = password
                 };
-                using (ISession session = UserSession.OpenSession())
+                using (ISession session = NhibernateSession.OpenSession())
                 {
                     using (ITransaction transaction = session.BeginTransaction())
                     {
@@ -109,22 +78,19 @@ namespace API.Controllers
         {
             try
             {
-                string person;
                 User client;
-                using (ISession session = UserSession.OpenSession())
+                using (ISession session = NhibernateSession.OpenSession())
                 {
                     using (ITransaction transaction = session.BeginTransaction())
                     {
                         var checkUser = session.Query<User>().Where(x => x.Name == name && x.Password == password).FirstOrDefault();
                         if (checkUser != null)
-                        {
-                            person = "user exist";
-                            transaction.Commit();
+                        {                         
                             client = checkUser;
-
-                        } else
+                            transaction.Commit();
+                        }
+                        else
                         {
-                            person = "user doesn't exist";
                             transaction.Commit();
                             client = null;
                         }
@@ -132,11 +98,18 @@ namespace API.Controllers
                 }
                 return Ok(client);
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return BadRequest("Sorry Can't find user");
+                return BadRequest(e.Message);
             }
             
+        }
+
+        [Route("{action}/{name}/{userId}")]
+        public ActionResult newToken(string name, string userId)
+        {
+           var token = jwtAuthenticationManager.TokenCreation(name, userId);
+            return Ok(token);
         }
     }
 }

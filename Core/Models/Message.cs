@@ -8,8 +8,7 @@ namespace Core
 {
     public class Message
     {
-       
-        
+
         public virtual Guid Id { get; set; }
         public virtual Guid ChannelId { get; set; }
         public virtual Guid UserId { get; set; }

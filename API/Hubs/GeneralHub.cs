@@ -32,7 +32,7 @@ namespace API.Hubs
 
             await Clients.All.SendAsync("ReceiveMessage", convertedMsg);
             //post messages to database
-            using (ISession session = MessageSession.OpenSession())
+            using (ISession session = NhibernateSession.OpenSession())
             {
                 using (ITransaction transaction = session.BeginTransaction())
                 {
@@ -45,7 +45,7 @@ namespace API.Hubs
         public async Task JoinRoom(string message, Guid channelId)
         {           
             List<Message> messageTable = new List<Message>();
-            using (ISession session = MessageSession.OpenSession())
+            using (ISession session = NhibernateSession.OpenSession())
             {
                 using (ITransaction transaction = session.BeginTransaction())
                 {

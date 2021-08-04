@@ -48,12 +48,12 @@ const MainScreen = () => {
         } catch (e) {
             console.error(e);
         }
+        console.log(chat.chatRoom);
     }, [chat.chatRoom.channel]);
 
 
     return (
         <Container fluid className="d-flex flex-column" style={{ height: "100vh" }}>
-            <h1>Welcome {chat.chatRoom.user}, with the Id of { chat.chatRoom.userId}</h1>
                 <span style={{ backgroundColor: "purple", width:"100%"}}><h1>Welcome To Twinkle</h1></span>
            
                 <span className="d-flex justify-content-between align-items-stretch" style={{height: "100vh"}}>

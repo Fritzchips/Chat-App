@@ -6,10 +6,11 @@
 
 	<class name="User" table="users" lazy="true">
 		<id name="Id" column="user_uid" type="guid">
-			<generator class="guid.comb" />
+			<generator class="guid.comb" />		
 		</id>
 		<property name="Name" column="name"/>
 		<property name="Password" column="password"/>
-		
+		<!--<one-to-many  class="Message" column="user_uid"/>-->
+			
 	</class>
 </hibernate-mapping>

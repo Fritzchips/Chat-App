@@ -14,7 +14,7 @@
 		<property name="UserId" column="user_uid"/>
 		<property name="ChannelId" column="channel_uid"/>
 		
-		<!--<many-to-one name="ChannelId" column="channel_uid" type="guid"/>
-		<many-to-one name="UserId" column="user_uid" type="guid"/>-->
+		<!--<many-to-one name="ChannelId" column="channel_uid" />
+		<many-to-one name="UserId" column="user_uid"/>-->
 	</class>
 </hibernate-mapping>

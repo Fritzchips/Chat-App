@@ -1,4 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
+
 <hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
 				   assembly="Core"
 				   namespace="Core">
@@ -8,12 +9,7 @@
 			<generator class="guid.comb" />
 		</id>
 
-
 		<property name="Name" column="name"/>
 		
-		<!--<set name = "Message" table = "messages">
-			<key column = "channel_uid"/>
-			<one-to-many class = "Message"/>
-		</set>-->
 	</class>
 </hibernate-mapping>
