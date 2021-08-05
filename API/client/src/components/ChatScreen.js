@@ -17,10 +17,10 @@ const ChatScreen = () => {
             ChannelId: chat.chatRoom.channelId,
             UserId: chat.chatRoom.userId,
             Date: new Date(),
-            Context: chat.chatRoom.message
+            Context: chat.chatRoom.message,
         });
 
-        await chat.chatRoom.hubConnection.invoke("SendMessageAll", message).catch(function (err) {
+        await chat.chatRoom.hubConnection.invoke("SendMessageAll", message, chat.chatRoom.user).catch(function (err) {
             console.error(err);
         });
     };

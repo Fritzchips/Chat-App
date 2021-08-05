@@ -14,11 +14,13 @@ namespace API.Hubs
 {
     public class GeneralHub : Hub
     {
-        public async Task SendMessageAll(string message)
+        public async Task SendMessageAll(string message, string userName)
         {
+
             var convertedMsg = JsonConvert.DeserializeObject<Message>(message);
 
-            await Clients.All.SendAsync("ReceiveMessage", convertedMsg);
+
+            await Clients.All.SendAsync("ReceiveMessage", convertedMsg, userName);
 
             using (ISession session = NhibernateSession.OpenSession())
             {

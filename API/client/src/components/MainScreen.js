@@ -39,7 +39,8 @@ const MainScreen = () => {
                 console.log(`greetings ${repliedMsg}`);
             });
 
-             connection.on("ReceiveMessage", function (allMessage) {
+            connection.on("ReceiveMessage", function (response, user) {
+                const allMessage = { ...response, name: user };
                 chat.dispatch({ type: PAGE_CONTROL.SUBMIT, value: allMessage });
             });
 
