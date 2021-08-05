@@ -14,44 +14,25 @@ namespace API.Hubs
 {
     public class GeneralHub : Hub
     {
+        private readonly INhibernateHandler _nhibernateHandler;
+
+        public GeneralHub(INhibernateHandler nhibernateHandler)
+        {
+            _nhibernateHandler = nhibernateHandler;
+        }
+
         public async Task SendMessageAll(string message, string userName)
         {
-
             var convertedMsg = JsonConvert.DeserializeObject<Message>(message);
-
-
             await Clients.All.SendAsync("ReceiveMessage", convertedMsg, userName);
-
-            using (ISession session = NhibernateSession.OpenSession())
-            {
-                using (ITransaction transaction = session.BeginTransaction())
-                {
-                    session.Save(convertedMsg);
-                    transaction.Commit();
-                }
-            }
+            _nhibernateHandler.CreateMessage(convertedMsg);
         }
 
         public async Task JoinRoom(string message, Guid channelId)
         {
-            
-            using (ISession session = NhibernateSession.OpenSession())
-            {
-                using (ITransaction transaction = session.BeginTransaction())
-                {
-                    var query = from msg in session.Query<Message>()
-                                join user in session.Query<User>() on msg.UserId equals user.Id
-                                orderby msg.Date
-                                where msg.ChannelId == channelId
-                                select new { msg.Id, msg.Context, msg.Date , user.Name };
-                    var messageTable = query.ToList();
-                    transaction.Commit();
-                    await Clients.Client(Context.ConnectionId).SendAsync("DataReceived", messageTable);
-                }
-            }
-            
+            var messageTable = _nhibernateHandler.GetMessages(channelId);
+            await Clients.Client(Context.ConnectionId).SendAsync("DataReceived", messageTable);
             await Clients.All.SendAsync("ReceiveGreeting", message);
         }
-
     }
 }

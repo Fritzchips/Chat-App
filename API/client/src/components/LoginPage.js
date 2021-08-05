@@ -29,15 +29,14 @@ const LoginPage = () => {
                     }
                 });
 
-                try {
-                    const valid = await authAxios.get(`/api/user/getchannel/general`);
+                const valid = await authAxios.get(`/api/channel/getchannel/general`);
+                if (valid.status === 200) {
                     chat.dispatch({ type: PAGE_CONTROL.LOCAL_STORAGE, value: data });
                     console.log("validation accepted");
-                } catch (e) {
+                } else {
                     localStorage.clear();
                     console.log(`local storage was cleared`);
                 }
-                
             }
         };
 
@@ -82,8 +81,16 @@ const LoginPage = () => {
 
     const createAccount = async (name, password) => {
         console.log(`creating account with ${name} and ${password}`);
-        await axios.post(`api/login/signup/${name}/${password}`);
-        setFormDisplay('signIn');
+        const makeAccount = await axios.post(`api/login/signup/${name}/${password}`);
+
+        if (makeAccount.data === "created user") {
+            setFormDisplay('signIn');
+            console.log(makeAccount);
+        } else {
+            setName('');
+            setPassword('');
+        }
+        
     };
 
     const loginAccount = async ( name, password) => {
@@ -99,8 +106,7 @@ const LoginPage = () => {
 
     const createToken = async (name, id) => {
         const token = await axios.get(`api/login/newtoken/${name}/${id}`);
-        chat.dispatch({ type: PAGE_CONTROL.TOKEN_CREATION, value: token.data });
-        
+        chat.dispatch({ type: PAGE_CONTROL.TOKEN_CREATION, value: token.data });   
     };
 
     return (

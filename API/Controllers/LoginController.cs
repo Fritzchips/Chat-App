@@ -18,41 +18,22 @@ namespace API.Controllers
     public class LoginController : BaseApiController
     {
         private readonly IJwtAuthenticationManager _jwtAuthenticationManager;
+        private readonly INhibernateHandler _nhibernateHandler;
 
-        public LoginController(IJwtAuthenticationManager jwtAuthenticationManager)
+        public LoginController(IJwtAuthenticationManager jwtAuthenticationManager, INhibernateHandler nhibernateHandler)
         {
             _jwtAuthenticationManager = jwtAuthenticationManager;
+            _nhibernateHandler = nhibernateHandler;
         }
 
+        //create user
         [Route("{action}/{name}/{password}")]
         public ActionResult signUp(string name, string password)
         {
             try
             {
-                string words;
-                User person = new User()
-                {
-                    Name = name,
-                    Password = password
-                };
-                using (ISession session = NhibernateSession.OpenSession())
-                {
-                    using (ITransaction transaction = session.BeginTransaction())
-                    {
-                        var checkPerson = session.Query<User>().Where(x => x.Name == name && x.Password == password).ToList();
-                        if(checkPerson.Count < 1)
-                        {
-                            session.Save(person);
-                            transaction.Commit();
-                            words = "saved the person";
-                        } else
-                        {
-                            transaction.Commit();
-                            words = "user already exist";
-                        }
-                    }
-                }
-                return Ok(words);
+                var clientStatus = _nhibernateHandler.CreateUser(name, password);
+                return Ok(clientStatus);
             }
             catch (Exception)
             {
@@ -61,30 +42,13 @@ namespace API.Controllers
             }
         }
 
-
+        //get single user
         [Route("{action}/{name}/{password}")]
         public ActionResult signIn(string name, string password)
         {
             try
             {
-                User client;
-                using (ISession session = NhibernateSession.OpenSession())
-                {
-                    using (ITransaction transaction = session.BeginTransaction())
-                    {
-                        var checkUser = session.Query<User>().Where(x => x.Name == name && x.Password == password).FirstOrDefault();
-                        if (checkUser != null)
-                        {                         
-                            client = checkUser;
-                            transaction.Commit();
-                        }
-                        else
-                        {
-                            transaction.Commit();
-                            client = null;
-                        }
-                    }
-                }
+                var client = _nhibernateHandler.GetUser(name, password);
                 return Ok(client);
             }
             catch (Exception e)
@@ -94,6 +58,7 @@ namespace API.Controllers
             
         }
 
+        //creating jwt
         [Route("{action}/{name}/{userId}")]
         public ActionResult newToken(string name, string userId)
         {

@@ -25,7 +25,7 @@ const MainScreen = () => {
         if (chat.chatRoom.hubConnection != null) {
             await chat.chatRoom.hubConnection.stop();
         };
-        const channelInfo = await authAxios.get(`/api/user/getchannel/${chat.chatRoom.channel}`);
+        const channelInfo = await authAxios.get(`/api/channel/getchannel/${chat.chatRoom.channel}`);
         const result = channelInfo.data;
         chat.dispatch({ type: PAGE_CONTROL.CHANNEL_ID, value: result.id });
       

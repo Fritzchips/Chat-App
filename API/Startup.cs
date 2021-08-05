@@ -23,6 +23,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using API.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Infrastructure;
 
 namespace API
 {
@@ -70,7 +71,9 @@ namespace API
                     };
                 });
 
-             services.AddSingleton<IJwtAuthenticationManager>(new JwtAuthenticationManager(_configuration["JwtConfig:Secret"]));
+            services.AddSingleton<IJwtAuthenticationManager>(new JwtAuthenticationManager(_configuration["JwtConfig:Secret"]));
+            services.AddSingleton<INhibernateHandler>(new NhibernateHandler());
+           
 
             //services.AddSwaggerGen(c =>
             //{
