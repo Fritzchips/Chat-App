@@ -30,7 +30,7 @@ namespace API
                     new Claim(ClaimTypes.Name, username),
                     new Claim(ClaimTypes.NameIdentifier, userId)
                 }),
-                Expires = DateTime.UtcNow.AddHours(1),
+                Expires = DateTime.UtcNow.AddMinutes(1),
                 SigningCredentials = new SigningCredentials(
                 new SymmetricSecurityKey(tokenKey),
                 SecurityAlgorithms.HmacSha256Signature)

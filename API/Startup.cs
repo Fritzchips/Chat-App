@@ -40,7 +40,7 @@ namespace API
         {
             
             services.Configure<JwtConfig>(_configuration.GetSection("JwtConfig"));
-
+            
             services.AddControllers();
             services.AddSignalR();
             services.AddSpaStaticFiles(config =>
@@ -65,29 +65,12 @@ namespace API
                         ValidateIssuerSigningKey = true,
                         IssuerSigningKey = new SymmetricSecurityKey(tokenKey),
                         ValidateIssuer = false,
-                        ValidateAudience = false
+                        ValidateAudience = false,
+                        ValidateLifetime = true
                     };
                 });
 
-                    //services.AddAuthentication()
-                    //    .AddJwtBearer(options =>
-                    //    {
-                    //        options.Events = new JwtBearerEvents
-                    //        {
-                    //            OnMessageReceived = context =>
-                    //            {
-                    //                var accessToken = context.Request.Query["access_token"];
-                    //                if (string.IsNullOrEmpty(accessToken) == false)
-                    //                {
-                    //                    context.Token = accessToken;
-                    //                }
-                    //                return Task.CompletedTask;
-                    //            }
-                    //        };
-                    //    });
-
-
-                    services.AddSingleton<IJwtAuthenticationManager>(new JwtAuthenticationManager(_configuration["JwtConfig:Secret"]));
+             services.AddSingleton<IJwtAuthenticationManager>(new JwtAuthenticationManager(_configuration["JwtConfig:Secret"]));
 
             //services.AddSwaggerGen(c =>
             //{
@@ -118,9 +101,9 @@ namespace API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                endpoints.MapHub<GeneralHub>("/general");
-                endpoints.MapHub<RandomHub>("/random");
-                endpoints.MapHub<CodingHub>("/coding");
+                endpoints.MapHub<GeneralHub>("/chatbox/general");
+                endpoints.MapHub<RandomHub>("/chatbox/random");
+                endpoints.MapHub<CodingHub>("/chatbox/coding");
             });
 
             app.UseSpa(configuration: spa =>

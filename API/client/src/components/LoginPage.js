@@ -5,6 +5,7 @@ import axios from 'axios';
 import { ChatContext } from '../App';
 import { PAGE_CONTROL } from '../hooks/useData';
 
+
 const LoginPage = () => {
     const chat = useContext(ChatContext);
     const [formDisplay, setFormDisplay] = useState('signIn');
@@ -17,6 +18,30 @@ const LoginPage = () => {
     }, [formDisplay]);
 
     useEffect(() => {
+        async function testToken() {
+            if (localStorage.getItem("chatUser")) {
+                const data = JSON.parse(localStorage.getItem("chatUser"));
+                console.log(data);
+                const authAxios = axios.create({
+                    headers: {
+                        Accept: 'application/json',
+                        Authorization: `Bearer ${data.jwToken}`
+                    }
+                });
+
+                try {
+                    const valid = await authAxios.get(`/api/user/getchannel/general`);
+                    chat.dispatch({ type: PAGE_CONTROL.LOCAL_STORAGE, value: data });
+                    console.log("validation accepted");
+                } catch (e) {
+                    localStorage.clear();
+                    console.log(`local storage was cleared`);
+                }
+                
+            }
+        };
+
+        testToken();
        //if localstorage exist
         //load it up
         //take state token
@@ -40,14 +65,6 @@ const LoginPage = () => {
         //save to localhost
         
     }, []);
-    const authenticateToken = async (token) => {
-        const checkValue = await axios.get(`api/login/authenticate/${token}`);
-        if (checkValue.data) {
-            return true
-        } else {
-            return false
-        };
-    };
 
     const guestHandler = e => {
         e.preventDefault();
@@ -77,11 +94,13 @@ const LoginPage = () => {
             console.log(`user: ${chat.chatRoom.user} with id ${chat.chatRoom.userId}`)
         }
         createToken(result.name, result.id);
+
     };
 
     const createToken = async (name, id) => {
         const token = await axios.get(`api/login/newtoken/${name}/${id}`);
         chat.dispatch({ type: PAGE_CONTROL.TOKEN_CREATION, value: token.data });
+        
     };
 
     return (

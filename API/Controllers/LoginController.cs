@@ -24,17 +24,6 @@ namespace API.Controllers
             _jwtAuthenticationManager = jwtAuthenticationManager;
         }
 
-        [AllowAnonymous]
-        [HttpPost("authenticate")]
-        public IActionResult Authenticate([FromBody] UserCred userCred)
-        {
-            var token = _jwtAuthenticationManager.TokenCreation(userCred.Username, userCred.Password);
-            if (token == null)
-                return Unauthorized();
-            return Ok(token);
-        }
-
-
         [Route("{action}/{name}/{password}")]
         public ActionResult signUp(string name, string password)
         {

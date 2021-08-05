@@ -6,9 +6,6 @@ import ChatMessages from './ChatMessages';
 import { ChatContext } from '../App';
 import { PAGE_CONTROL } from '../hooks/useData';
 import { v4 as uuidv4 } from 'uuid';
-import axios from 'axios';
-
-
 
 const ChatScreen = () => {
     const chat = useContext(ChatContext);
@@ -26,8 +23,6 @@ const ChatScreen = () => {
         await chat.chatRoom.hubConnection.invoke("SendMessageAll", message).catch(function (err) {
             console.error(err);
         });
-
-             //    /*const data = await axios.get(`/api/user/createmessage/${message.data}`);*/
     };
 
     return (
@@ -35,8 +30,7 @@ const ChatScreen = () => {
         <Container className="d-flex flex-column " style={{minHeight: "100%"}} >
             <div style={{ width: "100%", height: "80vh",  border: "3px solid black", borderRadius: "5px" , overflow: "scroll"}}>
                 <div style={{ backgroundColor: "grey", padding: "10px", fontSize: "25px" }}><strong>Welcome to { chat.chatRoom.channel} channel</strong></div>
-                <ChatMessages />
-                
+                <ChatMessages />     
             </div>
 
             <div style={{ height: "10vh", width: "100%", marginTop: "20px" }} className="align-self-baseline">

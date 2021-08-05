@@ -1,5 +1,6 @@
 ﻿using Core;
 using Infrastructure;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using Newtonsoft.Json;
@@ -10,8 +11,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace API.Hubs
-{
-    [Authorize]
+{ 
     public class CodingHub : Hub
     {
         public async Task SendMessageAll(string message)
@@ -19,7 +19,7 @@ namespace API.Hubs
             var convertedMsg = JsonConvert.DeserializeObject<Message>(message);
 
             await Clients.All.SendAsync("ReceiveMessage", convertedMsg);
-            //post messages to database
+
             using (ISession session = NhibernateSession.OpenSession())
             {
                 using (ITransaction transaction = session.BeginTransaction())
@@ -33,22 +33,24 @@ namespace API.Hubs
         public async Task JoinRoom(string message, Guid channelId)
         {
 
-            List<Message> messageTable = new List<Message>();
+            
 
             using (ISession session = NhibernateSession.OpenSession())
             {
                 using (ITransaction transaction = session.BeginTransaction())
                 {
 
-                    var dataCopy = session.Query<Message>()
-                        .OrderBy(x => x.Date)
-                        .Where(x => x.ChannelId == channelId)
-                        .ToList();
-                    messageTable = dataCopy;
+                    var query = from msg in session.Query<Message>()
+                                join user in session.Query<User>() on msg.UserId equals user.Id
+                                orderby msg.Date
+                                where msg.ChannelId == channelId
+                                select new { msg.Id, msg.Context, msg.Date, user.Name };
+                    var messageTable = query.ToList();
                     transaction.Commit();
+                    await Clients.Client(Context.ConnectionId).SendAsync("DataReceived", messageTable);
                 }
             }
-            await Clients.Client(Context.ConnectionId).SendAsync("DataReceived", messageTable);
+           
             await Clients.All.SendAsync("ReceiveGreeting", message);
         }
     }

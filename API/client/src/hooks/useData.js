@@ -10,7 +10,9 @@ export const PAGE_CONTROL = {
     ACTIVE_USERS: "active users",
     CHANNEL_ID: "channel Id",
     LOGIN: "user login",
-    TOKEN_CREATION: "save token"
+    TOKEN_CREATION: "save token",
+    LOCAL_STORAGE: "loading storage",
+    LOG_OUT: "logout"
 
 };
 
@@ -68,6 +70,12 @@ const reducer = (state, action) => {
             state.jwToken = action.value;
             state.loggedIn = true;
             return (state = { ...state });
+
+        case PAGE_CONTROL.LOCAL_STORAGE:
+            return (state = { ...action.value });
+
+        case PAGE_CONTROL.LOG_OUT:
+            return (state = { ...initialState });
 
         default:
             return state;
