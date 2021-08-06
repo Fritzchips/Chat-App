@@ -12,7 +12,8 @@ export const PAGE_CONTROL = {
     LOGIN: "user login",
     TOKEN_CREATION: "save token",
     LOCAL_STORAGE: "loading storage",
-    LOG_OUT: "logout"
+    LOG_OUT: "logout",
+    ADD_USER: "remove user"
 
 };
 
@@ -58,7 +59,8 @@ const reducer = (state, action) => {
             return (state = { ...state });
 
         case PAGE_CONTROL.ACTIVE_USERS:
-            state.activeUsers.push(action.value);
+                state.activeUsers = [...action.value];
+
             return (state = { ...state });
 
         case PAGE_CONTROL.LOGIN:
@@ -76,6 +78,9 @@ const reducer = (state, action) => {
 
         case PAGE_CONTROL.LOG_OUT:
             return (state = { ...initialState });
+
+        case PAGE_CONTROL.ADD_USER:
+            state.activeUsers.push(action.value);
 
         default:
             return state;

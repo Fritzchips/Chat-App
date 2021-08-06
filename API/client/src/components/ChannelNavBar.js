@@ -20,9 +20,9 @@ const ChannelNavBar = () => {
                 <br></br>
                 <div>
                     <h1>Active Users</h1>
-                    {chat.chatRoom.activeUsers.length > 0 ? chat.chatRoom.activeUsers.map((user, index) => (
-                        <div key={index}>
-                            <p>{user}</p>
+                    {chat.chatRoom.activeUsers.length > 0 ? chat.chatRoom.activeUsers.map(user => (
+                        <div key={user.id}>
+                            <p>{user.name}</p>
                         </div>
                         )) : (<></>)}
                 </div>

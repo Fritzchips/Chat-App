@@ -1,7 +1,5 @@
-import React, { useContext, useEffect, useState} from 'react';
+import React, { useContext} from 'react';
 import Container from 'react-bootstrap/Container';
-import InputGroup from 'react-bootstrap/InputGroup';
-import Button from 'react-bootstrap/Button';
 import ChatMessages from './ChatMessages';
 import { ChatContext } from '../App';
 import { PAGE_CONTROL } from '../hooks/useData';

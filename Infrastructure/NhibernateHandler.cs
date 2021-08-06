@@ -42,12 +42,12 @@ namespace Infrastructure
                     {
                         session.Save(person);
                         transaction.Commit();
-                        return "created user";
+                        return "account is created";
                     }
                     else
                     {
                         transaction.Commit();
-                        return "user already exist";    
+                        return "account already exist";    
                     }
                 }
             }

@@ -17,53 +17,30 @@ const LoginPage = () => {
         setPassword('');
     }, [formDisplay]);
 
-    useEffect(() => {
-        async function testToken() {
-            if (localStorage.getItem("chatUser")) {
-                const data = JSON.parse(localStorage.getItem("chatUser"));
-                console.log(data);
-                const authAxios = axios.create({
-                    headers: {
-                        Accept: 'application/json',
-                        Authorization: `Bearer ${data.jwToken}`
-                    }
-                });
+    //useEffect(() => {
+    //    async function testToken() {
+    //        if (localStorage.getItem("chatUser")) {
+    //            const data = JSON.parse(localStorage.getItem("chatUser"));
+    //            console.log(data);
+    //            const authAxios = axios.create({
+    //                headers: {
+    //                    Accept: 'application/json',
+    //                    Authorization: `Bearer ${data.jwToken}`
+    //                }
+    //            });
+    //            try {
+    //                const valid = await authAxios.get(`/api/channel/getchannel/general`);
+    //                chat.dispatch({ type: PAGE_CONTROL.LOCAL_STORAGE, value: data });
+    //                console.log("validation accepted");  
+    //            } catch (e) {
+    //                localStorage.clear();
+    //                console.log(`local storage was cleared`);
+    //            }
+    //        }
+    //    };
 
-                const valid = await authAxios.get(`/api/channel/getchannel/general`);
-                if (valid.status === 200) {
-                    chat.dispatch({ type: PAGE_CONTROL.LOCAL_STORAGE, value: data });
-                    console.log("validation accepted");
-                } else {
-                    localStorage.clear();
-                    console.log(`local storage was cleared`);
-                }
-            }
-        };
-
-        testToken();
-       //if localstorage exist
-        //load it up
-        //take state token
-        // authenticate(token);
-        //if response is good to go
-        // refesh token
-        //log in by setting the state
-
-        //const boolean = authenticateToken(data.jwToken);
-        //if(boolean) ? createToken(data.user, data.userId) : delete local storage
-
-        //if token is expired
-        //delete local storage
-        // nothing happens
-
-        //signing in
-        // verify credentials get user object
-        //set state
-        // create authentication token
-        //save loading and token to state
-        //save to localhost
-        
-    }, []);
+    //    testToken();     
+    //}, []);
 
     const guestHandler = e => {
         e.preventDefault();
@@ -83,13 +60,13 @@ const LoginPage = () => {
         console.log(`creating account with ${name} and ${password}`);
         const makeAccount = await axios.post(`api/login/signup/${name}/${password}`);
 
-        if (makeAccount.data === "created user") {
+        console.log(`${name}'s ${makeAccount.data}`);
+        if (makeAccount.data === "account is created") {
             setFormDisplay('signIn');
-            console.log(makeAccount);
         } else {
             setName('');
             setPassword('');
-        }
+        };
         
     };
 

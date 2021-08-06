@@ -2,7 +2,7 @@ import React, { useEffect, useContext} from 'react';
 import ChannelNavBar from './ChannelNavBar';
 import Container from 'react-bootstrap/Container';
 import ChatScreen from './ChatScreen';
-import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
+import { HubConnectionBuilder } from '@microsoft/signalr';
 import axios from 'axios';
 import { ChatContext } from '../App';
 import { PAGE_CONTROL } from '../hooks/useData';
@@ -21,43 +21,49 @@ const MainScreen = () => {
     });
 
 
-    useEffect(async () => {
-        if (chat.chatRoom.hubConnection != null) {
-            await chat.chatRoom.hubConnection.stop();
-        };
+    useEffect(() => {
+        async function connectToChat() {
+
+            if (chat.chatRoom.hubConnection != null) {
+                await chat.chatRoom.hubConnection.stop();
+            };
+
         const channelInfo = await authAxios.get(`/api/channel/getchannel/${chat.chatRoom.channel}`);
         const result = channelInfo.data;
         chat.dispatch({ type: PAGE_CONTROL.CHANNEL_ID, value: result.id });
       
-        try {
-            const connection = new HubConnectionBuilder().withUrl(`/chatbox/${chat.chatRoom.channel}`)
-                .build();
+            try {
+                const connection = new HubConnectionBuilder().withUrl(`/chatbox/${chat.chatRoom.channel}`)
+                    .build();
 
-            chat.dispatch({ type: PAGE_CONTROL.CONNECTION, value: connection });
+                chat.dispatch({ type: PAGE_CONTROL.CONNECTION, value: connection });
 
-             connection.on("ReceiveGreeting", function (repliedMsg) {
-                console.log(`greetings ${repliedMsg}`);
-            });
+                connection.on("ReceiveMessage", (response, user) => {
+                    const allMessage = { ...response, name: user };
+                    chat.dispatch({ type: PAGE_CONTROL.SUBMIT, value: allMessage });
+                });
 
-            connection.on("ReceiveMessage", function (response, user) {
-                const allMessage = { ...response, name: user };
-                chat.dispatch({ type: PAGE_CONTROL.SUBMIT, value: allMessage });
-            });
+                connection.on("DataReceived", messageTable => {
+                    chat.dispatch({ type: PAGE_CONTROL.CHANNEL_DATA, value: messageTable });  
+                });
 
-             connection.on("DataReceived", function (messageTable) {
-                chat.dispatch({ type: PAGE_CONTROL.CHANNEL_DATA, value: messageTable });
-            });
+                connection.on("UsersReceived", userTable => {
+                    chat.dispatch({ type: PAGE_CONTROL.ACTIVE_USERS, value: userTable });
+                });
 
-            await connection.start();
+                await connection.start();
 
-            await connection.invoke("JoinRoom", chat.chatRoom.user, chat.chatRoom.channelId).catch(function (err) {
-                console.error(err);
+                await connection.invoke("JoinRoom", chat.chatRoom.user, chat.chatRoom.channelId).catch(function (err) {
+                    console.error(err);
 
-            });
+                });
 
-        } catch (e) {
-            console.erro(e);
+            } catch (e) {
+                console.erro(e);
+                }
         }
+
+        connectToChat();
     }, [chat.chatRoom.channel]);
 
     const logoutHandler = () => {
