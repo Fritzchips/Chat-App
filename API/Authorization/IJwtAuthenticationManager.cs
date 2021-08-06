@@ -8,5 +8,7 @@ namespace API
     public interface IJwtAuthenticationManager
     {
         string TokenCreation(string username, string password);
+
+        bool TokenValidation(string token);
     } 
 }

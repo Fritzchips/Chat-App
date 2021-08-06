@@ -17,30 +17,38 @@ const LoginPage = () => {
         setPassword('');
     }, [formDisplay]);
 
-    //useEffect(() => {
-    //    async function testToken() {
-    //        if (localStorage.getItem("chatUser")) {
-    //            const data = JSON.parse(localStorage.getItem("chatUser"));
-    //            console.log(data);
-    //            const authAxios = axios.create({
-    //                headers: {
-    //                    Accept: 'application/json',
-    //                    Authorization: `Bearer ${data.jwToken}`
-    //                }
-    //            });
-    //            try {
-    //                const valid = await authAxios.get(`/api/channel/getchannel/general`);
-    //                chat.dispatch({ type: PAGE_CONTROL.LOCAL_STORAGE, value: data });
-    //                console.log("validation accepted");  
-    //            } catch (e) {
-    //                localStorage.clear();
-    //                console.log(`local storage was cleared`);
-    //            }
-    //        }
-    //    };
+    useEffect(() => {
+        async function testToken() {
+            if (localStorage.getItem("chatUser")) {
+                const data = JSON.parse(localStorage.getItem("chatUser"));
+                console.log(data);
+                //const authAxios = axios.create({
+                //    headers: {
+                //        Accept: 'application/json',
+                //        Authorization: `Bearer ${data.jwToken}`
+                //    }
+                //  //const authAxios = axios.create({
+                //    headers: {
+                //        Accept: 'application/json',
+                //        Authorization: `Bearer ${data.jwToken}`
+                //    }
+                //});
+     
+                const valid = await axios.get(`/api/login/tokenvalidation/${data.jwToken}`);
+                console.log(`valid output: ${valid.data}`);
+                if (valid.data) {
+                    chat.dispatch({ type: PAGE_CONTROL.LOCAL_STORAGE, value: data });
+                    console.log("validation accepted");
+                } else {
+                    localStorage.clear();
+                    console.log("storage was cleared");
+                }
+                  
+            }
+        };
 
-    //    testToken();     
-    //}, []);
+        testToken();     
+    }, []);
 
     const guestHandler = e => {
         e.preventDefault();

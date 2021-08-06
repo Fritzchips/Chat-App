@@ -104,9 +104,7 @@ namespace API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                endpoints.MapHub<GeneralHub>("/chatbox/general");
-                endpoints.MapHub<RandomHub>("/chatbox/random");
-                endpoints.MapHub<CodingHub>("/chatbox/coding");
+                endpoints.MapHub<ChatHub>("/chatbox/chat");
             });
 
             app.UseSpa(configuration: spa =>

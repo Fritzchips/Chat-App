@@ -31,13 +31,42 @@ namespace API
                     new Claim(ClaimTypes.NameIdentifier, userId)
                 }),
                 Expires = DateTime.UtcNow.AddMinutes(1),
+                //Issuer = "John",
+                //Audience = username,
                 SigningCredentials = new SigningCredentials(
                 new SymmetricSecurityKey(tokenKey),
                 SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
+        }
+
+        public bool TokenValidation(string token)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var tokenKey = Encoding.ASCII.GetBytes(_key);
+            var validationParameters = new TokenValidationParameters()
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(tokenKey),
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                //ValidIssuer = "John",
+                //ValidAudience = username,
+            };
+
+            try
+            {
+                var checkToken = tokenHandler.ValidateToken(token, validationParameters, out SecurityToken validateToken);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
 
         }
+
     }
 }

@@ -65,5 +65,12 @@ namespace API.Controllers
            var token = _jwtAuthenticationManager.TokenCreation(name, userId);
             return Ok(token);
         }
+
+        [Route("{action}/{token}")]
+        public bool tokenValidation(string token)
+        {
+            var value = _jwtAuthenticationManager.TokenValidation(token);
+            return value;
+        }
     }
 }

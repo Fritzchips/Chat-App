@@ -18,7 +18,7 @@ const ChatScreen = () => {
             Context: chat.chatRoom.message,
         });
 
-        await chat.chatRoom.hubConnection.invoke("SendMessageAll", message, chat.chatRoom.user).catch(function (err) {
+        await chat.chatRoom.hubConnection.invoke("SendMessageRoom", message, chat.chatRoom.user, chat.chatRoom.channel).catch(function (err) {
             console.error(err);
         });
     };

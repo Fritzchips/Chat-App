@@ -19,6 +19,7 @@ export const PAGE_CONTROL = {
 
 const initialState = {
     channel: 'general',
+    prevChannel: '',
     user: '',
     userId: '',
     channelId: '',
@@ -40,6 +41,9 @@ const reducer = (state, action) => {
             return (state = { ...state, message: '' });
 
         case PAGE_CONTROL.CHANNEL_CHANGE:
+            if (state.channel !== action.value) {
+                state.prevChannel = state.channel;
+            }
             return (state = { ...state, channel: action.value });
 
         case PAGE_CONTROL.CHANNEL_ID:

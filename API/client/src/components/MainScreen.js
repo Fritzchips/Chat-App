@@ -20,48 +20,24 @@ const MainScreen = () => {
         }
     });
 
-
     useEffect(() => {
         async function connectToChat() {
-
-            if (chat.chatRoom.hubConnection != null) {
-                await chat.chatRoom.hubConnection.stop();
+            if (chat.chatRoom.hubConnection !== null) {
+                await chat.chatRoom.hubConnection.invoke("LeaveRoom", chat.chatRoom.prevChannel);
+                console.log(`leaving channel ${chat.chatRoom.prevChannel}`)
             };
 
-        const channelInfo = await authAxios.get(`/api/channel/getchannel/${chat.chatRoom.channel}`);
-        const result = channelInfo.data;
-        chat.dispatch({ type: PAGE_CONTROL.CHANNEL_ID, value: result.id });
-      
-            try {
-                const connection = new HubConnectionBuilder().withUrl(`/chatbox/${chat.chatRoom.channel}`)
-                    .build();
+            const channelInfo = await authAxios.get(`/api/channel/getchannel/${chat.chatRoom.channel}`);
+            const result = channelInfo.data;
+            chat.dispatch({ type: PAGE_CONTROL.CHANNEL_ID, value: result.id });
 
-                chat.dispatch({ type: PAGE_CONTROL.CONNECTION, value: connection });
-
-                connection.on("ReceiveMessage", (response, user) => {
-                    const allMessage = { ...response, name: user };
-                    chat.dispatch({ type: PAGE_CONTROL.SUBMIT, value: allMessage });
-                });
-
-                connection.on("DataReceived", messageTable => {
-                    chat.dispatch({ type: PAGE_CONTROL.CHANNEL_DATA, value: messageTable });  
-                });
-
-                connection.on("UsersReceived", userTable => {
-                    chat.dispatch({ type: PAGE_CONTROL.ACTIVE_USERS, value: userTable });
-                });
-
-                await connection.start();
-
-                await connection.invoke("JoinRoom", chat.chatRoom.user, chat.chatRoom.channelId).catch(function (err) {
-                    console.error(err);
-
-                });
-
-            } catch (e) {
-                console.erro(e);
-                }
-        }
+            if (chat.chatRoom.hubConnection === null) {
+                await startConnection();
+            } else {
+                await chat.chatRoom.hubConnection.invoke("JoinRoom", chat.chatRoom.channel, chat.chatRoom.channelId);
+            }
+           
+        };
 
         connectToChat();
     }, [chat.chatRoom.channel]);
@@ -69,6 +45,35 @@ const MainScreen = () => {
     const logoutHandler = () => {
         localStorage.clear();
         chat.dispatch({ type: PAGE_CONTROL.LOG_OUT });
+    };
+
+    const startConnection = async() => {
+        try {
+            const connection = new HubConnectionBuilder().withUrl(`/chatbox/chat`).build();
+
+            chat.dispatch({ type: PAGE_CONTROL.CONNECTION, value: connection });
+
+            connection.on("ReceiveMessage", (response, user) => {
+                const allMessage = { ...response, name: user };
+                chat.dispatch({ type: PAGE_CONTROL.SUBMIT, value: allMessage });
+            });
+
+            connection.on("DataReceived", messageTable => {
+                chat.dispatch({ type: PAGE_CONTROL.CHANNEL_DATA, value: messageTable });
+            });
+
+            connection.on("UsersReceived", userTable => {
+                chat.dispatch({ type: PAGE_CONTROL.ACTIVE_USERS, value: userTable });
+            });
+
+            await connection.start();
+
+            await connection.invoke("JoinChat", chat.chatRoom.user);
+            await connection.invoke("JoinRoom", chat.chatRoom.channel, chat.chatRoom.channelId)
+
+        } catch (e) {
+            console.erro(e);
+        }
     };
 
 
