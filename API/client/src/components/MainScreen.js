@@ -23,24 +23,24 @@ const MainScreen = () => {
     useEffect(() => {
         async function connectToChat() {
             if (chat.chatRoom.hubConnection !== null) {
-                await chat.chatRoom.hubConnection.invoke("LeaveRoom", chat.chatRoom.prevChannel);
-                console.log(`leaving channel ${chat.chatRoom.prevChannel}`)
+                await chat.chatRoom.hubConnection.invoke("LeaveRoom", chat.chatRoom.previousChannel);
+                console.log(`leaving channel ${chat.chatRoom.previousChannel}`)
             };
 
-            const channelInfo = await authAxios.get(`/api/channel/getchannel/${chat.chatRoom.channel}`);
+            const channelInfo = await authAxios.get(`/api/channel/getchannel/${chat.chatRoom.currentChannel}`);
             const result = channelInfo.data;
-            chat.dispatch({ type: PAGE_CONTROL.CHANNEL_ID, value: result.id });
+            chat.dispatch({ type: PAGE_CONTROL.SAVE_CHANNEL_ID, value: result.id });
 
             if (chat.chatRoom.hubConnection === null) {
                 await startConnection();
             } else {
-                await chat.chatRoom.hubConnection.invoke("JoinRoom", chat.chatRoom.channel, chat.chatRoom.channelId);
+                await chat.chatRoom.hubConnection.invoke("JoinRoom", chat.chatRoom.currentChannel, chat.chatRoom.channelId);
             }
            
         };
 
         connectToChat();
-    }, [chat.chatRoom.channel]);
+    }, [chat.chatRoom.currentChannel]);
 
     const logoutHandler = () => {
         localStorage.clear();
@@ -51,19 +51,19 @@ const MainScreen = () => {
         try {
             const connection = new HubConnectionBuilder().withUrl(`/chatbox/chat`).build();
 
-            chat.dispatch({ type: PAGE_CONTROL.CONNECTION, value: connection });
+            chat.dispatch({ type: PAGE_CONTROL.SAVE_HUB_CONNECTION, value: connection });
 
             connection.on("ReceiveMessage", (response, user) => {
                 const allMessage = { ...response, name: user };
-                chat.dispatch({ type: PAGE_CONTROL.SUBMIT, value: allMessage });
+                chat.dispatch({ type: PAGE_CONTROL.ADD_NEW_MESSAGE, value: allMessage });
             });
 
             connection.on("DataReceived", messageTable => {
-                chat.dispatch({ type: PAGE_CONTROL.CHANNEL_DATA, value: messageTable });
+                chat.dispatch({ type: PAGE_CONTROL.LOAD_CHANNEL_MESSAGES, value: messageTable });
             });
 
             connection.on("UsersReceived", userTable => {
-                chat.dispatch({ type: PAGE_CONTROL.ACTIVE_USERS, value: userTable });
+                chat.dispatch({ type: PAGE_CONTROL.LOAD_ACTIVE_USERS, value: userTable });
             });
 
             await connection.start();

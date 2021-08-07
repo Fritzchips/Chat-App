@@ -49,10 +49,10 @@ namespace API
             {
                 ValidateIssuerSigningKey = true,
                 IssuerSigningKey = new SymmetricSecurityKey(tokenKey),
-                ValidateIssuer = true,
-                ValidateAudience = true,
+                ValidateIssuer = false,
+                ValidateAudience = false,
                 ValidateLifetime = true,
-                //ValidIssuer = "John",
+                //ValidIssuer = "John"
                 //ValidAudience = username,
             };
 

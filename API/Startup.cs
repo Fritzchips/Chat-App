@@ -67,7 +67,8 @@ namespace API
                         IssuerSigningKey = new SymmetricSecurityKey(tokenKey),
                         ValidateIssuer = false,
                         ValidateAudience = false,
-                        ValidateLifetime = true
+                        ValidateLifetime = true,
+                        //ValidIssuer = "John"
                     };
                 });
 

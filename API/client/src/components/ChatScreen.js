@@ -1,40 +1,44 @@
-import React, { useContext} from 'react';
+import React, { useContext, useEffect} from 'react';
 import Container from 'react-bootstrap/Container';
 import ChatMessages from './ChatMessages';
 import { ChatContext } from '../App';
-import { PAGE_CONTROL } from '../hooks/useData';
 import { v4 as uuidv4 } from 'uuid';
 
 const ChatScreen = () => {
     const chat = useContext(ChatContext);
+    const [message, setMessage] = useState('');
+
+    useEffect(() => {
+        setMessage('');
+    }, [chat.chatRoom.currentChannel]);
         
     const postHandler = async(e) => {
         e.preventDefault();
-        var message = JSON.stringify({
+        var newMessage = JSON.stringify({
             Id: uuidv4(),
             ChannelId: chat.chatRoom.channelId,
             UserId: chat.chatRoom.userId,
             Date: new Date(),
-            Context: chat.chatRoom.message,
+            Context: message,
         });
 
-        await chat.chatRoom.hubConnection.invoke("SendMessageRoom", message, chat.chatRoom.user, chat.chatRoom.channel).catch(function (err) {
-            console.error(err);
-        });
+        await chat.chatRoom.hubConnection.invoke("SendMessageRoom", newMessage, chat.chatRoom.user, chat.chatRoom.currentChannel);
+
+        setMessage('');
     };
 
     return (
 
         <Container className="d-flex flex-column " style={{minHeight: "100%"}} >
             <div style={{ width: "100%", height: "80vh",  border: "3px solid black", borderRadius: "5px" , overflow: "scroll"}}>
-                <div style={{ backgroundColor: "grey", padding: "10px", fontSize: "25px" }}><strong>Welcome to { chat.chatRoom.channel} channel</strong></div>
+                <div style={{ backgroundColor: "grey", padding: "10px", fontSize: "25px" }}><strong>Welcome to { chat.chatRoom.currentChannel} channel</strong></div>
                 <ChatMessages />     
             </div>
 
             <div style={{ height: "10vh", width: "100%", marginTop: "20px" }} className="align-self-baseline">
 
                 <form onSubmit={postHandler}>
-                    <input type="text" required style={{ width: "80%" }} value={chat.chatRoom.message} onChange={e => chat.dispatch({ type: PAGE_CONTROL.INPUT , value: e.target.value})}/>
+                    <input type="text" required style={{ width: "80%" }} value={message} onChange={e => setMessage(e.target.value)}/>
                     <button>Post</button>
                 </form>
                 </div>

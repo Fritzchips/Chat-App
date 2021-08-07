@@ -37,7 +37,7 @@ const LoginPage = () => {
                 const valid = await axios.get(`/api/login/tokenvalidation/${data.jwToken}`);
                 console.log(`valid output: ${valid.data}`);
                 if (valid.data) {
-                    chat.dispatch({ type: PAGE_CONTROL.LOCAL_STORAGE, value: data });
+                    chat.dispatch({ type: PAGE_CONTROL.LOAD_LOCAL_STORAGE, value: data });
                     console.log("validation accepted");
                 } else {
                     localStorage.clear();
@@ -82,7 +82,7 @@ const LoginPage = () => {
         const formSent = await axios.get(`api/login/signin/${name}/${password}`);
         const result = formSent.data;
         if (result) {
-            chat.dispatch({type: PAGE_CONTROL.LOGIN , value: result})
+            chat.dispatch({type: PAGE_CONTROL.SAVE_USER_INFO , value: result})
             console.log(`user: ${chat.chatRoom.user} with id ${chat.chatRoom.userId}`)
         }
         createToken(result.name, result.id);
@@ -91,7 +91,7 @@ const LoginPage = () => {
 
     const createToken = async (name, id) => {
         const token = await axios.get(`api/login/newtoken/${name}/${id}`);
-        chat.dispatch({ type: PAGE_CONTROL.TOKEN_CREATION, value: token.data });   
+        chat.dispatch({ type: PAGE_CONTROL.SAVE_TOKEN, value: token.data });   
     };
 
     return (
