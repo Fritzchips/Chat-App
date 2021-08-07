@@ -8,7 +8,7 @@ const  UserInforChangeModal = () => {
 
     const verifyHandler = async (e) => {
         e.preventDefault();
-        const checkData = await axios.post(`/api/user/${chat.chatRoom.userId}/${name}/${password}`);
+        const checkData = await axios.post(`/api/user/${chat.session.userId}/${name}/${password}`);
         if (checkData.value) {
             setChangeField("confirmed");
             setName('');

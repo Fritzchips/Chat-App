@@ -7,25 +7,25 @@ import useData from './hooks/useData';
 export const ChatContext = React.createContext();
 
 function App() {
-    const [chatRoom, dispatch] = useData();
+    const [session, dispatch] = useData();
 
     useEffect(() => {
-        if (chatRoom.jwToken !== null) {
-            localStorage.setItem("chatUser", JSON.stringify(chatRoom));
+        if (session.jwToken !== null) {
+            localStorage.setItem("chatUser", JSON.stringify(session));
             console.log("saved to local storage");
-        }
+        };
         
-    }, [chatRoom.loggedIn]);
+    }, [session.loggedIn]);
 
   return (
       <div className="App">
-          <ChatContext.Provider value={{ chatRoom: chatRoom, dispatch: dispatch }}>
+          <ChatContext.Provider value={{ session: session, dispatch: dispatch }}>
 
-          {chatRoom.loggedIn ? (<MainScreen />) : (<LoginPage />)}
+          {session.loggedIn ? (<MainScreen />) : (<LoginPage />)}
 
           </ChatContext.Provider >
     </div>
   );
-}
+};
 
 export default App;

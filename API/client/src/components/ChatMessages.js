@@ -9,7 +9,7 @@ const ChatMessages = () => {
 
     return (
         <Container fluid className="d-flex flex-column" style={{ height: "100vh" }}>
-            {chat.chatRoom.messageList.length > 0 ? chat.chatRoom.messageList.map(message => (
+            {chat.session.messageList.length > 0 ? chat.session.messageList.map(message => (
                 <div key={message.id}>
                     <p>{message.name} says:</p>
                     <p>{message.context}</p>

@@ -18,10 +18,9 @@ export const PAGE_CONTROL = {
 const initialState = {
     currentChannel: 'general',
     previousChannel: '',
-    user: '',
+    userName: '',
     userId: '',
     channelId: '',
-    message: '',
     messageList: [],
     activeUsersList: [],
     hubConnection: null,
@@ -57,7 +56,7 @@ const reducer = (state, action) => {
             return (state = { ...state, channelId: action.value });
 
         case PAGE_CONTROL.SAVE_USER_INFO:
-            state.user = action.value.name;
+            state.userName = action.value.name;
             state.userId = action.value.id;
             return (state = { ...state });
 
@@ -78,9 +77,9 @@ const reducer = (state, action) => {
 };
 
 const useData = () => {
-    const [chatRoom, dispatch] = useReducer(reducer, initialState);
+    const [session, dispatch] = useReducer(reducer, initialState);
 
-    return [chatRoom, dispatch];
+    return [session, dispatch];
 };
 
 export default useData;

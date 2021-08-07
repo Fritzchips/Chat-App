@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace API
 {
-    public interface IJwtAuthenticationManager
+    public interface IJwtHandler
     {
         string TokenCreation(string username, string password);
 

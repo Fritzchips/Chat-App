@@ -20,33 +20,17 @@ const LoginPage = () => {
     useEffect(() => {
         async function testToken() {
             if (localStorage.getItem("chatUser")) {
-                const data = JSON.parse(localStorage.getItem("chatUser"));
-                console.log(data);
-                //const authAxios = axios.create({
-                //    headers: {
-                //        Accept: 'application/json',
-                //        Authorization: `Bearer ${data.jwToken}`
-                //    }
-                //  //const authAxios = axios.create({
-                //    headers: {
-                //        Accept: 'application/json',
-                //        Authorization: `Bearer ${data.jwToken}`
-                //    }
-                //});
-     
+                const data = JSON.parse(localStorage.getItem("chatUser"));      
                 const valid = await axios.get(`/api/login/tokenvalidation/${data.jwToken}`);
-                console.log(`valid output: ${valid.data}`);
                 if (valid.data) {
                     chat.dispatch({ type: PAGE_CONTROL.LOAD_LOCAL_STORAGE, value: data });
                     console.log("validation accepted");
                 } else {
                     localStorage.clear();
                     console.log("storage was cleared");
-                }
-                  
-            }
+                };                 
+            };
         };
-
         testToken();     
     }, []);
 
@@ -65,17 +49,13 @@ const LoginPage = () => {
     };
 
     const createAccount = async (name, password) => {
-        console.log(`creating account with ${name} and ${password}`);
         const makeAccount = await axios.post(`api/login/signup/${name}/${password}`);
-
-        console.log(`${name}'s ${makeAccount.data}`);
         if (makeAccount.data === "account is created") {
             setFormDisplay('signIn');
         } else {
             setName('');
             setPassword('');
-        };
-        
+        };   
     };
 
     const loginAccount = async ( name, password) => {
@@ -83,7 +63,7 @@ const LoginPage = () => {
         const result = formSent.data;
         if (result) {
             chat.dispatch({type: PAGE_CONTROL.SAVE_USER_INFO , value: result})
-            console.log(`user: ${chat.chatRoom.user} with id ${chat.chatRoom.userId}`)
+            console.log(`user: ${chat.session.user} with id ${chat.session.userId}`)
         }
         createToken(result.name, result.id);
 

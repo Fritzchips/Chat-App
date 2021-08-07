@@ -10,37 +10,36 @@ import { PAGE_CONTROL } from '../hooks/useData';
 
 
 const MainScreen = () => {
-
     const chat = useContext(ChatContext);
 
     const authAxios = axios.create({
         headers: {
             Accept: 'application/json',
-            Authorization: `Bearer ${chat.chatRoom.jwToken}`
+            Authorization: `Bearer ${chat.session.jwToken}`
         }
     });
 
     useEffect(() => {
         async function connectToChat() {
-            if (chat.chatRoom.hubConnection !== null) {
-                await chat.chatRoom.hubConnection.invoke("LeaveRoom", chat.chatRoom.previousChannel);
-                console.log(`leaving channel ${chat.chatRoom.previousChannel}`)
+            if (chat.session.hubConnection !== null) {
+                await chat.session.hubConnection.invoke("LeaveRoom", chat.session.previousChannel);
+                console.log(`leaving channel ${chat.session.previousChannel}`)
             };
 
-            const channelInfo = await authAxios.get(`/api/channel/getchannel/${chat.chatRoom.currentChannel}`);
+            const channelInfo = await authAxios.get(`/api/channel/getchannel/${chat.session.currentChannel}`);
             const result = channelInfo.data;
             chat.dispatch({ type: PAGE_CONTROL.SAVE_CHANNEL_ID, value: result.id });
 
-            if (chat.chatRoom.hubConnection === null) {
+            if (chat.session.hubConnection === null) {
                 await startConnection();
             } else {
-                await chat.chatRoom.hubConnection.invoke("JoinRoom", chat.chatRoom.currentChannel, chat.chatRoom.channelId);
+                await chat.session.hubConnection.invoke("JoinRoom", chat.session.currentChannel, chat.session.channelId);
             }
            
         };
 
         connectToChat();
-    }, [chat.chatRoom.currentChannel]);
+    }, [chat.session.currentChannel]);
 
     const logoutHandler = () => {
         localStorage.clear();
@@ -53,26 +52,26 @@ const MainScreen = () => {
 
             chat.dispatch({ type: PAGE_CONTROL.SAVE_HUB_CONNECTION, value: connection });
 
-            connection.on("ReceiveMessage", (response, user) => {
-                const allMessage = { ...response, name: user };
-                chat.dispatch({ type: PAGE_CONTROL.ADD_NEW_MESSAGE, value: allMessage });
+            connection.on("ReceiveMessage", (message, user) => {
+                const newMessage = { ...message, name: user };
+                chat.dispatch({ type: PAGE_CONTROL.ADD_NEW_MESSAGE, value: newMessage });
             });
 
-            connection.on("DataReceived", messageTable => {
-                chat.dispatch({ type: PAGE_CONTROL.LOAD_CHANNEL_MESSAGES, value: messageTable });
+            connection.on("DataReceived", channelMessages => {
+                chat.dispatch({ type: PAGE_CONTROL.LOAD_CHANNEL_MESSAGES, value: channelMessages });
             });
 
-            connection.on("UsersReceived", userTable => {
-                chat.dispatch({ type: PAGE_CONTROL.LOAD_ACTIVE_USERS, value: userTable });
+            connection.on("UsersReceived", activeUserList => {
+                chat.dispatch({ type: PAGE_CONTROL.LOAD_ACTIVE_USERS, value: activeUserList });
             });
 
             await connection.start();
 
-            await connection.invoke("JoinChat", chat.chatRoom.user);
-            await connection.invoke("JoinRoom", chat.chatRoom.channel, chat.chatRoom.channelId)
+            await connection.invoke("JoinChat", chat.session.user);
+            await connection.invoke("JoinRoom", chat.session.channel, chat.session.channelId)
 
         } catch (e) {
-            console.erro(e);
+            console.error(e);
         }
     };
 

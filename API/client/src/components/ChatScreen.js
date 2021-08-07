@@ -10,19 +10,19 @@ const ChatScreen = () => {
 
     useEffect(() => {
         setMessage('');
-    }, [chat.chatRoom.currentChannel]);
+    }, [chat.session.currentChannel]);
         
     const postHandler = async(e) => {
         e.preventDefault();
         var newMessage = JSON.stringify({
             Id: uuidv4(),
-            ChannelId: chat.chatRoom.channelId,
-            UserId: chat.chatRoom.userId,
+            ChannelId: chat.session.channelId,
+            UserId: chat.session.userId,
             Date: new Date(),
             Context: message,
         });
 
-        await chat.chatRoom.hubConnection.invoke("SendMessageRoom", newMessage, chat.chatRoom.user, chat.chatRoom.currentChannel);
+        await chat.session.hubConnection.invoke("SendMessageRoom", newMessage, chat.session.userName, chat.session.currentChannel);
 
         setMessage('');
     };
@@ -31,7 +31,7 @@ const ChatScreen = () => {
 
         <Container className="d-flex flex-column " style={{minHeight: "100%"}} >
             <div style={{ width: "100%", height: "80vh",  border: "3px solid black", borderRadius: "5px" , overflow: "scroll"}}>
-                <div style={{ backgroundColor: "grey", padding: "10px", fontSize: "25px" }}><strong>Welcome to { chat.chatRoom.currentChannel} channel</strong></div>
+                <div style={{ backgroundColor: "grey", padding: "10px", fontSize: "25px" }}><strong>Welcome to { chat.session.currentChannel} channel</strong></div>
                 <ChatMessages />     
             </div>
 

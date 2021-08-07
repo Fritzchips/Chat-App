@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 
 namespace API
 {
-    public class JwtAuthenticationManager : IJwtAuthenticationManager
+    public class JwtHandler : IJwtHandler
     {
         
         private readonly string _key;
 
-        public JwtAuthenticationManager(string key)
+        public JwtHandler(string key)
         {
             _key = key;
         }

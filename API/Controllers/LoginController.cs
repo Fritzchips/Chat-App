@@ -17,10 +17,10 @@ namespace API.Controllers
     //[Authorize]
     public class LoginController : BaseApiController
     {
-        private readonly IJwtAuthenticationManager _jwtAuthenticationManager;
+        private readonly IJwtHandler _jwtAuthenticationManager;
         private readonly INhibernateHandler _nhibernateHandler;
 
-        public LoginController(IJwtAuthenticationManager jwtAuthenticationManager, INhibernateHandler nhibernateHandler)
+        public LoginController(IJwtHandler jwtAuthenticationManager, INhibernateHandler nhibernateHandler)
         {
             _jwtAuthenticationManager = jwtAuthenticationManager;
             _nhibernateHandler = nhibernateHandler;
