@@ -1,14 +1,7 @@
-﻿using Core;
-using Infrastructure;
+﻿using Infrastructure;
 using Microsoft.AspNetCore.Mvc;
-using NHibernate;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace API.Controllers
 {

@@ -27,8 +27,14 @@ const LoginPage = () => {
                     chat.dispatch({ type: PAGE_CONTROL.LOAD_LOCAL_STORAGE, value: data });
                     console.log("validation accepted");
                 } else {
-                    localStorage.clear();
-                    console.log("storage was cleared");
+                    const validateRT = await axios.get(`/api/login/rtvalidation/${data.jwToken}`);
+                    if (validateRT.data) {
+                        chat.dispatch({ type: PAGE_CONTROL.LOAD_LOCAL_STORAGE, value: data });
+                        createToken(data.userName, data.userId);
+                        console.log("old value:",chat.session);
+                        } else {
+                            localStorage.clear();
+                        };                    
                 };                 
             };
         };

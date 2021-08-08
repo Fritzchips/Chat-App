@@ -1,16 +1,7 @@
 ﻿using Core;
 using Infrastructure;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using NHibernate;
 using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
 
 namespace API.Controllers
@@ -72,6 +63,13 @@ namespace API.Controllers
         public bool TokenValidation(string token)
         {
             var value = _jwtAuthenticationManager.JwtValidation(token);
+            return value;
+        }
+
+        [Route("{action}/{reftoken}")]
+        public bool RTValidation(string reftoken)
+        {
+            var value = _jwtAuthenticationManager.RefreshTokenValidation(reftoken);
             return value;
         }
     }

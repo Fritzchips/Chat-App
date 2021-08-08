@@ -1,9 +1,4 @@
-﻿using API.Authorization;
-using API.Authorization.Utilities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using API.Authorization.Utilities;
 
 namespace API
 {
@@ -13,6 +8,6 @@ namespace API
 
         bool JwtValidation(string jwt);
 
-        bool RefreshTokenValidation(TokenSet token);
+        bool RefreshTokenValidation(string refToken);
     } 
 }

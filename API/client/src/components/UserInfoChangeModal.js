@@ -94,7 +94,7 @@ const UserInforChangeModal = ({ modalHandler }) => {
 
         return (
 
-            <Container style={outerModal} onClick={ modalHandler}>
+            <Container style={outerModal}>
                 <div style={{width: "500px", backgroundColor: "white", border: "4px solid black", borderRadius: "10px"}}>
                 <header><button onClick={ modalHandler}>X</button></header>
                 <h1>What Would you like to Change</h1>

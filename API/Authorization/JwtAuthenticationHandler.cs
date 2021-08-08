@@ -2,12 +2,10 @@
 using API.Authorization.Utilities;
 using Microsoft.IdentityModel.Tokens;
 using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace API
 {
@@ -65,9 +63,7 @@ namespace API
                 IssuerSigningKey = new SymmetricSecurityKey(tokenKey),
                 ValidateIssuer = false,
                 ValidateAudience = false,
-                ValidateLifetime = true,
-                //ValidIssuer = "John"
-                //ValidAudience = username,
+                ValidateLifetime = true
             };
 
             try
@@ -82,9 +78,19 @@ namespace API
 
         }
 
-        public bool RefreshTokenValidation(TokenSet token)
+        public bool RefreshTokenValidation(string refToken)
         {
-            return true;
+            try
+            {
+                var value = TokenManager.tokenList.Single(x => x.RefreshToken == refToken);
+                TokenManager.tokenList.Remove(value);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
         }
     }
 }

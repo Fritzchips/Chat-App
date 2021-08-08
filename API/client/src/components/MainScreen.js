@@ -20,8 +20,7 @@ const MainScreen = () => {
             Authorization: `Bearer ${chat.session.jwToken}`
         }
     });
-
-    console.log(chat.session);
+    console.log("new values:",chat.session);
 
     useEffect(() => {
         async function connectToChat() {
