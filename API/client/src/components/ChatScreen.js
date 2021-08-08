@@ -1,4 +1,4 @@
-import React, { useContext, useEffect} from 'react';
+import React, { useContext, useEffect, useState} from 'react';
 import Container from 'react-bootstrap/Container';
 import ChatMessages from './ChatMessages';
 import { ChatContext } from '../App';

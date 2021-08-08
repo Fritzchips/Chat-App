@@ -1,4 +1,5 @@
-﻿using Core;
+﻿using API.Hubs.Utilities;
+using Core;
 using Infrastructure;
 using Microsoft.AspNetCore.SignalR;
 using Newtonsoft.Json;
@@ -25,14 +26,23 @@ namespace API.Hubs
             _nhibernateHandler.CreateMessage(convertedMsg);
         }
 
-        public async Task JoinChat(string userName)
+        public async Task JoinChat(string userName, Guid userId)
         {
             HubUser user = new HubUser
             {
                 Name = userName,
-                Id = Context.ConnectionId
+                Id = Context.ConnectionId,
+                UserId = userId
             };
-            UserHandler.userList.Add(user);
+            try
+            {
+                var copy = UserHandler.userList.Single(x => x.UserId == userId);
+            }
+            catch (Exception)
+            {
+                UserHandler.userList.Add(user);
+            };
+        
             await Clients.All.SendAsync("UsersReceived", UserHandler.userList);
         }
 
@@ -46,7 +56,7 @@ namespace API.Hubs
 
         public async Task JoinRoom(string channelName,Guid channelId)
         {
-            var messageTable = _nhibernateHandler.GetMessages(channelId);
+            var messageTable =  _nhibernateHandler.GetMessages(channelId);
             await Groups.AddToGroupAsync(Context.ConnectionId, channelName);
             await Clients.Client(Context.ConnectionId).SendAsync("DataReceived", messageTable);
         }

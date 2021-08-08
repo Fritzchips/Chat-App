@@ -4,6 +4,7 @@ import Button from 'react-bootstrap/Button';
 import axios from 'axios';
 import { ChatContext } from '../App';
 import { PAGE_CONTROL } from '../hooks/useData';
+import { v4 as uuidv4 } from 'uuid';
 
 
 const LoginPage = () => {
@@ -49,24 +50,35 @@ const LoginPage = () => {
     };
 
     const createAccount = async (name, password) => {
-        const makeAccount = await axios.post(`api/login/signup/${name}/${password}`);
-        if (makeAccount.data === "account is created") {
-            setFormDisplay('signIn');
-        } else {
+        const checkAccount = await axios.get(`api/login/checkuser/${name}/${password}`);
+        if (checkAccount.data) {
+            console.log("sorry user exist");
             setName('');
             setPassword('');
-        };   
+        } else {
+            const createNewUser = JSON.stringify({
+                Id: uuidv4,
+                Name: name,
+                password: password
+            });
+            const makeAccount = await axios.post(`api/login/signup/${createNewUser}`);
+            console.log(`account ${makeAccount.data} was made`);
+            setFormDisplay('signIn');
+        };  
     };
 
     const loginAccount = async ( name, password) => {
-        const formSent = await axios.get(`api/login/signin/${name}/${password}`);
-        const result = formSent.data;
-        if (result) {
-            chat.dispatch({type: PAGE_CONTROL.SAVE_USER_INFO , value: result})
-            console.log(`user: ${chat.session.user} with id ${chat.session.userId}`)
-        }
-        createToken(result.name, result.id);
-
+        const formSent = await axios.get(`api/login/checkuser/${name}/${password}`);
+        if (formSent.data) {
+            const loginData = await axios.get(`api/login/signin/${name}/${password}`);
+            const result = loginData.data;
+            chat.dispatch({ type: PAGE_CONTROL.SAVE_USER_INFO, value: result });
+            createToken(result.name, result.id);
+        } else {
+            console.log("sorry user doesnt exist");
+            setName('');
+            setPassword('');
+        };     
     };
 
     const createToken = async (name, id) => {

@@ -1,4 +1,4 @@
-import React, { useEffect, useContext} from 'react';
+import React, { useEffect, useContext, useState} from 'react';
 import ChannelNavBar from './ChannelNavBar';
 import Container from 'react-bootstrap/Container';
 import ChatScreen from './ChatScreen';
@@ -6,11 +6,13 @@ import { HubConnectionBuilder } from '@microsoft/signalr';
 import axios from 'axios';
 import { ChatContext } from '../App';
 import { PAGE_CONTROL } from '../hooks/useData';
+import UserInforChangeModal from './UserInfoChangeModal';
 
 
 
 const MainScreen = () => {
     const chat = useContext(ChatContext);
+    const [modal, setModal] = useState(false);
 
     const authAxios = axios.create({
         headers: {
@@ -18,6 +20,8 @@ const MainScreen = () => {
             Authorization: `Bearer ${chat.session.jwToken}`
         }
     });
+
+    console.log(chat.session);
 
     useEffect(() => {
         async function connectToChat() {
@@ -31,10 +35,10 @@ const MainScreen = () => {
             chat.dispatch({ type: PAGE_CONTROL.SAVE_CHANNEL_ID, value: result.id });
 
             if (chat.session.hubConnection === null) {
-                await startConnection();
+                startConnection();
             } else {
                 await chat.session.hubConnection.invoke("JoinRoom", chat.session.currentChannel, chat.session.channelId);
-            }
+            };
            
         };
 
@@ -43,10 +47,19 @@ const MainScreen = () => {
 
     const logoutHandler = () => {
         localStorage.clear();
+        chat.session.hubConnection.stop();
         chat.dispatch({ type: PAGE_CONTROL.LOG_OUT });
     };
 
-    const startConnection = async() => {
+    const modalHandler = () => {
+        if (modal) {
+            setModal(false);
+        } else {
+            setModal(true);
+        };   
+    };
+
+    const startConnection = async () => {
         try {
             const connection = new HubConnectionBuilder().withUrl(`/chatbox/chat`).build();
 
@@ -67,18 +80,19 @@ const MainScreen = () => {
 
             await connection.start();
 
-            await connection.invoke("JoinChat", chat.session.user);
-            await connection.invoke("JoinRoom", chat.session.channel, chat.session.channelId)
+            await connection.invoke("JoinChat", chat.session.userName, chat.session.userId);
+
+            await connection.invoke("JoinRoom", chat.session.currentChannel, chat.session.channelId);
 
         } catch (e) {
             console.error(e);
         }
     };
 
-
     return (
         <Container fluid className="d-flex flex-column" style={{ height: "100vh" }}>
-            <span style={{ backgroundColor: "purple", width: "100%" }}><h1>Welcome To Twinkle</h1><button onClick={ logoutHandler}>Log Out</button></span>
+            <span style={{ backgroundColor: "purple", width: "100%" }}><h1>Welcome To Twinkle</h1><button onClick={logoutHandler}>Log Out</button></span>
+            <span><button onClick={modalHandler}>Change User Info</button></span>
            
                 <span className="d-flex justify-content-between align-items-stretch" style={{height: "100vh"}}>
                     <span style={{ backgroundColor: "purple", maxWidth: "200px" }}>
@@ -88,7 +102,8 @@ const MainScreen = () => {
                     <span style={{ width: "100%" }}>
                         <ChatScreen  />
                     </span>
-                </span>
+            </span>
+            {modal ? (<UserInforChangeModal modalHandler={ modalHandler} />) : <></>}
             </Container>        
     );
 }

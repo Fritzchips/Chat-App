@@ -25,7 +25,8 @@ const initialState = {
     activeUsersList: [],
     hubConnection: null,
     loggedIn: false,
-    jwToken: null
+    jwToken: null,
+    refresherToken: null
 };
 
 const reducer = (state, action) => {
@@ -42,7 +43,8 @@ const reducer = (state, action) => {
             return (state = { ...state, currentChannel: action.value });
 
         case PAGE_CONTROL.SAVE_HUB_CONNECTION:
-            return (state = { ...state, hubConnection: action.value });
+            state.hubConnection = action.value;
+            return (state = { ...state});
 
         case PAGE_CONTROL.LOAD_CHANNEL_MESSAGES:
             state.messageList = [...action.value];
@@ -53,7 +55,8 @@ const reducer = (state, action) => {
             return (state = { ...state });
 
         case PAGE_CONTROL.SAVE_CHANNEL_ID:
-            return (state = { ...state, channelId: action.value });
+            state.channelId = action.value;
+            return (state = { ...state});
 
         case PAGE_CONTROL.SAVE_USER_INFO:
             state.userName = action.value.name;
@@ -61,7 +64,8 @@ const reducer = (state, action) => {
             return (state = { ...state });
 
         case PAGE_CONTROL.SAVE_TOKEN:
-            state.jwToken = action.value;
+            state.jwToken = action.value.jwtToken;
+            state.refresherToken = action.value.refreshToken;
             state.loggedIn = true;
             return (state = { ...state });
 

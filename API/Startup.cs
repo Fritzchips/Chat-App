@@ -24,6 +24,7 @@ using Microsoft.IdentityModel.Tokens;
 using API.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Infrastructure;
+using API.Authorization.Utilities;
 
 namespace API
 {
@@ -72,7 +73,8 @@ namespace API
                     };
                 });
 
-            services.AddSingleton<IJwtHandler>(new JwtHandler(_configuration["JwtConfig:Secret"]));
+            services.AddSingleton<IRefreshTokenHandler>(new RefreshTokenHandler());
+            services.AddSingleton<IJwtAuthenticationHandler>(x=> new JwtAuthenticationHandler(_configuration["JwtConfig:Secret"], x.GetService<IRefreshTokenHandler>()));
             services.AddSingleton<INhibernateHandler>(new NhibernateHandler());
            
 

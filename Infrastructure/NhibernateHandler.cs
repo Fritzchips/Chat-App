@@ -26,29 +26,14 @@ namespace Infrastructure
             }
         }
 
-        public string CreateUser(string name, string password)
+        public void CreateUser(User userInfo)
         {
-            User person = new User()
-            {
-                Name = name,
-                Password = password
-            };
             using (ISession session = NhibernateSession.OpenSession())
             {
                 using (ITransaction transaction = session.BeginTransaction())
                 {
-                    var checkPerson = session.Query<User>().Where(x => x.Name == name && x.Password == password).ToList();
-                    if (checkPerson.Count < 1)
-                    {
-                        session.Save(person);
+                        session.Save(userInfo);
                         transaction.Commit();
-                        return "account is created";
-                    }
-                    else
-                    {
-                        transaction.Commit();
-                        return "account already exist";    
-                    }
                 }
             }
         }
@@ -87,9 +72,8 @@ namespace Infrastructure
             }
         }
 
-        public User GetUser(string name, string password)
+        public bool FindUser(string name, string password)
         {
-            User client;
             using (ISession session = NhibernateSession.OpenSession())
             {
                 using (ITransaction transaction = session.BeginTransaction())
@@ -97,17 +81,74 @@ namespace Infrastructure
                     var checkUser = session.Query<User>().Where(x => x.Name == name && x.Password == password).FirstOrDefault();
                     if (checkUser != null)
                     {
-                        client = checkUser;
                         transaction.Commit();
+                        return true;
                     }
                     else
                     {
                         transaction.Commit();
-                        client = null;
+                        return false;
                     }
                 }
             }
+        }
+
+        public User GetUserById(Guid userId)
+        {
+            User client;
+            using (ISession session = NhibernateSession.OpenSession())
+            {
+                using (ITransaction transaction = session.BeginTransaction())
+                {
+                    User user = session.Get<User>(userId);
+                    client = user;
+                    transaction.Commit();
+                }
+            }
             return client;
+        }
+        
+        public User GetUserByString(string name, string password)
+        {
+            User client;
+            using (ISession session = NhibernateSession.OpenSession())
+            {
+                using (ITransaction transaction = session.BeginTransaction())
+                {
+                    User user = session.Query<User>().Where(x => x.Name == name && x.Password == password).FirstOrDefault();
+                    client = user;
+                    transaction.Commit();
+                }
+            }
+            return client;
+        }
+
+
+
+        public void UpdateUser(string type, User userInfo)
+        {
+            using(ISession session = NhibernateSession.OpenSession())
+            {
+                using(ITransaction transaction = session.BeginTransaction())
+                {
+                    User updateUser = session.Get<User>(userInfo.Id);
+                    if (type == "Name")
+                    {
+                        updateUser.Name = userInfo.Name;
+
+                    } else if(type == "Password")
+                    {
+                        updateUser.Password = userInfo.Password;
+                    }
+                    else
+                    {
+                        updateUser.Name = userInfo.Name;
+                        updateUser.Password = userInfo.Password;
+                    };
+                    transaction.Commit();
+
+                }
+            }  
         }
     }
 }

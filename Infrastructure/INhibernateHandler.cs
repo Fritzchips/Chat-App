@@ -9,14 +9,24 @@ namespace Infrastructure
 {
     public interface INhibernateHandler
     {
-        User GetUser(string name, string password);
+        bool FindUser(string name, string password);
 
-        string CreateUser(string name, string password);
+        void CreateUser(User userInfo);
+
+        User GetUserById(Guid userId);
+
+        User GetUserByString(string name, string password);
+
+        void UpdateUser(string type, User userInfo);
 
         Channel GetChannel(string name);
 
         void CreateMessage(Message message);
 
         object GetMessages(Guid channelId);
+
+       
+
+       
     }
 }

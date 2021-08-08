@@ -1,68 +1,140 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
+import axios from 'axios';
+import Container from 'react-bootstrap/Container';
+import { ChatContext } from '../App';
+import { PAGE_CONTROL } from '../hooks/useData';
 
-const  UserInforChangeModal = () => {
+const outerModal = {
+    position: "fixed",
+    left: "0",
+    top: "0",
+    right: "0",
+    bottom: "0",
+    backgroundColor: "rgba(0,0,0,0.5)",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    minWidth: "100vw"
+}
+
+
+
+const UserInforChangeModal = ({ modalHandler }) => {
     const chat = useContext(ChatContext);
-    const [changeField, setChangeField] = useState("unconfirmed");
+
+    const [changeForm, setChangeForm] = useState("unconfirmed");
     const [name, setName] = useState('');
     const [password, setPassword] = useState('');
+    const [newName, setNewName] = useState('');
+    const [newPassword, setNewPassword] = useState('');
+    const [outcome, setOutcome] = useState('');
+    const [changeField, setChangeField] = useState('Name');
+    const [item, setItem] = useState('');
 
-    const verifyHandler = async (e) => {
-        e.preventDefault();
-        const checkData = await axios.post(`/api/user/${chat.session.userId}/${name}/${password}`);
-        if (checkData.value) {
-            setChangeField("confirmed");
-            setName('');
-            setPassword('');
-        } else {
-            console.log("invalid username password");
+    useEffect(() => {
+        async function grabUser() {
+            const userData = await axios.get(`/api/user/getuser/${chat.session.userId}`);
+            const response = userData.data;
+            setName(response.name);
+            setPassword(response.password);
         };
-       
-    };
+        grabUser();
+    }, []);
 
-    const changeUserInfo = async (e) => {
+    useEffect(() => {
+        console.log(`changefield value: ${changeField}`);
+    }, [changeField]);
+
+    const accountUpdateHandler = async (e) => {
         e.preventDefault();
-        const checkInfo = axios.post(`/api/login/signup/${name}/${password}`);
-        if (checkInfo.data) {
 
+        if (name === newName && password === newPassword) {
+            const changeData = await axios.post(`/api/user/updateuser/${changeField}/${item}`);
+            console.log(changeData.data);
+            localStorage.clear();
+            chat.dispatch({ type: PAGE_CONTROL.LOG_OUT });
+            alert("Please Sign In Again with you're new username and password");
         } else {
-            console.log("set of credentials is already taken")
-        }
-        //promp relogin when changes are made
+            setOutcome("Invalid Name and/or Password");
+        };
+        setNewName("");
+        setNewPassword("");
     };
 
-    if (changeField === "unconfirmed") {
+    const checkAvailability = async (e) => {
+        e.preventDefault();
+        let desiredName = name;
+        let desiredPassword = password;
+        if (changeField === "Name") {
+            desiredName = newName;
+        } else if (changeField === "Password") {
+            desiredPassword = newPassword;
+        } else {
+            desiredName = newName;
+            desiredPassword = newPassword;
+        };
+        const checkInfo = await axios.get(`/api/login/checkuser/${desiredName}/${desiredPassword}`);
+        if (checkInfo.data) {
+            setOutcome("Name and Password combination is already taken");
+        } else {
+            setChangeForm("confirmed");
+            const newItem = JSON.stringify({
+                Id: chat.session.userId,
+                Name: desiredName,
+                Password: desiredPassword
+            });
+            setItem(newItem);
+            setOutcome("");
+        };
+        setNewName("");
+        setNewPassword("");
+    };
+
+    if (changeForm === "unconfirmed") {
 
         return (
 
-            <Container>
-                <h1>Change User Info</h1>
+            <Container style={outerModal} onClick={ modalHandler}>
+                <div style={{width: "500px", backgroundColor: "white", border: "4px solid black", borderRadius: "10px"}}>
+                <header><button onClick={ modalHandler}>X</button></header>
+                <h1>What Would you like to Change</h1>
+                <select onChange={ e => setChangeField(e.target.value)}>
+                <option value="Name">Name</option>
+                <option value="Password">Password</option>
+                <option value="Both">Name and Password</option>
+                </select>
 
-                <form onSubmit={verifyHandler}>
-                    <p>Please Enter Your Name and Password</p>
-                    <input type="text" value={name} onChange={e => setName(e.target.value)} required />
-                    <input type="text" value={password} onChange={e => setPassword(e.target.value)} required />
+                <form onSubmit={ checkAvailability}>
+                    <p>Please Enter Your new Name and Password</p>
+                    <div style={{ display: `${changeField === "Password" ? "none" : "block"}` }}>
+                        <label>New Name</label>
+                        <input type="text" value={newName} onChange={e => setNewName(e.target.value)} required={changeField === "Password" ? false : true}  />
+                    </div>
+                    <div style={{ display: `${changeField === "Name" ? "none" : "block"}` }}>
+                        <label>New Password</label>
+                        <input type="text" value={newPassword} onChange={e => setNewPassword(e.target.value)} required={changeField === "Name" ? false : true}  />
+                    </div>
+                    <p>{ outcome }</p>
                     <button>Verify</button>
-                </form>
+                    </form>
+                    </div>
             </Container>
-
         );
     } else {
         return (
             <Container>
-                <h1>What Would you like to Change</h1>
+                <h1>Change User Info</h1>
+                <form onSubmit={ accountUpdateHandler}>
+                    <p>Please Enter Your Name and Password</p>
+                    <input type="text" value={newName} onChange={e => setNewName(e.target.value)} required />
+                    <input type="text" value={newPassword} onChange={e => setNewPassword(e.target.value)} required />
+                    <p>{ outcome}</p>
+                    <button>Submit</button>
+                    </form>
 
-                <form onSubmit={changeUserInfo}>
-                    <p>Please Enter Your new Name and Password</p>
-                    <input type="text" value={checkName} onChange={e => setCheckName(e.target.value)} required />
-                    <input type="text" value={checkPassword} onChange={e => setCheckPassword(e.target.value)} required />
-                    <button>Verify</button>
-                    <button>Change</button>
-                </form>
             </Container>
         );
     };
-
-
 }
 
 export default UserInforChangeModal;
