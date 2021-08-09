@@ -34,29 +34,27 @@ const LoginPage = () => {
     };
 
     useEffect(() => {
-        testToken();
-    }, []);
-
-    const testToken=async()=> {
-        if (localStorage.getItem("chatUser")) {
-            const data = JSON.parse(localStorage.getItem("chatUser"));
-            const valid = await axios.get(`/api/token/tokenvalidation/${data.jwToken}`);
-            if (valid.data) {
-                chat.dispatch({ type: PAGE_CONTROL.LOAD_LOCAL_STORAGE, value: data });
-            } else {
-                const validateRT = await axios.get(`/api/token/rtvalidation/${data.jwToken}`);
-                if (validateRT.data) {
+        const testToken=async()=> {
+            if (localStorage.getItem("chatUser")) {
+                const data = JSON.parse(localStorage.getItem("chatUser"));
+                const valid = await axios.get(`/api/token/tokenvalidation/${data.jwToken}`);
+                console.log(data);
+                if (valid.data) {
                     chat.dispatch({ type: PAGE_CONTROL.LOAD_LOCAL_STORAGE, value: data });
-                    createToken(data.userName, data.userId);
+                    await createToken(data.userName, data.userId);
                 } else {
                     localStorage.clear();
                 };
             };
         };
-    };
+
+        testToken();
+    }, []);
+
+    
 
     const createAccount = async (name, password) => {
-        const checkAccountStatus = await axios.get(`api/login/checkuser/${name}/${password}`);
+        const checkAccountStatus = await axios.get(`api/login/confirmuser/${name}/${password}`);
         if (checkAccountStatus.data) {
             setOutcome("sorry user exist");
             setName('');
@@ -74,7 +72,7 @@ const LoginPage = () => {
     };
 
     const loginAccount = async ( name, password) => {
-        const checkAccountStatus = await axios.get(`api/login/checkuser/${name}/${password}`);
+        const checkAccountStatus = await axios.get(`api/login/confirmuser/${name}/${password}`);
         if (checkAccountStatus.data) {
             const loginInfo = await axios.get(`api/login/signin/${name}/${password}`);
             const accountInfo = loginInfo.data;
@@ -89,7 +87,7 @@ const LoginPage = () => {
 
     const createToken = async (name, id) => {
         const token = await axios.get(`api/token/newtoken/${name}/${id}`);
-        chat.dispatch({ type: PAGE_CONTROL.SAVE_TOKEN, value: token.data });   
+        chat.dispatch({ type: PAGE_CONTROL.SAVE_TOKEN, value: token.data });
     };
 
     return (

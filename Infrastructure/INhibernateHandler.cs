@@ -5,7 +5,9 @@ namespace Infrastructure
 {
     public interface INhibernateHandler
     {
-        bool FindUser(string name, string password);
+        Channel GetChannel(string name);
+
+        bool ConfirmUser(string name, string password);
 
         void CreateUser(User userInfo);
 
@@ -15,14 +17,8 @@ namespace Infrastructure
 
         void UpdateUser(string type, User userInfo);
 
-        Channel GetChannel(string name);
-
         void CreateMessage(Message message);
 
-        object GetMessages(Guid channelId);
-
-       
-
-       
+        object GetMessages(Guid channelId);   
     }
 }

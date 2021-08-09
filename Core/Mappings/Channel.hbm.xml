@@ -9,7 +9,6 @@
 			<generator class="guid.comb" />
 		</id>
 
-		<property name="Name" column="name"/>
-		
+		<property name="Name" column="name"/>		
 	</class>
 </hibernate-mapping>

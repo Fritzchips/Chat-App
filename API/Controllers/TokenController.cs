@@ -15,7 +15,6 @@ namespace API.Controllers
             _jwtAuthenticationManager = jwtAuthenticationManag;
         }
 
-        //creating jwt
         [HttpGet("{action}/{name}/{userId}")]
         public ActionResult NewToken(string name, string userId)
         {
@@ -27,13 +26,6 @@ namespace API.Controllers
         public bool TokenValidation(string token)
         {
             var value = _jwtAuthenticationManager.JwtValidation(token);
-            return value;
-        }
-
-        [HttpGet("{action}/{reftoken}")]
-        public bool RTValidation(string reftoken)
-        {
-            var value = _jwtAuthenticationManager.RefreshTokenValidation(reftoken);
             return value;
         }
     }

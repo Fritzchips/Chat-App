@@ -1,28 +1,14 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.WebSockets;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Microsoft.OpenApi.Models;
-using Microsoft.AspNetCore.SignalR;
 using API.Hubs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using API.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Infrastructure;
 using API.Authorization.Utilities;
 
@@ -36,7 +22,6 @@ namespace API
             _configuration = configuration;
         }
 
-
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
@@ -47,34 +32,32 @@ namespace API
             services.AddSignalR();
             services.AddSpaStaticFiles(config =>
             {
-                    config.RootPath = "client/build";
-                });
+                config.RootPath = "client/build";
+            });
 
             services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
+            }).AddJwtBearer(x =>
+            {
+                var tokenKey = Encoding.ASCII.GetBytes(_configuration["JwtConfig:Secret"]);
+
+                x.RequireHttpsMetadata = false;
+                x.SaveToken = true;
+                x.TokenValidationParameters = new TokenValidationParameters
                 {
-                    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-                    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(tokenKey),
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ValidateLifetime = true,
+                };
+            });
 
-                }).AddJwtBearer(x =>
-                {
-                    var tokenKey = Encoding.ASCII.GetBytes(_configuration["JwtConfig:Secret"]);
-
-                    x.RequireHttpsMetadata = false;
-                    x.SaveToken = true;
-                    x.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(tokenKey),
-                        ValidateIssuer = false,
-                        ValidateAudience = false,
-                        ValidateLifetime = true,
-                        //ValidIssuer = "John"
-                    };
-                });
-
-            services.AddSingleton<IRefreshTokenHandler>(new RefreshTokenHandler());
-            services.AddSingleton<IJwtAuthenticationHandler>(x=> new JwtAuthenticationHandler(_configuration["JwtConfig:Secret"], x.GetService<IRefreshTokenHandler>()));
+            services.AddSingleton<IJwtAuthenticationHandler>(new JwtAuthenticationHandler(_configuration["JwtConfig:Secret"]));
             services.AddSingleton<INhibernateHandler>(new NhibernateHandler());
            
 

@@ -18,15 +18,8 @@ namespace API.Controllers
         [HttpGet("{action}/{name}")]
         public ActionResult GetChannel(string name)
         {
-            try
-            {
-                var channelData = _nhibernateHandler.GetChannel(name);
-                return Ok(channelData);
-            }
-            catch (Exception)
-            {
-                return BadRequest("didnt work");
-            }
+            var channelData = _nhibernateHandler.GetChannel(name);
+            return Ok(channelData);
         }
     }
 }

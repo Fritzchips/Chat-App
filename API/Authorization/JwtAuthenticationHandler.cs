@@ -13,15 +13,13 @@ namespace API
     {
         
         private readonly string _key;
-        private readonly IRefreshTokenHandler _refreshTokenHandler;
 
-        public JwtAuthenticationHandler(string key, IRefreshTokenHandler refreshTokenHandler)
+        public JwtAuthenticationHandler(string key)
         {
             _key = key;
-            _refreshTokenHandler = refreshTokenHandler;
         }
 
-        public TokenSet TokenCreation(string username, string userId)
+        public string TokenCreation(string username, string userId)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var tokenKey = Encoding.ASCII.GetBytes(_key);
@@ -41,20 +39,17 @@ namespace API
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
             var jwt = tokenHandler.WriteToken(token);
-            var rt = _refreshTokenHandler.GenerateToken();
-            TokenSet newTokens = new TokenSet()
-            {
-                JwtToken = jwt,
-                RefreshToken = rt
-            };
 
-            TokenManager.tokenList.Add(newTokens);
+            TokenManager.tokenList.Add(jwt);
 
-            return newTokens;
+            return jwt;
         }
 
         public bool JwtValidation(string jwt)
         {
+            //var tokenInList = TokenManager.tokenList.Single(x => x.Contains(jwt));
+            //TokenManager.tokenList.Remove(tokenInList);
+
             var tokenHandler = new JwtSecurityTokenHandler();
             var tokenKey = Encoding.ASCII.GetBytes(_key);
             var validationParameters = new TokenValidationParameters()
@@ -71,26 +66,14 @@ namespace API
                 var checkToken = tokenHandler.ValidateToken(jwt, validationParameters, out SecurityToken validateToken);
                 return true;
             }
-            catch (Exception)
+            catch (SecurityTokenExpiredException)
             {
-                return false;
-            }
-
-        }
-
-        public bool RefreshTokenValidation(string refToken)
-        {
-            try
-            {
-                var value = TokenManager.tokenList.Single(x => x.RefreshToken == refToken);
-                TokenManager.tokenList.Remove(value);
                 return true;
             }
             catch (Exception)
             {
                 return false;
             }
-
         }
     }
 }

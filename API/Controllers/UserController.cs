@@ -16,7 +16,7 @@ namespace API.Controllers
         {
             _nhibernateHandler = nhibernateHandler;
         }
-        //get single user
+
         [HttpGet("{action}/{id}")]
         public ActionResult GetUser(Guid id)
         {
@@ -24,7 +24,6 @@ namespace API.Controllers
             return Ok(client);
         }
 
-        //update user
         [HttpPost("{action}/{type}/{user}")]
         public ActionResult UpdateUser(string type, string user)
         {

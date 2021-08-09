@@ -25,8 +25,7 @@ const initialState = {
     activeUsersList: [],
     hubConnection: null,
     loggedIn: false,
-    jwToken: null,
-    refresherToken: null
+    jwToken: null
 };
 
 const reducer = (state, action) => {
@@ -64,13 +63,12 @@ const reducer = (state, action) => {
             return (state = { ...state });
 
         case PAGE_CONTROL.SAVE_TOKEN:
-            state.jwToken = action.value.jwtToken;
-            state.refresherToken = action.value.refreshToken;
+            state.jwToken = action.value;
             state.loggedIn = true;
             return (state = { ...state });
 
         case PAGE_CONTROL.LOAD_LOCAL_STORAGE:
-            return (state = { ...action.value });
+            return (state = { ...action.value, loggedIn: false, jwToken: null });
 
         case PAGE_CONTROL.LOG_OUT:
             return (state = { ...initialState });

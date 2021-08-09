@@ -11,30 +11,6 @@ namespace Infrastructure
         {
         }
 
-        public void CreateMessage(Message message)
-        {
-            using (ISession session = NhibernateSession.OpenSession())
-            {
-                using (ITransaction transaction = session.BeginTransaction())
-                {
-                    session.Save(message);
-                    transaction.Commit();
-                }
-            }
-        }
-
-        public void CreateUser(User userInfo)
-        {
-            using (ISession session = NhibernateSession.OpenSession())
-            {
-                using (ITransaction transaction = session.BeginTransaction())
-                {
-                        session.Save(userInfo);
-                        transaction.Commit();
-                }
-            }
-        }
-
         public Channel GetChannel(string name)
         {
             Channel channelData;
@@ -51,25 +27,7 @@ namespace Infrastructure
             return channelData;
         }
 
-        public object GetMessages(Guid channelId)
-        {
-            using (ISession session = NhibernateSession.OpenSession())
-            {
-                using (ITransaction transaction = session.BeginTransaction())
-                {
-                    var query = from msg in session.Query<Message>()
-                                join user in session.Query<User>() on msg.UserId equals user.Id
-                                orderby msg.Date
-                                where msg.ChannelId == channelId
-                                select new { msg.Id, msg.Context, msg.Date, user.Name };
-                    var messageTable = query.ToList();
-                    transaction.Commit();
-                    return messageTable;
-                }
-            }
-        }
-
-        public bool FindUser(string name, string password)
+        public bool ConfirmUser(string name, string password)
         {
             using (ISession session = NhibernateSession.OpenSession())
             {
@@ -90,6 +48,18 @@ namespace Infrastructure
             }
         }
 
+        public void CreateUser(User userInfo)
+        {
+            using (ISession session = NhibernateSession.OpenSession())
+            {
+                using (ITransaction transaction = session.BeginTransaction())
+                {
+                    session.Save(userInfo);
+                    transaction.Commit();
+                }
+            }
+        }
+
         public User GetUserById(Guid userId)
         {
             User client;
@@ -104,7 +74,7 @@ namespace Infrastructure
             }
             return client;
         }
-        
+
         public User GetUserByString(string name, string password)
         {
             User client;
@@ -120,20 +90,19 @@ namespace Infrastructure
             return client;
         }
 
-
-
         public void UpdateUser(string type, User userInfo)
         {
-            using(ISession session = NhibernateSession.OpenSession())
+            using (ISession session = NhibernateSession.OpenSession())
             {
-                using(ITransaction transaction = session.BeginTransaction())
+                using (ITransaction transaction = session.BeginTransaction())
                 {
                     User updateUser = session.Get<User>(userInfo.Id);
                     if (type == "Name")
                     {
                         updateUser.Name = userInfo.Name;
 
-                    } else if(type == "Password")
+                    }
+                    else if (type == "Password")
                     {
                         updateUser.Password = userInfo.Password;
                     }
@@ -143,9 +112,38 @@ namespace Infrastructure
                         updateUser.Password = userInfo.Password;
                     };
                     transaction.Commit();
-
                 }
-            }  
+            }
         }
+
+        public void CreateMessage(Message message)
+        {
+            using (ISession session = NhibernateSession.OpenSession())
+            {
+                using (ITransaction transaction = session.BeginTransaction())
+                {
+                    session.Save(message);
+                    transaction.Commit();
+                }
+            }
+        }  
+
+        public object GetMessages(Guid channelId)
+        {
+            using (ISession session = NhibernateSession.OpenSession())
+            {
+                using (ITransaction transaction = session.BeginTransaction())
+                {
+                    var query = from msg in session.Query<Message>()
+                                join user in session.Query<User>() on msg.UserId equals user.Id
+                                orderby msg.Date
+                                where msg.ChannelId == channelId
+                                select new { msg.Id, msg.Context, msg.Date, user.Name };
+                    var messageTable = query.ToList();
+                    transaction.Commit();
+                    return messageTable;
+                }
+            }
+        }        
     }
 }

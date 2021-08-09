@@ -7,14 +7,11 @@
 		<id name="Id" column="message_uid" type="guid">
 			<generator class="guid.comb" />
 		</id>
-		
-		
+
 		<property name="Date" column="date_created"/>
 		<property name="Context" column="context"/>
 		<property name="UserId" column="user_uid"/>
 		<property name="ChannelId" column="channel_uid"/>
-		
-		<!--<many-to-one name="ChannelId" column="channel_uid" />
-		<many-to-one name="UserId" column="user_uid"/>-->
+
 	</class>
 </hibernate-mapping>

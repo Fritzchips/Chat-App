@@ -22,7 +22,7 @@ const ChatScreen = () => {
             Context: message,
         });
 
-        await chat.session.hubConnection.invoke("SendMessageRoom", newMessage, chat.session.userName, chat.session.currentChannel);
+        await chat.session.hubConnection.invoke("SendMessage", newMessage, chat.session.userName, chat.session.currentChannel);
         setMessage('');
     };
 

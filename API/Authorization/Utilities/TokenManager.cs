@@ -4,6 +4,6 @@ namespace API.Authorization.Utilities
 {
     public static class TokenManager
     {
-        public static HashSet<TokenSet> tokenList = new HashSet<TokenSet>();
+        public static HashSet<string> tokenList = new HashSet<string>();
     }
 }

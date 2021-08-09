@@ -18,7 +18,7 @@ namespace API.Hubs
             _nhibernateHandler = nhibernateHandler;
         }
 
-        public async Task SendMessageRoom(string message, string userName, string channelName)
+        public async Task SendMessage(string message, string userName, string channelName)
         {
             var convertedMsg = JsonConvert.DeserializeObject<Message>(message);
             await Clients.Group(channelName).SendAsync("ReceiveMessage", convertedMsg, userName);
@@ -40,8 +40,7 @@ namespace API.Hubs
             catch (Exception)
             {
                 UserHandler.userList.Add(user);
-            };
-        
+            };     
             await Clients.All.SendAsync("UsersReceived", UserHandler.userList);
         }
 
