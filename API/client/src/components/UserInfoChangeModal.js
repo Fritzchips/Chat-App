@@ -1,8 +1,10 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useContext, useEffect} from 'react';
 import axios from 'axios';
 import Container from 'react-bootstrap/Container';
 import { ChatContext } from '../App';
-import { PAGE_CONTROL } from '../hooks/useData';
+import { PAGE_CONTROL } from '../hooks/useSessionData';
+import useCrendetialManager from '../hooks/useCredentialManager';
+import { CRED_CONTROL } from '../hooks/useCredentialManager';
 
 const outerModal = {
     position: "fixed",
@@ -15,90 +17,72 @@ const outerModal = {
     alignItems: "center",
     justifyContent: "center",
     minWidth: "100vw"
-}
-
-
+};
 
 const UserInforChangeModal = ({ modalHandler }) => {
     const chat = useContext(ChatContext);
+    const [credentials, setCredentials] = useCrendetialManager;
 
-    const [changeForm, setChangeForm] = useState("unconfirmed");
-    const [name, setName] = useState('');
-    const [password, setPassword] = useState('');
-    const [newName, setNewName] = useState('');
-    const [newPassword, setNewPassword] = useState('');
-    const [outcome, setOutcome] = useState('');
-    const [changeField, setChangeField] = useState('Name');
-    const [item, setItem] = useState('');
+    const authAxios = axios.create({
+        headers: {
+            Accept: 'application/json',
+            Authorization: `Bearer ${chat.session.jwToken}`
+        }
+    });
 
     useEffect(() => {
-        async function grabUser() {
-            const userData = await axios.get(`/api/user/getuser/${chat.session.userId}`);
-            const response = userData.data;
-            setName(response.name);
-            setPassword(response.password);
-        };
-        grabUser();
+        getUserInfo();
     }, []);
 
-    useEffect(() => {
-        console.log(`changefield value: ${changeField}`);
-    }, [changeField]);
-
+    const getUserInfo = async()=> {
+        const userData = await authAxios.get(`/api/user/getuser/${chat.session.userId}`);
+        const response = userData.data;
+        console.log(response);
+        setCredentials({ type: CRED_CONTROL.SAVE_USER_INFO, value: response });
+    };
+        
     const accountUpdateHandler = async (e) => {
         e.preventDefault();
 
-        if (name === newName && password === newPassword) {
-            const changeData = await axios.post(`/api/user/updateuser/${changeField}/${item}`);
-            console.log(changeData.data);
+        if (credentials.name === credentials.newName && credentials.password === credentials.newPassword) {
+            await axios.post(`/api/user/updateuser/${credentials.changeField}/${credentials.item}`);
             localStorage.clear();
             chat.dispatch({ type: PAGE_CONTROL.LOG_OUT });
             alert("Please Sign In Again with you're new username and password");
         } else {
-            setOutcome("Invalid Name and/or Password");
+            setCredentials({ type: CRED_CONTROL.CHANGE_OUTCOME, value: "Invalid Name and/or Password" });
         };
-        setNewName("");
-        setNewPassword("");
+        setCredentials({ type: CRED_CONTROL.CLEAR_INPUT, value: '' });
     };
 
     const checkAvailability = async (e) => {
         e.preventDefault();
-        let desiredName = name;
-        let desiredPassword = password;
-        if (changeField === "Name") {
-            desiredName = newName;
-        } else if (changeField === "Password") {
-            desiredPassword = newPassword;
+        let desiredName = credentials.changeField === "Password" ? credentials.name : credentials.newName;
+        let desiredPassword = credentials.changeField === "Name" ? credentials.password : credentials.newPassword;
+
+        const checkAccountStatus = await axios.get(`/api/login/checkuser/${desiredName}/${desiredPassword}`);
+        if (checkAccountStatus.data) {
+            setCredentials({ type: 'SetOutcome', value: `${desiredName} and ${desiredPassword} combination is already taken` });
         } else {
-            desiredName = newName;
-            desiredPassword = newPassword;
-        };
-        const checkInfo = await axios.get(`/api/login/checkuser/${desiredName}/${desiredPassword}`);
-        if (checkInfo.data) {
-            setOutcome("Name and Password combination is already taken");
-        } else {
-            setChangeForm("confirmed");
-            const newItem = JSON.stringify({
+            setCredentials({type: CRED_CONTROL.CHANGE_FORM, value:"confirmed" })
+            const updatedAccountInfo = JSON.stringify({
                 Id: chat.session.userId,
                 Name: desiredName,
                 Password: desiredPassword
             });
-            setItem(newItem);
-            setOutcome("");
+            setCredentials({ type: CRED_CONTROL.SET_UPDATE_USER, value: updatedAccountInfo });
         };
-        setNewName("");
-        setNewPassword("");
+        setCredentials({ type: CRED_CONTROL.CLEAR_INPUT, value: '' });
     };
 
-    if (changeForm === "unconfirmed") {
-
+    if (credentials.changeForm === "unconfirmed") {
         return (
-
             <Container style={outerModal}>
                 <div style={{width: "500px", backgroundColor: "white", border: "4px solid black", borderRadius: "10px"}}>
                 <header><button onClick={ modalHandler}>X</button></header>
-                <h1>What Would you like to Change</h1>
-                <select onChange={ e => setChangeField(e.target.value)}>
+                    <h1>What Would you like to Change</h1>
+                    //
+                <select onChange={e => setCredentials({ type: CRED_CONTROL.CHANGE_MODIFIEDFIELD, value: e.target.value })}>
                 <option value="Name">Name</option>
                 <option value="Password">Password</option>
                 <option value="Both">Name and Password</option>
@@ -106,15 +90,15 @@ const UserInforChangeModal = ({ modalHandler }) => {
 
                 <form onSubmit={ checkAvailability}>
                     <p>Please Enter Your new Name and Password</p>
-                    <div style={{ display: `${changeField === "Password" ? "none" : "block"}` }}>
+                        <div style={{ display: `${credentials.changeField === "Password" ? "none" : "block"}` }}>
                         <label>New Name</label>
-                        <input type="text" value={newName} onChange={e => setNewName(e.target.value)} required={changeField === "Password" ? false : true}  />
+                        <input type="text" value={credentials.newName} onChange={e => setCredentials({ type: CRED_CONTROL.NAME_INPUT,value: e.target.value })} required={credentials.changeField === "Password" ? false : true}  />
                     </div>
-                    <div style={{ display: `${changeField === "Name" ? "none" : "block"}` }}>
+                    <div style={{ display: `${credentials.changeField === "Name" ? "none" : "block"}` }}>
                         <label>New Password</label>
-                        <input type="text" value={newPassword} onChange={e => setNewPassword(e.target.value)} required={changeField === "Name" ? false : true}  />
+                        <input type="text" value={credentials.newPassword} onChange={e => setCredentials({ type: CRED_CONTROL.PASSWORD_INPUT, value: e.target.value })} required={credentials.changeField === "Name" ? false : true}  />
                     </div>
-                    <p>{ outcome }</p>
+                    <p>{ credentials.outcome }</p>
                     <button>Verify</button>
                     </form>
                     </div>
@@ -122,16 +106,18 @@ const UserInforChangeModal = ({ modalHandler }) => {
         );
     } else {
         return (
-            <Container>
+            <Container style={outerModal}>
+                <div style={{ width: "500px", backgroundColor: "white", border: "4px solid black", borderRadius: "10px" }}>
+                <header><button onClick={modalHandler}>X</button></header>
                 <h1>Change User Info</h1>
                 <form onSubmit={ accountUpdateHandler}>
                     <p>Please Enter Your Name and Password</p>
-                    <input type="text" value={newName} onChange={e => setNewName(e.target.value)} required />
-                    <input type="text" value={newPassword} onChange={e => setNewPassword(e.target.value)} required />
-                    <p>{ outcome}</p>
+                    <input type="text" value={credentials.newName} onChange={e => setCredentials({ type: CRED_CONTROL.NAME_INPUT, value: e.target.value })} required />
+                    <input type="text" value={credentials.newPassword} onChange={e => setCredentials({ type: CRED_CONTROL.PASSWORD_INPUT, value: e.target.value })} required />
+                    <p>{ credentials.outcome}</p>
                     <button>Submit</button>
                     </form>
-
+                </div>
             </Container>
         );
     };

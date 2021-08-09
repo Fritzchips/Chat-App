@@ -3,92 +3,92 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import axios from 'axios';
 import { ChatContext } from '../App';
-import { PAGE_CONTROL } from '../hooks/useData';
+import { PAGE_CONTROL } from '../hooks/useSessionData';
 import { v4 as uuidv4 } from 'uuid';
 
 
 const LoginPage = () => {
     const chat = useContext(ChatContext);
-    const [formDisplay, setFormDisplay] = useState('signIn');
+    const [formType, setFormType] = useState('signIn');
     const [name, setName] = useState('');
     const [password, setPassword] = useState('');
+    const [outcome, setOutcome] = useState('');
 
     useEffect(() => {
         setName('');
         setPassword('');
-    }, [formDisplay]);
-
-    useEffect(() => {
-        async function testToken() {
-            if (localStorage.getItem("chatUser")) {
-                const data = JSON.parse(localStorage.getItem("chatUser"));      
-                const valid = await axios.get(`/api/login/tokenvalidation/${data.jwToken}`);
-                if (valid.data) {
-                    chat.dispatch({ type: PAGE_CONTROL.LOAD_LOCAL_STORAGE, value: data });
-                    console.log("validation accepted");
-                } else {
-                    const validateRT = await axios.get(`/api/login/rtvalidation/${data.jwToken}`);
-                    if (validateRT.data) {
-                        chat.dispatch({ type: PAGE_CONTROL.LOAD_LOCAL_STORAGE, value: data });
-                        createToken(data.userName, data.userId);
-                        console.log("old value:",chat.session);
-                        } else {
-                            localStorage.clear();
-                        };                    
-                };                 
-            };
-        };
-        testToken();     
-    }, []);
+    }, [formType]);
 
     const guestHandler = e => {
         e.preventDefault();
-        loginAccount('Guest', "0000");
+        loginAccount('Guest', '0000');
     };
 
     const submitHandler = e => {
         e.preventDefault();
-        if (formDisplay === 'signUp') {
+        if (formType === 'signUp') {
             createAccount(name, password);
         } else {
             loginAccount(name, password);
-        }  
+        };
+    };
+
+    useEffect(() => {
+        testToken();
+    }, []);
+
+    const testToken=async()=> {
+        if (localStorage.getItem("chatUser")) {
+            const data = JSON.parse(localStorage.getItem("chatUser"));
+            const valid = await axios.get(`/api/token/tokenvalidation/${data.jwToken}`);
+            if (valid.data) {
+                chat.dispatch({ type: PAGE_CONTROL.LOAD_LOCAL_STORAGE, value: data });
+            } else {
+                const validateRT = await axios.get(`/api/token/rtvalidation/${data.jwToken}`);
+                if (validateRT.data) {
+                    chat.dispatch({ type: PAGE_CONTROL.LOAD_LOCAL_STORAGE, value: data });
+                    createToken(data.userName, data.userId);
+                } else {
+                    localStorage.clear();
+                };
+            };
+        };
     };
 
     const createAccount = async (name, password) => {
-        const checkAccount = await axios.get(`api/login/checkuser/${name}/${password}`);
-        if (checkAccount.data) {
-            console.log("sorry user exist");
+        const checkAccountStatus = await axios.get(`api/login/checkuser/${name}/${password}`);
+        if (checkAccountStatus.data) {
+            setOutcome("sorry user exist");
             setName('');
             setPassword('');
         } else {
-            const createNewUser = JSON.stringify({
+            const newUserInfo = JSON.stringify({
                 Id: uuidv4,
                 Name: name,
                 password: password
             });
-            const makeAccount = await axios.post(`api/login/signup/${createNewUser}`);
-            console.log(`account ${makeAccount.data} was made`);
-            setFormDisplay('signIn');
+            await axios.post(`api/login/signup/${newUserInfo}`);
+            setOutcome(`${name}'s account was made`);
+            setFormType('signIn');
         };  
     };
 
     const loginAccount = async ( name, password) => {
-        const formSent = await axios.get(`api/login/checkuser/${name}/${password}`);
-        if (formSent.data) {
-            const loginData = await axios.get(`api/login/signin/${name}/${password}`);
-            const result = loginData.data;
-            chat.dispatch({ type: PAGE_CONTROL.SAVE_USER_INFO, value: result });
-            createToken(result.name, result.id);
+        const checkAccountStatus = await axios.get(`api/login/checkuser/${name}/${password}`);
+        if (checkAccountStatus.data) {
+            const loginInfo = await axios.get(`api/login/signin/${name}/${password}`);
+            const accountInfo = loginInfo.data;
+            chat.dispatch({ type: PAGE_CONTROL.SAVE_USER_INFO, value: accountInfo });
+            createToken(accountInfo.name, accountInfo.id);
         } else {
-            console.log("sorry user doesnt exist");
+            setOutcome("sorry user doesnt exist");
             setName('');
             setPassword('');
         };     
     };
 
     const createToken = async (name, id) => {
-        const token = await axios.get(`api/login/newtoken/${name}/${id}`);
+        const token = await axios.get(`api/token/newtoken/${name}/${id}`);
         chat.dispatch({ type: PAGE_CONTROL.SAVE_TOKEN, value: token.data });   
     };
 
@@ -108,15 +108,15 @@ const LoginPage = () => {
                             <Form.Label>Password:</Form.Label>
                             <Form.Control type="password" placeholder="Password" required value={password} onChange={(e) => setPassword(e.target.value)}/>
                         </Form.Group>
-                        <Button variant="primary" type="submit">{formDisplay}</Button>
+                        <Button variant="primary" type="submit">{formType}</Button>
                     </Form>
-
-            
-                    <button onClick={e => setFormDisplay(e.target.value)} value="signIn">Log In</button>
-                    <button onClick={e => setFormDisplay(e.target.value)} value="signUp">New User</button>
+  
+                    <button onClick={e => setFormType(e.target.value)} value="signIn">Log In</button>
+                    <button onClick={e => setFormType(e.target.value)} value="signUp">New User</button>
                  </div>
                 <button onClick={guestHandler}>Continue as Guest</button>
             </div>
+            <p>{ outcome}</p>
         </div>
     );
 }

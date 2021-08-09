@@ -14,7 +14,7 @@ const ChatScreen = () => {
         
     const postHandler = async(e) => {
         e.preventDefault();
-        var newMessage = JSON.stringify({
+        const newMessage = JSON.stringify({
             Id: uuidv4(),
             ChannelId: chat.session.channelId,
             UserId: chat.session.userId,
@@ -23,12 +23,10 @@ const ChatScreen = () => {
         });
 
         await chat.session.hubConnection.invoke("SendMessageRoom", newMessage, chat.session.userName, chat.session.currentChannel);
-
         setMessage('');
     };
 
     return (
-
         <Container className="d-flex flex-column " style={{minHeight: "100%"}} >
             <div style={{ width: "100%", height: "80vh",  border: "3px solid black", borderRadius: "5px" , overflow: "scroll"}}>
                 <div style={{ backgroundColor: "grey", padding: "10px", fontSize: "25px" }}><strong>Welcome to { chat.session.currentChannel} channel</strong></div>
@@ -42,8 +40,7 @@ const ChatScreen = () => {
                     <button>Post</button>
                 </form>
                 </div>
-            </Container>
-       
+            </Container>      
     );
 }
 

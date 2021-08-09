@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import Container from 'react-bootstrap/Container';
 import { ChatContext} from '../App';
-import { PAGE_CONTROL } from '../hooks/useData';
+import { PAGE_CONTROL } from '../hooks/useSessionData';
 
 
 const ChannelNavBar = () => {
@@ -9,7 +9,7 @@ const ChannelNavBar = () => {
 
     return (
         <Container>
-            <h1>Channels {chat.session.currentChannel}</h1>
+            <h1>Channels</h1>
             <div>
                 <div><button onClick={e => chat.dispatch({ type: PAGE_CONTROL.CHANGE_CHANNEL, value: e.target.value })} value="general">General</button></div>
                 <div><button onClick={e => chat.dispatch({ type: PAGE_CONTROL.CHANGE_CHANNEL, value: e.target.value })} value="random">Random</button></div>

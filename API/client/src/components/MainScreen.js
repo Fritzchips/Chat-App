@@ -5,8 +5,8 @@ import ChatScreen from './ChatScreen';
 import { HubConnectionBuilder } from '@microsoft/signalr';
 import axios from 'axios';
 import { ChatContext } from '../App';
-import { PAGE_CONTROL } from '../hooks/useData';
-import UserInforChangeModal from './UserInfoChangeModal';
+import { PAGE_CONTROL } from '../hooks/useSessionData';
+import UserInfoChangeModal from './UserInfoChangeModal';
 
 
 
@@ -20,29 +20,27 @@ const MainScreen = () => {
             Authorization: `Bearer ${chat.session.jwToken}`
         }
     });
-    console.log("new values:",chat.session);
 
     useEffect(() => {
-        async function connectToChat() {
-            if (chat.session.hubConnection !== null) {
-                await chat.session.hubConnection.invoke("LeaveRoom", chat.session.previousChannel);
-                console.log(`leaving channel ${chat.session.previousChannel}`)
-            };
-
-            const channelInfo = await authAxios.get(`/api/channel/getchannel/${chat.session.currentChannel}`);
-            const result = channelInfo.data;
-            chat.dispatch({ type: PAGE_CONTROL.SAVE_CHANNEL_ID, value: result.id });
-
-            if (chat.session.hubConnection === null) {
-                startConnection();
-            } else {
-                await chat.session.hubConnection.invoke("JoinRoom", chat.session.currentChannel, chat.session.channelId);
-            };
-           
-        };
-
         connectToChat();
     }, [chat.session.currentChannel]);
+
+    const connectToChat = async()=> {
+        if (chat.session.hubConnection !== null) {
+            await chat.session.hubConnection.invoke("LeaveRoom", chat.session.previousChannel);
+            console.log(`leaving channel ${chat.session.previousChannel}`)
+        };
+
+        const channelInfo = await authAxios.get(`/api/channel/getchannel/${chat.session.currentChannel}`);
+        const result = channelInfo.data;
+        chat.dispatch({ type: PAGE_CONTROL.SAVE_CHANNEL_ID, value: result.id });
+
+        if (chat.session.hubConnection === null) {
+            startConnection();
+        } else {
+            await chat.session.hubConnection.invoke("JoinRoom", chat.session.currentChannel, chat.session.channelId);
+        };
+    };
 
     const logoutHandler = () => {
         localStorage.clear();
@@ -61,7 +59,6 @@ const MainScreen = () => {
     const startConnection = async () => {
         try {
             const connection = new HubConnectionBuilder().withUrl(`/chatbox/chat`).build();
-
             chat.dispatch({ type: PAGE_CONTROL.SAVE_HUB_CONNECTION, value: connection });
 
             connection.on("ReceiveMessage", (message, user) => {
@@ -102,7 +99,7 @@ const MainScreen = () => {
                         <ChatScreen  />
                     </span>
             </span>
-            {modal ? (<UserInforChangeModal modalHandler={ modalHandler} />) : <></>}
+            {modal ? (<UserInfoChangeModal modalHandler={ modalHandler} />) : <></>}
             </Container>        
     );
 }

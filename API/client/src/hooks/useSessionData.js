@@ -80,12 +80,12 @@ const reducer = (state, action) => {
     };
 };
 
-const useData = () => {
+const useSessionData = () => {
     const [session, dispatch] = useReducer(reducer, initialState);
 
     return [session, dispatch];
 };
 
-export default useData;
+export default useSessionData;
     
 

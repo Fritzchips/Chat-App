@@ -6,20 +6,17 @@ using Newtonsoft.Json;
 
 namespace API.Controllers
 {
-    //[Authorize]
     public class LoginController : BaseApiController
     {
-        private readonly IJwtAuthenticationHandler _jwtAuthenticationManager;
         private readonly INhibernateHandler _nhibernateHandler;
 
-        public LoginController(IJwtAuthenticationHandler jwtAuthenticationManager, INhibernateHandler nhibernateHandler)
+        public LoginController(INhibernateHandler nhibernateHandler)
         {
-            _jwtAuthenticationManager = jwtAuthenticationManager;
             _nhibernateHandler = nhibernateHandler;
         }
 
         //create user
-        [Route("{action}/{userInfo}")]
+        [HttpPost("{action}/{userInfo}")]
         public ActionResult SignUp(string userInfo)
         {
             var convertedUser = JsonConvert.DeserializeObject<User>(userInfo);
@@ -29,7 +26,7 @@ namespace API.Controllers
         }
 
         //get single user
-        [Route("{action}/{name}/{password}")]
+        [HttpGet("{action}/{name}/{password}")]
         public ActionResult CheckUser(string name, string password)
         {
             try
@@ -44,33 +41,13 @@ namespace API.Controllers
             
         }
 
-        [Route("{action}/{name}/{password}")]
+        [HttpGet("{action}/{name}/{password}")]
         public ActionResult SignIn(string name, string password)
         {
             User client = _nhibernateHandler.GetUserByString(name, password);
             return Ok(client);
         }
 
-        //creating jwt
-        [Route("{action}/{name}/{userId}")]
-        public ActionResult NewToken(string name, string userId)
-        {
-           var token = _jwtAuthenticationManager.TokenCreation(name, userId);
-            return Ok(token);
-        }
-
-        [Route("{action}/{token}")]
-        public bool TokenValidation(string token)
-        {
-            var value = _jwtAuthenticationManager.JwtValidation(token);
-            return value;
-        }
-
-        [Route("{action}/{reftoken}")]
-        public bool RTValidation(string reftoken)
-        {
-            var value = _jwtAuthenticationManager.RefreshTokenValidation(reftoken);
-            return value;
-        }
+        
     }
 }

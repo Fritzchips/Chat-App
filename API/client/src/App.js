@@ -2,17 +2,16 @@ import React, { useEffect } from 'react';
 import './App.css';
 import LoginPage from './components/LoginPage';
 import MainScreen from './components/MainScreen';
-import useData from './hooks/useData';
+import useSessionData from './hooks/useSessionData';
 
 export const ChatContext = React.createContext();
 
 function App() {
-    const [session, dispatch] = useData();
+    const [session, dispatch] = useSessionData();
 
     useEffect(() => {
         if (session.jwToken !== null) {
             localStorage.setItem("chatUser", JSON.stringify(session));
-            console.log("saved to local storage");
         };
         
     }, [session.loggedIn]);
