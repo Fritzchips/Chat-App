@@ -1,60 +1,63 @@
 import { useReducer } from 'react';
 
 export const CRED_CONTROL = {
-    SAVE_USER_INFO: 'Save Info',
-    CHANGE_OUTCOME: 'SetOutcome',
-    CHANGE_FORM: 'SetChangeForm',
-    CHANGE_MODIFIEDFIELD: 'setChangeField',
-    SET_UPDATE_USER: 'UpdatedInfo',
-    CLEAR_INPUT: 'Reset New',
-    NAME_INPUT: 'change newname',
-    PASSWORD_INPUT: 'change newpassword'
+    SAVE_USER_INFO: 'Save User Information',
+    CHANGE_OUTCOME: 'Result Outcome',
+    CHANGE_FORM: 'Change Form',
+    CHANGE_MODIFIEDFIELD: 'Change Selected Field',
+    SET_UPDATE_USER: 'Save User Update',
+    CLEAR_INPUT: 'Clear Input',
+    NAME_INPUT: 'Name Input',
+    PASSWORD_INPUT: 'Password Input'
 };
 
 const initialState = {
-    changeForm: 'unconfirmed',
+    currentForm: 'User Modify',
+    savedName: '',
+    savedPassword: '',
     name: '',
     password: '',
-    newName: '',
-    newPassword: '',
     outcome: '',
-    changeField: 'Name',
-    item: ''
+    selectedField: 'Name',
+    updatedUser: ''
 };
 
 const reducer = (state, action) => {
     switch (action.type) {
+
         case CRED_CONTROL.SAVE_USER_INFO:
-            state.name = action.value.name;
-            state.password = action.value.password;
+            state.savedName = action.value.name;
+            state.savedPassword = action.value.password;
             return state = { ...state };
+
         case CRED_CONTROL.CHANGE_OUTCOME:
             state.outcome = action.value;
             return state = { ...state };
+
         case CRED_CONTROL.CHANGE_FORM:
-            state.changeForm = action.value;
+            state.currentForm = action.value;
             return state = { ...state };
 
         case CRED_CONTROL.CHANGE_MODIFIEDFIELD:
-            state.changeField = action.value;
+            state.selectedField = action.value;
             return state = { ...state };
 
         case CRED_CONTROL.SET_UPDATE_USER:
-            state.item = action.value;
+            state.updatedUser = action.value;
             state.outcome = '';
             return state = { ...state };
 
         case CRED_CONTROL.CLEAR_INPUT:
-            state.newName = action.value;
-            state.newPassword = action.value;
+            state.name = action.value;
+            state.password = action.value;
             return state = { ...state };
 
         case CRED_CONTROL.NAME_INPUT:
-            state.newName = action.value;
+            state.name = action.value;
             return state = { ...state };
 
         case CRED_CONTROL.PASSWORD_INPUT:
-            state.newPassword = action.value;
+            state.password = action.value;
             return state = { ...state };
 
         default:
