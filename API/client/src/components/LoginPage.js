@@ -5,6 +5,8 @@ import axios from 'axios';
 import { ChatContext } from '../App';
 import { PAGE_CONTROL } from '../hooks/useSessionData';
 import { v4 as uuidv4 } from 'uuid';
+import Container from 'react-bootstrap/Container';
+import '../App.css';
 
 
 const LoginPage = () => {
@@ -91,8 +93,8 @@ const LoginPage = () => {
     };
 
     return (
-        <div>
-            <h1>Wecome to Twinkle</h1>
+        <Container className="login-background">
+            <h1>Welcome to Twinkle</h1>
             <div style={{maxWidth: "80%"}}>
                 <div>
                     <Form onSubmit={submitHandler}>
@@ -104,18 +106,17 @@ const LoginPage = () => {
 
                         <Form.Group className="mb-3" controlId="password">
                             <Form.Label>Password:</Form.Label>
-                            <Form.Control type="password" placeholder="Password" required value={password} onChange={(e) => setPassword(e.target.value)}/>
+                            <Form.Control type="password" placeholder="Password" required value={password} onChange={(e) => setPassword(e.target.value)} />
                         </Form.Group>
                         <Button variant="primary" type="submit">{formType}</Button>
                     </Form>
-  
-                    <button onClick={e => setFormType(e.target.value)} value="signIn">Log In</button>
-                    <button onClick={e => setFormType(e.target.value)} value="signUp">New User</button>
+                    <p>{ outcome}</p>
+                    <Button onClick={e => setFormType(e.target.value)} value="signIn">Log In</Button>
+                    <Button onClick={e => setFormType(e.target.value)} value="signUp">New User</Button>
                  </div>
-                <button onClick={guestHandler}>Continue as Guest</button>
-            </div>
-            <p>{ outcome}</p>
-        </div>
+                <Button onClick={guestHandler}>Continue as Guest</Button>
+            </div>  
+        </Container>
     );
 }
 

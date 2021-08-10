@@ -46,10 +46,11 @@ const UserInforChangeModal = ({ modalHandler }) => {
 
         if (credentials.savedName === credentials.name && credentials.savedPassword === credentials.password) {
             await authAxios.post(`/api/user/updateuser/${credentials.selectedField}/${credentials.updatedUser}`);
-            
+
+            await chat.dispatch({ type: PAGE_CONTROL.LOG_OUT });
             localStorage.clear();
             chat.session.hubConnection.stop();
-            await chat.dispatch({ type: PAGE_CONTROL.LOG_OUT });
+            
             alert("Please Sign In Again with you're new username and password");
         } else {
             setCredentials({ type: CRED_CONTROL.CHANGE_OUTCOME, value: "Invalid Name and/or Password" });

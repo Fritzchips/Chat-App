@@ -99,6 +99,18 @@ namespace UnitTesting.API.UnitTests
         }
 
         [Test]
+        public void JoinRoom_JoinGeneralGroup_ReturnList()
+        {
+            Guid channelId = Guid.NewGuid();
+            List<object> messageList = new List<object>();
+            List<object> channelList = new List<object>();
+
+            _nhibernateHandler.Setup(x => x.GetMessages(channelId)).Returns(channelList);
+
+            Assert.AreEqual(messageList, channelList);
+        }
+
+        [Test]
         public void LeaveRoom_ConnectionStringRemoval_ReturnTrue()
         {
             string connection = "54321";
