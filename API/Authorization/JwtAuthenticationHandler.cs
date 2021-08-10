@@ -31,8 +31,6 @@ namespace API
                     new Claim(ClaimTypes.NameIdentifier, userId)
                 }),
                 Expires = DateTime.UtcNow.AddMinutes(1),
-                //Issuer = "John",
-                //Audience = username,
                 SigningCredentials = new SigningCredentials(
                 new SymmetricSecurityKey(tokenKey),
                 SecurityAlgorithms.HmacSha256Signature)
@@ -47,9 +45,6 @@ namespace API
 
         public bool JwtValidation(string jwt)
         {
-            //var tokenInList = TokenManager.tokenList.Single(x => x.Contains(jwt));
-            //TokenManager.tokenList.Remove(tokenInList);
-
             var tokenHandler = new JwtSecurityTokenHandler();
             var tokenKey = Encoding.ASCII.GetBytes(_key);
             var validationParameters = new TokenValidationParameters()
@@ -63,7 +58,11 @@ namespace API
 
             try
             {
+                var tokenInList = TokenManager.tokenList.Single(x => x.Contains(jwt));
+                TokenManager.tokenList.Remove(tokenInList);
+
                 var checkToken = tokenHandler.ValidateToken(jwt, validationParameters, out SecurityToken validateToken);
+
                 return true;
             }
             catch (SecurityTokenExpiredException)

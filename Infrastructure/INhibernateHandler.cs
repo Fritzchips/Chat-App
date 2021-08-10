@@ -9,15 +9,15 @@ namespace Infrastructure
 
         bool ConfirmUser(string name, string password);
 
-        void CreateUser(User userInfo);
+        bool CreateUser(User userInfo);
 
         User GetUserById(Guid userId);
 
         User GetUserByString(string name, string password);
 
-        void UpdateUser(string type, User userInfo);
+        User UpdateUser(string type, User userInfo);
 
-        void CreateMessage(Message message);
+        bool CreateMessage(Message message);
 
         object GetMessages(Guid channelId);   
     }

@@ -33,20 +33,18 @@ namespace API.Hubs
                 Id = Context.ConnectionId,
                 UserId = userId
             };
-            try
-            {
-                var copy = UserHandler.userList.Single(x => x.UserId == userId);
-            }
-            catch (Exception)
+
+            var copy = UserHandler.userList.Where(x => x.UserId == userId).FirstOrDefault();
+            if (copy == null)
             {
                 UserHandler.userList.Add(user);
-            };     
+            };      
             await Clients.All.SendAsync("UsersReceived", UserHandler.userList);
         }
 
         public override async Task OnDisconnectedAsync(Exception exception)
         {
-            var user = UserHandler.userList.Single(x => x.Id == Context.ConnectionId);
+            var user = UserHandler.userList.Where(x => x.Id == Context.ConnectionId).FirstOrDefault();
             UserHandler.userList.Remove(user);
             await Clients.All.SendAsync("UsersReceived", UserHandler.userList);
             await Task.CompletedTask;

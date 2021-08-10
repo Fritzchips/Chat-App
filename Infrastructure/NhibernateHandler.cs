@@ -48,7 +48,7 @@ namespace Infrastructure
             }
         }
 
-        public void CreateUser(User userInfo)
+        public bool CreateUser(User userInfo)
         {
             using (ISession session = NhibernateSession.OpenSession())
             {
@@ -56,6 +56,7 @@ namespace Infrastructure
                 {
                     session.Save(userInfo);
                     transaction.Commit();
+                    return true;
                 }
             }
         }
@@ -90,7 +91,7 @@ namespace Infrastructure
             return client;
         }
 
-        public void UpdateUser(string type, User userInfo)
+        public User UpdateUser(string type, User userInfo)
         {
             using (ISession session = NhibernateSession.OpenSession())
             {
@@ -112,11 +113,12 @@ namespace Infrastructure
                         updateUser.Password = userInfo.Password;
                     };
                     transaction.Commit();
+                    return updateUser;
                 }
             }
         }
 
-        public void CreateMessage(Message message)
+        public bool CreateMessage(Message message)
         {
             using (ISession session = NhibernateSession.OpenSession())
             {
@@ -124,6 +126,7 @@ namespace Infrastructure
                 {
                     session.Save(message);
                     transaction.Commit();
+                    return true;
                 }
             }
         }  
