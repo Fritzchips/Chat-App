@@ -1,6 +1,9 @@
 import React, { useContext, useEffect} from 'react';
 import axios from 'axios';
 import Container from 'react-bootstrap/Container';
+import Modal from 'react-bootstrap/Modal';
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
 import { ChatContext } from '../App';
 import { PAGE_CONTROL } from '../hooks/useSessionData';
 import useCrendetialManager from '../hooks/useCredentialManager';
@@ -65,7 +68,7 @@ const UserInforChangeModal = ({ modalHandler }) => {
 
         const checkAccountStatus = await axios.get(`/api/login/confirmuser/${desiredName}/${desiredPassword}`);
         if (checkAccountStatus.data) {
-            setCredentials({ type: 'SetOutcome', value: `${desiredName} and ${desiredPassword} combination is already taken` });
+            setCredentials({ type: CRED_CONTROL.CHANGE_OUTCOME, value: `${desiredName} and ${desiredPassword} combination is already taken` });
         } else {
             setCredentials({type: CRED_CONTROL.CHANGE_FORM, value:"Verification" })
             const updatedAccountInfo = JSON.stringify({
@@ -78,48 +81,82 @@ const UserInforChangeModal = ({ modalHandler }) => {
         setCredentials({ type: CRED_CONTROL.CLEAR_INPUT, value: '' });
     };
 
+    const inputStyle = {
+        borderRadius: "20px",
+        width: "100%"
+
+    };
+
     if (credentials.currentForm === "User Modify") {
         return (
             <Container style={outerModal}>
-                <div style={{width: "500px", backgroundColor: "white", border: "4px solid black", borderRadius: "10px"}}>
-                <header><button onClick={ modalHandler}>X</button></header>
-                    <h1>What Would you like to Change</h1>
-                <select onChange={e => setCredentials({ type: CRED_CONTROL.CHANGE_MODIFIEDFIELD, value: e.target.value })}>
-                <option value="Name">Name</option>
-                <option value="Password">Password</option>
-                <option value="Name and Password">Name and Password</option>
-                </select>
+            <Modal.Dialog>
+                <Modal.Header >
+                    <Modal.Title>What Would you like to Change?  </Modal.Title><Button onClick={ modalHandler}>X</Button>
+                </Modal.Header>
+                    
+                <Modal.Body>
+                    <Form onSubmit={checkAvailability}>
+                        <Form.Group className="d-flex justify-content-center">
+                            <Form.Control as="select" onChange={e => setCredentials({ type: CRED_CONTROL.CHANGE_MODIFIEDFIELD, value: e.target.value })} style={{marginBottom: " 20px", width: "200px"}}>
+                            <option value="Name">Name</option>
+                            <option value="Password">Password</option>
+                            <option value="Name and Password">Name and Password</option>
+                            </Form.Control>
+                        </Form.Group>
 
-                <form onSubmit={ checkAvailability}>
-                        <p>Please Enter Your Desired { credentials.selectedField}</p>
-                        <div style={{ display: `${credentials.selectedField === "Password" ? "none" : "block"}` }}>
-                        <label>New Name</label>
-                        <input type="text" value={credentials.name} onChange={e => setCredentials({ type: CRED_CONTROL.NAME_INPUT,value: e.target.value })} required={credentials.selectedField === "Password" ? false : true}  />
-                    </div>
-                    <div style={{ display: `${credentials.selectedField === "Name" ? "none" : "block"}` }}>
-                        <label>New Password</label>
-                        <input type="text" value={credentials.password} onChange={e => setCredentials({ type: CRED_CONTROL.PASSWORD_INPUT, value: e.target.value })} required={credentials.selectedField === "Name" ? false : true}  />
-                    </div>
-                    <p>{ credentials.outcome }</p>
-                    <button>Verify</button>
-                    </form>
-                    </div>
+                        <p>Please Enter Your Desired {credentials.selectedField}</p>
+                        <Form.Group style={{ display: `${credentials.selectedField === "Password" ? "none" : "block"}` }}>
+                            <Form.Label>New Name</Form.Label>
+                            <Form.Control type="text" style={ inputStyle} value={credentials.name} onChange={e => setCredentials({ type: CRED_CONTROL.NAME_INPUT, value: e.target.value })} required={credentials.selectedField === "Password" ? false : true} />
+                        </Form.Group>
+
+                        <Form.Group style={{ display: `${credentials.selectedField === "Name" ? "none" : "block"}` }}>
+                            <Form.Label>New Password</Form.Label>
+                            <Form.Control type="text" style={inputStyle} value={credentials.password} onChange={e => setCredentials({ type: CRED_CONTROL.PASSWORD_INPUT, value: e.target.value })} required={credentials.selectedField === "Name" ? false : true} />
+                            </Form.Group>
+                            <br></br>
+                        <Button type="submit">Verify</Button>
+                    </Form>
+                </Modal.Body>
+
+                    <Modal.Footer className="d-flex justify-content-center">
+                    <p>{credentials.outcome}</p>       
+                </Modal.Footer>
+            </Modal.Dialog>
             </Container>
         );
     } else {
         return (
             <Container style={outerModal}>
-                <div style={{ width: "500px", backgroundColor: "white", border: "4px solid black", borderRadius: "10px" }}>
-                <header><button onClick={modalHandler}>X</button></header>
-                <h1>Change User Info</h1>
-                <form onSubmit={ accountUpdateHandler}>
-                    <p>Please Enter Your Name and Password</p>
-                    <input type="text" value={credentials.name} onChange={e => setCredentials({ type: CRED_CONTROL.NAME_INPUT, value: e.target.value })} required />
-                    <input type="text" value={credentials.password} onChange={e => setCredentials({ type: CRED_CONTROL.PASSWORD_INPUT, value: e.target.value })} required />
-                    <p>{ credentials.outcome}</p>
-                    <button>Submit</button>
-                    </form>
-                </div>
+                <Modal.Dialog>
+                    <Modal.Header >
+                        <Modal.Title>Verify your Name and Password  </Modal.Title><Button onClick={modalHandler}>X</Button>
+                    </Modal.Header>
+
+                    <Modal.Body>
+                        <Form onSubmit={accountUpdateHandler}>
+
+                            <p>Please Enter Your Name and Password</p>
+                            <Form.Text className="text-muted">Confirm your identity to make to you { credentials.selectedField}</Form.Text>
+                            <Form.Group>
+                                <Form.Label>Name</Form.Label>
+                                <Form.Control type="text" style={inputStyle} value={credentials.name} onChange={e => setCredentials({ type: CRED_CONTROL.NAME_INPUT, value: e.target.value })} required/>
+                            </Form.Group>
+
+                            <Form.Group>
+                                <Form.Label>Password</Form.Label>
+                                <Form.Control type="text" style={inputStyle} value={credentials.password} onChange={e => setCredentials({ type: CRED_CONTROL.PASSWORD_INPUT, value: e.target.value })} required/>
+                            </Form.Group>
+                            <br></br>
+                            <Button type="submit" >Submit</Button>
+                        </Form>
+                    </Modal.Body>
+
+                    <Modal.Footer className="d-flex justify-content-center">
+                        <p>{credentials.outcome}</p>
+                    </Modal.Footer>
+                </Modal.Dialog>
             </Container>
         );
     };

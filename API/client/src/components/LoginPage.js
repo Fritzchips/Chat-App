@@ -6,12 +6,11 @@ import { ChatContext } from '../App';
 import { PAGE_CONTROL } from '../hooks/useSessionData';
 import { v4 as uuidv4 } from 'uuid';
 import Container from 'react-bootstrap/Container';
-import '../App.css';
-
+import stars from '../images/login_background.jpg';
 
 const LoginPage = () => {
     const chat = useContext(ChatContext);
-    const [formType, setFormType] = useState('signIn');
+    const [formType, setFormType] = useState('Sign In');
     const [name, setName] = useState('');
     const [password, setPassword] = useState('');
     const [outcome, setOutcome] = useState('');
@@ -28,7 +27,7 @@ const LoginPage = () => {
 
     const submitHandler = e => {
         e.preventDefault();
-        if (formType === 'signUp') {
+        if (formType === 'Sign Up') {
             createAccount(name, password);
         } else {
             loginAccount(name, password);
@@ -58,7 +57,7 @@ const LoginPage = () => {
     const createAccount = async (name, password) => {
         const checkAccountStatus = await axios.get(`api/login/confirmuser/${name}/${password}`);
         if (checkAccountStatus.data) {
-            setOutcome("sorry user exist");
+            setOutcome("Sorry user already exist");
             setName('');
             setPassword('');
         } else {
@@ -69,7 +68,7 @@ const LoginPage = () => {
             });
             await axios.post(`api/login/signup/${newUserInfo}`);
             setOutcome(`${name}'s account was made`);
-            setFormType('signIn');
+            setFormType('Sign In');
         };  
     };
 
@@ -81,7 +80,7 @@ const LoginPage = () => {
             chat.dispatch({ type: PAGE_CONTROL.SAVE_USER_INFO, value: accountInfo });
             createToken(accountInfo.name, accountInfo.id);
         } else {
-            setOutcome("sorry user doesnt exist");
+            setOutcome("Sorry user doesn't exist");
             setName('');
             setPassword('');
         };     
@@ -91,31 +90,53 @@ const LoginPage = () => {
         const token = await axios.get(`api/token/newtoken/${name}/${id}`);
         chat.dispatch({ type: PAGE_CONTROL.SAVE_TOKEN, value: token.data });
     };
+    const styling = {
+        backgroundImage: `url(${stars})`,
+        position: "fixed",
+        left: "0",
+        minWidth: "100%",
+        minHeight: "100%",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+    };
+    const inputStyle = {
+        borderRadius: "20px",
+        maxWidth: "300px",
+        width: "300px"
+    };
 
     return (
-        <Container className="login-background">
-            <h1>Welcome to Twinkle</h1>
-            <div style={{maxWidth: "80%"}}>
+        <Container style={styling}>
+            <div>
+                <h1 style={{color: "white"}}>Welcome to Twinkle</h1>
                 <div>
-                    <Form onSubmit={submitHandler}>
+                    <Form onSubmit={submitHandler} style={{display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column"}}>
                         <Form.Group className="mb-3" controlId="usernamel">
-                            <Form.Label>User Name:</Form.Label>
-                            <Form.Control type="text" placeholder="Enter user name" required value={name} onChange={(e)=> setName(e.target.value) }/>
-                            <Form.Text className="text-muted"> We'll never share your email with anyone else.</Form.Text>
+                            <Form.Label style={{ color: "white" }}>User Name</Form.Label>
+                            <Form.Control type="text" placeholder="Enter user name" required value={name} onChange={(e) => setName(e.target.value)} style={ inputStyle}/>
                         </Form.Group>
 
                         <Form.Group className="mb-3" controlId="password">
-                            <Form.Label>Password:</Form.Label>
-                            <Form.Control type="password" placeholder="Password" required value={password} onChange={(e) => setPassword(e.target.value)} />
+                            <Form.Label style={{ color: "white" }}>Password</Form.Label>
+                            <Form.Control type="password" placeholder="Password" required value={password} onChange={(e) => setPassword(e.target.value)} style={inputStyle}/>
                         </Form.Group>
-                        <Button variant="primary" type="submit">{formType}</Button>
+                        <Form.Text style={{ color: "red" }}>{outcome}</Form.Text>
+                        <br></br>
+                        <Button variant="primary" type="submit" style={inputStyle}>{formType}</Button>
                     </Form>
-                    <p>{ outcome}</p>
-                    <Button onClick={e => setFormType(e.target.value)} value="signIn">Log In</Button>
-                    <Button onClick={e => setFormType(e.target.value)} value="signUp">New User</Button>
-                 </div>
-                <Button onClick={guestHandler}>Continue as Guest</Button>
-            </div>  
+                </div>
+                <br></br>
+                <p style={{color: "white"}}>Would you like to?</p>
+                    <div >
+                        <Button onClick={e => setFormType(e.target.value)} value="Sign In" >Log In</Button>
+                        <Button onClick={e => setFormType(e.target.value)} value="Sign Up" >Register</Button>
+                </div>
+                <p style={{ color: "white" }}>Or</p>
+                <Button onClick={guestHandler} style={ inputStyle}>Continue as Guest</Button>
+            </div>
         </Container>
     );
 }
