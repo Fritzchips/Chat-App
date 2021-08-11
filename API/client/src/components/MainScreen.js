@@ -16,6 +16,7 @@ import HeaderNavBar from './HeaderNavBar';
 
 const MainScreen = () => {
     const chat = useContext(ChatContext);
+    const [channelNav, setChannelNav] = useState(true);
 
     const authAxios = axios.create({
         headers: {
@@ -25,25 +26,24 @@ const MainScreen = () => {
     });
 
     useEffect(() => {
+        const connectToChat = async()=> {
+            if (chat.session.hubConnection !== null) {
+                await chat.session.hubConnection.invoke("LeaveRoom", chat.session.previousChannel);
+            };
+            const channelInfo = await authAxios.get(`/api/channel/getchannel/${chat.session.currentChannel}`);
+            const result = channelInfo.data;
+            await chat.dispatch({ type: PAGE_CONTROL.SAVE_CHANNEL_ID, value: result.id });
+
+            if (chat.session.hubConnection === null) {
+                startConnection();
+            } else {
+                await chat.session.hubConnection.invoke("JoinRoom", chat.session.currentChannel, chat.session.channelId);
+            };
+        };
         connectToChat();
     }, [chat.session.currentChannel]);
 
-    const connectToChat = async()=> {
-        if (chat.session.hubConnection !== null) {
-            await chat.session.hubConnection.invoke("LeaveRoom", chat.session.previousChannel);
-            console.log(`leaving channel ${chat.session.previousChannel}`)
-        };
-
-        const channelInfo = await authAxios.get(`/api/channel/getchannel/${chat.session.currentChannel}`);
-        const result = channelInfo.data;
-        chat.dispatch({ type: PAGE_CONTROL.SAVE_CHANNEL_ID, value: result.id });
-
-        if (chat.session.hubConnection === null) {
-            startConnection();
-        } else {
-            await chat.session.hubConnection.invoke("JoinRoom", chat.session.currentChannel, chat.session.channelId);
-        };
-    };
+    
 
     const startConnection = async () => {
         try {
@@ -74,15 +74,24 @@ const MainScreen = () => {
         }
     };
 
-    return (
-        <div className="d-flex flex-column" style={{ height: "100vh", width: "100vw", position: "fixed", left: "0" }}>
-           <HeaderNavBar />
-            <span className="d-flex justify-content-between align-items-stretch" style={{height: "100vh"}}>
-                <span style={{ backgroundColor: "purple", maxWidth: "200px" }}>
-                    <ChannelNavBar />
-                </span>
+    const channelNavHandler = () => {
+        if (channelNav) {
+            setChannelNav(false);
+        } else {
+            setChannelNav(true);
+        };
+    };
 
-                <span style={{ width: "100%" }}>
+    return (
+        <div className="d-flex flex-column" style={{ height: "100vh",width: "100vw", position: "fixed", left: "0"}}>
+            <HeaderNavBar channelNavHandler={ channelNavHandler}/>
+            <span className="d-flex justify-content-between align-items-stretch" style={{height: "100vh"}}>
+                {channelNav ?
+                    (<span style={{ backgroundColor: "purple", width: "150px" }}>
+                     <ChannelNavBar />
+                    </span>) : <></>}
+
+                <span style={{ width: "100%", height: "100vh" }}>
                     <ChatScreen  />
                 </span>
             </span>

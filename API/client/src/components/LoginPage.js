@@ -12,7 +12,9 @@ import { MoonStarsFill } from 'react-bootstrap-icons';
 
 const LoginPage = () => {
     const chat = useContext(ChatContext);
+
     const [formType, setFormType] = useState('Sign In');
+    const [nextForm, setNextForm] = useState('Register');
     const [name, setName] = useState('');
     const [password, setPassword] = useState('');
     const [outcome, setOutcome] = useState('');
@@ -110,6 +112,16 @@ const LoginPage = () => {
         width: "300px"
     };
 
+    const formChangeHandler = () => {
+        if (formType == "Sign In") {
+            setFormType("Sign Up");
+            setNextForm("Log In");
+        } else {
+            setFormType("Sign In");
+            setNextForm("Register");
+        };
+    };
+
     return (
         <Container style={styling}>
             <div>
@@ -133,8 +145,7 @@ const LoginPage = () => {
                 <br></br>
                 <p style={{color: "white"}}>Would you like to?</p>
                     <div >
-                        <Button onClick={e => setFormType(e.target.value)} value="Sign In" >Log In</Button>
-                        <Button onClick={e => setFormType(e.target.value)} value="Sign Up" >Register</Button>
+                    <Button onClick={formChangeHandler}>{ nextForm}</Button>
                 </div>
                 <p style={{ color: "white" }}>Or</p>
                 <Button onClick={guestHandler} style={ inputStyle}>Continue as Guest</Button>

@@ -141,7 +141,7 @@ namespace Infrastructure
                                 join user in session.Query<User>() on msg.UserId equals user.Id
                                 orderby msg.Date
                                 where msg.ChannelId == channelId
-                                select new { msg.Id, msg.Context, msg.Date, user.Name };
+                                select new { msg.Id, msg.Context, msg.Date, user.Name , msg.UserId};
                     var messageTable = query.ToList();
                     transaction.Commit();
                     return messageTable;

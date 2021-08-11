@@ -32,19 +32,35 @@ const ChannelNavBar = () => {
     return (
         <div style={{maxHeight: "100vh"}}>
             <hr></hr>
-            <CaretRightFill /><CaretDownFill />
-            <CollectionFill />
-            <p onClick={showChannelHandler}>Channels</p>
+  
+            <div onClick={showChannelHandler}>
+                {showChannel ? (<CaretDownFill />) : (<CaretRightFill/>)}
+                <CollectionFill />
+                <span>Channels</span>
+            </div>
             {showChannel ?
                 (<div>
                     <hr></hr>
-                    <div><button onClick={e => chat.dispatch({ type: PAGE_CONTROL.CHANGE_CHANNEL, value: e.target.value })} value="general"><Globe />General</button></div>
-                    <div><button onClick={e => chat.dispatch({ type: PAGE_CONTROL.CHANGE_CHANNEL, value: e.target.value })} value="random"><PatchQuestionFill />Random</button></div>
-                    <div> <button onClick={e => chat.dispatch({ type: PAGE_CONTROL.CHANGE_CHANNEL, value: e.target.value })} value="coding"><CodeSquare /> Coding</button></div>
+                    <div onClick={() => chat.dispatch({ type: PAGE_CONTROL.CHANGE_CHANNEL, value: "general"})} >
+                        <Globe />
+                        <span>General</span>
+                    </div>
+                    <div onClick={() => chat.dispatch({ type: PAGE_CONTROL.CHANGE_CHANNEL, value: "random"})} >
+                        <PatchQuestionFill />
+                        <span>Random</span>
+                    </div>
+                    <div onClick={() => chat.dispatch({ type: PAGE_CONTROL.CHANGE_CHANNEL, value: "coding" })} >
+                        <CodeSquare />
+                        <span>Coding</span>
+                    </div>
                 </div>) : (<></>)}
 
             <hr></hr>
-            <div onClick={showUsersHandler}><People /> <strong>Users</strong></div>
+            <div onClick={showUsersHandler}>
+                {showUsers ? (<CaretDownFill />) : (<CaretRightFill />)}
+                <People />
+                <strong>Users</strong>
+            </div>
             <hr></hr>
             {showUsers ? (<ActiveUserList />) : (<></>)}
         </div>

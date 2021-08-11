@@ -27,14 +27,14 @@ const ChatScreen = () => {
     };
 
     return (
-        <div className="d-flex flex-column " style={{minHeight: "80vh"}} >
+        <div className="d-flex flex-column " >
             
-            <div style={{ backgroundColor: "grey", padding: "10px", fontSize: "25px" }}><strong>Welcome to {chat.session.currentChannel} channel</strong></div>
-            <div style={{ width: "100%", height: "75vh", overflow: "auto"}}>
+            <div style={{ backgroundColor: "grey", padding: "10px", fontSize: "25px" }}><strong># {chat.session.currentChannel} channel</strong></div>
+            <div style={{ width: "100%", height: "70vh", overflow: "auto"}}>
                 <ChatMessageList />     
             </div>
 
-            <div style={{ height: "10vh", width: "100%", marginTop: "20px", paddingTop: "20px"}} className="align-self-baseline">
+            <div style={{width: "100%", height: "20vh", paddingTop: "5px"}} className="align-self-baseline">
 
                 <form onSubmit={postHandler}>
                     <input type="text" required style={{ width: "80%" }} value={message} onChange={e => setMessage(e.target.value)}/>

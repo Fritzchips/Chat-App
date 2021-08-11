@@ -37,9 +37,10 @@ const reducer = (state, action) => {
 
         case PAGE_CONTROL.CHANGE_CHANNEL:
             if (state.currentChannel !== action.value) {
-                state.prevChannel = state.currentChannel;
-            }
-            return (state = { ...state, currentChannel: action.value });
+                state.previousChannel = state.currentChannel;
+            };
+            state.currentChannel = action.value;
+            return (state = { ...state});
 
         case PAGE_CONTROL.SAVE_HUB_CONNECTION:
             state.hubConnection = action.value;

@@ -3,20 +3,29 @@ import { FormChangeContext } from './UserInfoChangeModal';
 import { ChatContext } from '../App';
 import { CRED_CONTROL } from '../hooks/useCredentialManager';
 import { PAGE_CONTROL } from '../hooks/useSessionData';
-
-
-
+import axios from 'axios';
+import Modal from 'react-bootstrap/Modal';
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+import { ModalContext } from './HeaderNavBar';
 
 
 const UserVerificationForm = () => {
     const chat = useContext(ChatContext);
     const client = useContext(FormChangeContext);
+    const popup = useContext(ModalContext);
 
     const inputStyle = {
         borderRadius: "20px",
         width: "100%"
 
     };
+    const authAxios = axios.create({
+        headers: {
+            Accept: 'application/json',
+            Authorization: `Bearer ${chat.session.jwToken}`
+        }
+    });
 
     const accountUpdateHandler = async (e) => {
         e.preventDefault();
@@ -26,9 +35,9 @@ const UserVerificationForm = () => {
 
             await chat.dispatch({ type: PAGE_CONTROL.LOG_OUT });
             localStorage.clear();
-            chat.session.hubConnection.stop();
+            await chat.session.hubConnection.stop();
 
-            alert("Please Sign In Again with you're new username and password");
+            alert("Please Sign In Again with your new username and password");
         } else {
             client.setCredentials({ type: CRED_CONTROL.CHANGE_OUTCOME, value: "Invalid Name and/or Password" });
         };
@@ -40,7 +49,7 @@ const UserVerificationForm = () => {
         <>
             <Modal.Dialog>
                 <Modal.Header >
-                    <Modal.Title>Verify your Name and Password  </Modal.Title><Button onClick={modalHandler}>X</Button>
+                    <Modal.Title>Verify your Name and Password  </Modal.Title><Button onClick={popup.modalHandler}>X</Button>
                 </Modal.Header>
 
                 <Modal.Body>

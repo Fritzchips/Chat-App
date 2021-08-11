@@ -1,16 +1,18 @@
 import React, { useContext } from 'react';
-import Container from 'react-bootstrap/Container';
 import { ChatContext } from '../App';
-import { PersonFill } from 'react-bootstrap-icons';
 import { FormChangeContext } from './UserInfoChangeModal';
 import { CRED_CONTROL } from '../hooks/useCredentialManager';
+import axios from 'axios';
+import Modal from 'react-bootstrap/Modal';
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+import { ModalContext } from './HeaderNavBar';
 
 
-
-
-const UserModifyForm = () => {
+const UserModifyForm = ({modalHandler }) => {
     const chat = useContext(ChatContext);
     const client = useContext(FormChangeContext);
+    const popup = useContext(ModalContext);
     const inputStyle = {
         borderRadius: "20px",
         width: "100%"
@@ -41,7 +43,7 @@ const UserModifyForm = () => {
         <>
             <Modal.Dialog>
                 <Modal.Header >
-                    <Modal.Title>What Would you like to Change?  </Modal.Title><Button onClick={modalHandler}>X</Button>
+                    <Modal.Title>What Would you like to Change?  </Modal.Title><Button onClick={popup.modalHandler}>X</Button>
                 </Modal.Header>
 
                 <Modal.Body>
