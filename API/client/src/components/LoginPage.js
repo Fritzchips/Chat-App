@@ -7,6 +7,8 @@ import { PAGE_CONTROL } from '../hooks/useSessionData';
 import { v4 as uuidv4 } from 'uuid';
 import Container from 'react-bootstrap/Container';
 import stars from '../images/login_background.jpg';
+import { MoonStarsFill } from 'react-bootstrap-icons';
+
 
 const LoginPage = () => {
     const chat = useContext(ChatContext);
@@ -111,7 +113,7 @@ const LoginPage = () => {
     return (
         <Container style={styling}>
             <div>
-                <h1 style={{color: "white"}}>Welcome to Twinkle</h1>
+                <h1 style={{color: "white"}}>Welcome to Twinkle<MoonStarsFill /></h1>
                 <div>
                     <Form onSubmit={submitHandler} style={{display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column"}}>
                         <Form.Group className="mb-3" controlId="usernamel">
