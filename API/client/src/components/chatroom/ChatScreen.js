@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState} from 'react';
-import Container from 'react-bootstrap/Container';
+import Button from 'react-bootstrap/Button';
 import ChatMessageList from './ChatMessageList';
-import { ChatContext } from '../App';
+import { ChatContext } from '../../App';
 import { v4 as uuidv4 } from 'uuid';
 
 const ChatScreen = () => {
@@ -27,18 +27,18 @@ const ChatScreen = () => {
     };
 
     return (
-        <div className="d-flex flex-column " >
+        <div className="d-flex flex-column " style={{
+            background: "#023059"}}>
             
-            <div style={{ backgroundColor: "grey", padding: "10px", fontSize: "25px" }}><strong># {chat.session.currentChannel} channel</strong></div>
-            <div style={{ width: "100%", height: "70vh", overflow: "auto"}}>
+            <div style={{ backgroundColor: "#04B2D9", padding: "10px", fontSize: "25px", }}><strong style={{color: "white" }}># {chat.session.currentChannel} channel</strong></div>
+            <div style={{ width: "100%", height: "70vh", overflow: "auto", backgroundColor: "#5CD6FF"}}>
                 <ChatMessageList />     
             </div>
 
-            <div style={{width: "100%", height: "20vh", paddingTop: "5px"}} className="align-self-baseline">
-
-                <form onSubmit={postHandler}>
-                    <input type="text" required style={{ width: "80%" }} value={message} onChange={e => setMessage(e.target.value)}/>
-                    <button>Post</button>
+            <div style={{ width: "100%", height: "20vh", marginTop: "15px"}} className="align-self-baseline">
+                <form  onSubmit={postHandler} >
+                    <input type="text" required style={{ width: "80%" , height: "34px", borderRadius: "10px"}} value={message} onChange={e => setMessage(e.target.value)}/>
+                    <button type="submit" style={{backgroundColor: "lightblue", borderRadius: "10px",}} >Post</button>
                 </form>
                 </div>
             </div>      

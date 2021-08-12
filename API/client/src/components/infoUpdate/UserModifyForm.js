@@ -1,12 +1,13 @@
 import React, { useContext } from 'react';
-import { ChatContext } from '../App';
+import { ChatContext } from '../../App';
 import { FormChangeContext } from './UserInfoChangeModal';
-import { CRED_CONTROL } from '../hooks/useCredentialManager';
+import { CRED_CONTROL } from '../../hooks/useCredentialManager';
 import axios from 'axios';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import { ModalContext } from './HeaderNavBar';
+import { ModalContext } from '../navigation/HeaderNavBar';
+import { MoonStarsFill } from 'react-bootstrap-icons';
 
 
 const UserModifyForm = ({modalHandler }) => {
@@ -44,6 +45,7 @@ const UserModifyForm = ({modalHandler }) => {
             <Modal.Dialog>
                 <Modal.Header >
                     <Modal.Title>What Would you like to Change?  </Modal.Title><Button onClick={popup.modalHandler}>X</Button>
+                    
                 </Modal.Header>
 
                 <Modal.Body>
@@ -56,7 +58,7 @@ const UserModifyForm = ({modalHandler }) => {
                             </Form.Control>
                         </Form.Group>
 
-                        <p>Please Enter Your Desired {client.credentials.selectedField}</p>
+                        <p>Please Enter Your Desired <strong>{client.credentials.selectedField}</strong></p>
                         <Form.Group style={{ display: `${client.credentials.selectedField === "Password" ? "none" : "block"}` }}>
                             <Form.Label>New Name</Form.Label>
                             <Form.Control type="text" style={inputStyle} value={client.credentials.name} onChange={e => client.setCredentials({ type: CRED_CONTROL.NAME_INPUT, value: e.target.value })} required={client.credentials.selectedField === "Password" ? false : true} />
@@ -73,6 +75,7 @@ const UserModifyForm = ({modalHandler }) => {
 
                 <Modal.Footer className="d-flex justify-content-center">
                     <p>{client.credentials.outcome}</p>
+                    <MoonStarsFill style={{ margin: "30px", color: "#04B2D9", fontSize: "100px" }} />
                 </Modal.Footer>
             </Modal.Dialog>
         </>

@@ -1,13 +1,13 @@
 import React, { useContext } from 'react';
 import { FormChangeContext } from './UserInfoChangeModal';
-import { ChatContext } from '../App';
-import { CRED_CONTROL } from '../hooks/useCredentialManager';
-import { PAGE_CONTROL } from '../hooks/useSessionData';
+import { ChatContext } from '../../App';
+import { CRED_CONTROL } from '../../hooks/useCredentialManager';
+import { PAGE_CONTROL } from '../../hooks/useSessionData';
 import axios from 'axios';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import { ModalContext } from './HeaderNavBar';
+import { ModalContext } from '../navigation/HeaderNavBar';
 
 
 const UserVerificationForm = () => {

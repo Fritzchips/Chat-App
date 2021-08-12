@@ -1,17 +1,11 @@
 import React, { useEffect, useContext, useState} from 'react';
-import ChannelNavBar from './ChannelNavBar';
-import Container from 'react-bootstrap/Container';
-import Button from 'react-bootstrap/Button';
-import Nav from "react-bootstrap/Nav";
-import Navbar from "react-bootstrap/Navbar";
+import ChannelNavBar from '../navigation/ChannelNavBar';
 import ChatScreen from './ChatScreen';
 import { HubConnectionBuilder } from '@microsoft/signalr';
 import axios from 'axios';
-import { ChatContext } from '../App';
-import { PAGE_CONTROL } from '../hooks/useSessionData';
-import UserInfoChangeModal from './UserInfoChangeModal';
-import HeaderNavBar from './HeaderNavBar';
-
+import { ChatContext } from '../../App';
+import { PAGE_CONTROL } from '../../hooks/useSessionData';
+import HeaderNavBar from '../navigation/HeaderNavBar';
 
 
 const MainScreen = () => {
@@ -87,7 +81,7 @@ const MainScreen = () => {
             <HeaderNavBar channelNavHandler={ channelNavHandler}/>
             <span className="d-flex justify-content-between align-items-stretch" style={{height: "100vh"}}>
                 {channelNav ?
-                    (<span style={{ backgroundColor: "purple", width: "150px" }}>
+                    (<span style={{ backgroundColor: "#04668C", width: "200px" }}>
                      <ChannelNavBar />
                     </span>) : <></>}
 

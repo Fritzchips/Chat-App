@@ -1,15 +1,12 @@
 import React, { useContext, useEffect} from 'react';
 import axios from 'axios';
 import Container from 'react-bootstrap/Container';
-import Modal from 'react-bootstrap/Modal';
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
-import { ChatContext } from '../App';
-import { PAGE_CONTROL } from '../hooks/useSessionData';
-import useCrendetialManager from '../hooks/useCredentialManager';
-import { CRED_CONTROL } from '../hooks/useCredentialManager';
+import { ChatContext } from '../../App';
+import useCrendetialManager from '../../hooks/useCredentialManager';
+import { CRED_CONTROL } from '../../hooks/useCredentialManager';
 import UserVerificationForm from './UserVerificationForm';
 import UserModifyForm from './UserModifyForm';
+
 
 const outerModal = {
     position: "fixed",
@@ -49,7 +46,8 @@ const UserInforChangeModal = ({ modalHandler }) => {
         
     return (
         <Container style={outerModal}>
-            <FormChangeContext.Provider value={{credentials: credentials, setCredentials: setCredentials}}>
+            <FormChangeContext.Provider value={{ credentials: credentials, setCredentials: setCredentials }}>
+                
                 {credentials.currentForm === "User Modify" ? <UserModifyForm modalHandler={modalHandler} /> : <UserVerificationForm modalHandler={ modalHandler}/>}
             </FormChangeContext.Provider>
         </Container>

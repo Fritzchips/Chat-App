@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
 import './App.css';
-import LoginPage from './components/LoginPage';
-import MainScreen from './components/MainScreen';
+import MainScreen from './components/chatroom/MainScreen';
+import LoginPage from './components/login/LoginPage';
+
 import useSessionData from './hooks/useSessionData';
 
 export const ChatContext = React.createContext();
