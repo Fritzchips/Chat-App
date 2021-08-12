@@ -16,11 +16,6 @@ const UserVerificationForm = () => {
     const client = useContext(FormChangeContext);
     const popup = useContext(ModalContext);
 
-    const inputStyle = {
-        borderRadius: "20px",
-        width: "100%"
-
-    };
     const authAxios = axios.create({
         headers: {
             Accept: 'application/json',
@@ -33,12 +28,8 @@ const UserVerificationForm = () => {
 
         if (client.credentials.savedName === client.credentials.name && client.credentials.savedPassword === client.credentials.password) {
             await authAxios.post(`/api/user/updateuser/${client.credentials.selectedField}/${client.credentials.updatedUser}`);
-
-            await chat.dispatch({ type: PAGE_CONTROL.LOG_OUT });
-            localStorage.clear();
-            await chat.session.hubConnection.stop();
-
-            alert("Please Sign In Again with your new username and password");
+            client.setCredentials({ type: CRED_CONTROL.CHANGE_FORM, value: "ConfirmMessage" });
+            
         } else {
             client.setCredentials({ type: CRED_CONTROL.CHANGE_OUTCOME, value: "Invalid Name and/or Password" });
         };
@@ -57,16 +48,15 @@ const UserVerificationForm = () => {
                 <Modal.Body>
                     <Form onSubmit={accountUpdateHandler}>
 
-                        <p>Please Enter Your Name and Password</p>
                         <Form.Text className="text-muted">Confirm your identity to make changes your account</Form.Text>
                         <Form.Group>
                             <Form.Label>Name</Form.Label>
-                            <Form.Control type="text" style={inputStyle} value={client.credentials.name} onChange={e => client.setCredentials({ type: CRED_CONTROL.NAME_INPUT, value: e.target.value })} required />
+                            <Form.Control type="text" id="modal-ver-input" value={client.credentials.name} onChange={e => client.setCredentials({ type: CRED_CONTROL.NAME_INPUT, value: e.target.value })} required />
                         </Form.Group>
 
                         <Form.Group>
                             <Form.Label>Password</Form.Label>
-                            <Form.Control type="text" style={inputStyle} value={client.credentials.password} onChange={e => client.setCredentials({ type: CRED_CONTROL.PASSWORD_INPUT, value: e.target.value })} required />
+                            <Form.Control type="text" id="modal-ver-input-two" value={client.credentials.password} onChange={e => client.setCredentials({ type: CRED_CONTROL.PASSWORD_INPUT, value: e.target.value })} required />
                         </Form.Group>
                         <br></br>
                         <Button type="submit">Submit</Button>

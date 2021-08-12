@@ -28,7 +28,7 @@ const LoginForm = () => {
             chat.dispatch({ type: PAGE_CONTROL.SAVE_USER_INFO, value: accountInfo });
             createToken(accountInfo.name, accountInfo.id);
         } else {
-            setOutcome("Sorry user doesn't exist");
+            setOutcome("Invalid Name and/or Password");
             setName('');
             setPassword('');
         };

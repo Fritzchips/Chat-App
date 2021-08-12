@@ -34,8 +34,8 @@ const ChatScreen = () => {
             </div>
 
             <div className="chat-message-list">
-                <ChatMessageList />     
-            </div>
+                <ChatMessageList />
+            </div>    
 
             <div className="align-self-baseline chat-inputfield">
                 <form  onSubmit={postHandler} >

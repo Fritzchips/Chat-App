@@ -14,7 +14,7 @@ const UserList = () => {
             {chat.session.activeUsersList.length > 0 ? chat.session.activeUsersList.map(user => (
                 <div key={user.id} className="users-row">
                     <PersonFill className="users-icon"/>
-                    <span><strong className="users-name">{user.name}</strong></span>
+                    <span className="users-name">{user.name}</span>
                 </div>
             )) : (<></>)}
         </Container>

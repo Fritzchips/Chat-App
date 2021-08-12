@@ -32,7 +32,7 @@
     border: #023059;
 }
 
-.modal-form-select {
+#modal-form-select {
     margin-bottom: 20px;
     width: 200px;
 }
@@ -41,4 +41,20 @@
     color: red;
 }
 
+#modal-mod-input {
+    border-radius: 20px;
+    width: 100%;
+}
+#modal-mod-input-two {
+    border-radius: 20px;
+    width: 100%;
+}
 
+#modal-ver-input {
+    border-radius: 20px;
+    width: 100%;
+}
+#modal-ver-input-two {
+    border-radius: 20px;
+    width: 100%;
+}

@@ -14,11 +14,6 @@ const UserModifyForm = () => {
     const chat = useContext(ChatContext);
     const client = useContext(FormChangeContext);
     const popup = useContext(ModalContext);
-    const inputStyle = {
-        borderRadius: "20px",
-        width: "100%"
-
-    };
 
     const checkAvailability = async (e) => {
         e.preventDefault();
@@ -27,9 +22,9 @@ const UserModifyForm = () => {
 
         const checkAccountStatus = await axios.get(`/api/login/confirmuser/${desiredName}/${desiredPassword}`);
         if (checkAccountStatus.data) {
-            client.setCredentials({ type: CRED_CONTROL.CHANGE_OUTCOME, value: `${desiredName} and ${desiredPassword} combination is already taken` });
+            client.setCredentials({ type: CRED_CONTROL.CHANGE_OUTCOME, value: `Name and Password combination is already taken` });
         } else {
-            client.setCredentials({ type: CRED_CONTROL.CHANGE_FORM, value: "Verification" })
+            client.setCredentials({ type: CRED_CONTROL.CHANGE_FORM, value: "Verification" });
             const updatedAccountInfo = JSON.stringify({
                 Id: chat.session.userId,
                 Name: desiredName,
@@ -51,7 +46,7 @@ const UserModifyForm = () => {
                 <Modal.Body >
                     <Form onSubmit={checkAvailability}>
                         <Form.Group className="d-flex justify-content-center">
-                            <Form.Control as="select" onChange={e => client.setCredentials({ type: CRED_CONTROL.CHANGE_MODIFIEDFIELD, value: e.target.value })} className="modal-form-select">
+                            <Form.Control as="select" onChange={e => client.setCredentials({ type: CRED_CONTROL.CHANGE_MODIFIEDFIELD, value: e.target.value })} id="modal-form-select">
                                 <option value="Name">Name</option>
                                 <option value="Password">Password</option>
                                 <option value="Name and Password">Name and Password</option>
@@ -61,12 +56,12 @@ const UserModifyForm = () => {
                         <p>Please Enter Your Desired <strong>{client.credentials.selectedField}</strong></p>
                         <Form.Group style={{ display: `${client.credentials.selectedField === "Password" ? "none" : "block"}` }}>
                             <Form.Label>New Name</Form.Label>
-                            <Form.Control type="text" style={inputStyle} value={client.credentials.name} onChange={e => client.setCredentials({ type: CRED_CONTROL.NAME_INPUT, value: e.target.value })} required={client.credentials.selectedField === "Password" ? false : true} />
+                            <Form.Control type="text" id="modal-mod-input" value={client.credentials.name} onChange={e => client.setCredentials({ type: CRED_CONTROL.NAME_INPUT, value: e.target.value })} required={client.credentials.selectedField === "Password" ? false : true} />
                         </Form.Group>
 
                         <Form.Group style={{ display: `${client.credentials.selectedField === "Name" ? "none" : "block"}` }}>
                             <Form.Label>New Password</Form.Label>
-                            <Form.Control type="text" style={inputStyle} value={client.credentials.password} onChange={e => client.setCredentials({ type: CRED_CONTROL.PASSWORD_INPUT, value: e.target.value })} required={client.credentials.selectedField === "Name" ? false : true} />
+                            <Form.Control type="text" id="modal-mod-input-two" value={client.credentials.password} onChange={e => client.setCredentials({ type: CRED_CONTROL.PASSWORD_INPUT, value: e.target.value })} required={client.credentials.selectedField === "Name" ? false : true} />
                         </Form.Group>
                         <br></br>
                         <Button type="submit">Verify</Button>

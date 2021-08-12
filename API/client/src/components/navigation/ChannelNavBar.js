@@ -51,7 +51,7 @@ const ChannelNavBar = () => {
                         <span>Coding</span>
                     </div>
                 </div>) : (<></>)}
-
+            <br></br>
             <div onClick={showUsersHandler} >
                 {showUsers ? (<CaretDownFill className="channel-nav-icon-indent" />) : (<CaretRightFill className="channel-nav-icon-indent"/>)}
                 <PeopleFill className="channel-nav-people"/>

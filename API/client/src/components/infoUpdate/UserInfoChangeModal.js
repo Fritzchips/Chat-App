@@ -7,6 +7,7 @@ import { CRED_CONTROL } from '../../hooks/useCredentialManager';
 import UserVerificationForm from './UserVerificationForm';
 import UserModifyForm from './UserModifyForm';
 import "./styling/ModifyUser.css";
+import ConfirmMessage from './ConfirmMessage';
 
 export const FormChangeContext = React.createContext();
 
@@ -33,7 +34,11 @@ const UserInforChangeModal = () => {
     return (
         <Container className="outer-modal-background">
             <FormChangeContext.Provider value={{ credentials: credentials, setCredentials: setCredentials }}>
-                {credentials.currentForm === "User Modify" ? <UserModifyForm  /> : <UserVerificationForm />}
+                {credentials.currentForm === "User Modify" ?
+                    <UserModifyForm />
+                    : credentials.currentForm === "Verification" ?
+                        <UserVerificationForm /> 
+                        : <ConfirmMessage />}
             </FormChangeContext.Provider>
         </Container>
     );

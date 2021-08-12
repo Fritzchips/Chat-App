@@ -20,7 +20,7 @@ const RegisterForm = () => {
     const createAccount = async (name, password) => {
         const checkAccountStatus = await axios.get(`api/login/confirmuser/${name}/${password}`);
         if (checkAccountStatus.data) {
-            setOutcome("Sorry user already exist");
+            setOutcome("Sorry User is already taken");
             setName('');
             setPassword('');
         } else {
