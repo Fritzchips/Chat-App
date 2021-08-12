@@ -47,8 +47,7 @@ const LoginForm = () => {
     const inputStyletwo = {
         borderRadius: "20px",
         maxWidth: "300px",
-        width: "300px",
-        backgroundColor: "#04B2D9"
+        width: "300px"
     };
 
 

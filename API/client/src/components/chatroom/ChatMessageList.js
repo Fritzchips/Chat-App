@@ -20,8 +20,7 @@ const meMsg = {
 }
 const ChatMessageList = () => {
     const chat = useContext(ChatContext);
-    //const messageRef = useRef(null);
-    const color = `#92E5EB`;
+   // const messageRef = useRef(null);
 
     return (
         <div className="d-flex flex-column " >
@@ -38,6 +37,7 @@ const ChatMessageList = () => {
                 
             )) : (<></>)}
             <br></br>
+            {/*<div ref={messageRef }></div>*/}
         </div>
     );
 }

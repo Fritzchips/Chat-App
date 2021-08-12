@@ -12,6 +12,10 @@ const MainScreen = () => {
     const chat = useContext(ChatContext);
     const [channelNav, setChannelNav] = useState(true);
 
+    const activateRef = () => {
+
+    };
+
     const authAxios = axios.create({
         headers: {
             Accept: 'application/json',
@@ -51,6 +55,7 @@ const MainScreen = () => {
 
             connection.on("DataReceived", channelMessages => {
                 chat.dispatch({ type: PAGE_CONTROL.LOAD_CHANNEL_MESSAGES, value: channelMessages });
+
             });
 
             connection.on("UsersReceived", activeUserList => {

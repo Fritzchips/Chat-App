@@ -7,7 +7,6 @@ import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { ModalContext } from '../navigation/HeaderNavBar';
-import { MoonStarsFill } from 'react-bootstrap-icons';
 
 
 const UserModifyForm = ({modalHandler }) => {
@@ -43,12 +42,12 @@ const UserModifyForm = ({modalHandler }) => {
     return (
         <>
             <Modal.Dialog>
-                <Modal.Header >
-                    <Modal.Title>What Would you like to Change?  </Modal.Title><Button onClick={popup.modalHandler}>X</Button>
+                <Modal.Header style={{ backgroundColor: "#023059" }}>
+                    <Modal.Title style={{ color: "white" }}>What Would you like to Change?  </Modal.Title><Button onClick={popup.modalHandler} style={{ marginLeft: "10px", backgroundColor: "#023059", border: "#023059" }}>X</Button>
                     
                 </Modal.Header>
 
-                <Modal.Body>
+                <Modal.Body >
                     <Form onSubmit={checkAvailability}>
                         <Form.Group className="d-flex justify-content-center">
                             <Form.Control as="select" onChange={e => client.setCredentials({ type: CRED_CONTROL.CHANGE_MODIFIEDFIELD, value: e.target.value })} style={{ marginBottom: " 20px", width: "200px" }}>
@@ -69,13 +68,12 @@ const UserModifyForm = ({modalHandler }) => {
                             <Form.Control type="text" style={inputStyle} value={client.credentials.password} onChange={e => client.setCredentials({ type: CRED_CONTROL.PASSWORD_INPUT, value: e.target.value })} required={client.credentials.selectedField === "Name" ? false : true} />
                         </Form.Group>
                         <br></br>
-                        <Button type="submit">Verify</Button>
+                        <Button type="submit" style={{ borderRadius: "10px", backgroundColor: "#04B2D9", border: "#04B2D9" }}>Verify</Button>
                     </Form>
                 </Modal.Body>
 
-                <Modal.Footer className="d-flex justify-content-center">
+                <Modal.Footer className="d-flex justify-content-center" style={{ backgroundColor: "#023059" }}>
                     <p>{client.credentials.outcome}</p>
-                    <MoonStarsFill style={{ margin: "30px", color: "#04B2D9", fontSize: "100px" }} />
                 </Modal.Footer>
             </Modal.Dialog>
         </>

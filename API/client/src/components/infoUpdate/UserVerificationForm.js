@@ -48,15 +48,15 @@ const UserVerificationForm = () => {
     return (
         <>
             <Modal.Dialog>
-                <Modal.Header >
-                    <Modal.Title>Verify your Name and Password  </Modal.Title><Button onClick={popup.modalHandler}>X</Button>
+                <Modal.Header style={{ backgroundColor: "#023059" }} >
+                    <Modal.Title style={{ color: "white" }}>Verify your Name and Password  </Modal.Title><Button onClick={popup.modalHandler} style={{ marginLeft: "10px", backgroundColor: "#023059", border: "#023059" }}>X</Button>
                 </Modal.Header>
 
                 <Modal.Body>
                     <Form onSubmit={accountUpdateHandler}>
 
                         <p>Please Enter Your Name and Password</p>
-                        <Form.Text className="text-muted">Confirm your identity to make to you {client.credentials.selectedField}</Form.Text>
+                        <Form.Text className="text-muted">Confirm your identity to make changes your account</Form.Text>
                         <Form.Group>
                             <Form.Label>Name</Form.Label>
                             <Form.Control type="text" style={inputStyle} value={client.credentials.name} onChange={e => client.setCredentials({ type: CRED_CONTROL.NAME_INPUT, value: e.target.value })} required />
@@ -67,11 +67,11 @@ const UserVerificationForm = () => {
                             <Form.Control type="text" style={inputStyle} value={client.credentials.password} onChange={e => client.setCredentials({ type: CRED_CONTROL.PASSWORD_INPUT, value: e.target.value })} required />
                         </Form.Group>
                         <br></br>
-                        <Button type="submit" >Submit</Button>
+                        <Button type="submit" style={{ borderRadius: "10px", backgroundColor: "#04B2D9", border: "#04B2D9" }}>Submit</Button>
                     </Form>
                 </Modal.Body>
 
-                <Modal.Footer className="d-flex justify-content-center">
+                <Modal.Footer className="d-flex justify-content-center" style={{ backgroundColor: "#023059" }}>
                     <p>{client.credentials.outcome}</p>
                 </Modal.Footer>
             </Modal.Dialog>
