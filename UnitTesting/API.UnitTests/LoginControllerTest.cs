@@ -3,11 +3,6 @@ using Core;
 using Infrastructure;
 using Moq;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace UnitTesting.API.UnitTests
 {
@@ -34,7 +29,7 @@ namespace UnitTesting.API.UnitTests
                 Password = password
             };
 
-            var value = _nhibernateHandler.Setup(x => x.ConfirmUser(name, password)).Returns(true);
+            _nhibernateHandler.Setup(x => x.ConfirmUser(name, password)).Returns(true);
 
             Assert.IsTrue(true, "User exist");
         }
@@ -50,7 +45,7 @@ namespace UnitTesting.API.UnitTests
                 Password = password
             };
 
-            var value = _nhibernateHandler.Setup(x => x.ConfirmUser(name, password)).Returns(false);
+            _nhibernateHandler.Setup(x => x.ConfirmUser(name, password)).Returns(false);
 
             Assert.IsFalse(false, "User exist");
         }

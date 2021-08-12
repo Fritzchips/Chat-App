@@ -20,9 +20,9 @@ namespace API.Hubs
 
         public async Task SendMessage(string message, string userName, string channelName)
         {
-            var convertedMsg = JsonConvert.DeserializeObject<Message>(message);
-            await Clients.Group(channelName).SendAsync("ReceiveMessage", convertedMsg, userName);
-            _nhibernateHandler.CreateMessage(convertedMsg);
+            var convertedMessage = JsonConvert.DeserializeObject<Message>(message);
+            await Clients.Group(channelName).SendAsync("ReceiveMessage", convertedMessage, userName);
+            _nhibernateHandler.CreateMessage(convertedMessage);
         }
 
         public async Task JoinChat(string userName, Guid userId)

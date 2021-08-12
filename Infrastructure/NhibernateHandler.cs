@@ -101,7 +101,6 @@ namespace Infrastructure
                     if (type == "Name")
                     {
                         updateUser.Name = userInfo.Name;
-
                     }
                     else if (type == "Password")
                     {
@@ -142,9 +141,9 @@ namespace Infrastructure
                                 orderby msg.Date
                                 where msg.ChannelId == channelId
                                 select new { msg.Id, msg.Context, msg.Date, user.Name , msg.UserId};
-                    var messageTable = query.ToList();
+                    var messageList = query.ToList();
                     transaction.Commit();
-                    return messageTable;
+                    return messageList;
                 }
             }
         }        

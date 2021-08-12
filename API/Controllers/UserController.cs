@@ -27,8 +27,8 @@ namespace API.Controllers
         [HttpPost("{action}/{type}/{user}")]
         public ActionResult UpdateUser(string type, string user)
         {
-            var newUser = JsonConvert.DeserializeObject<User>(user);
-            _nhibernateHandler.UpdateUser(type, newUser);
+            var userInfo = JsonConvert.DeserializeObject<User>(user);
+            _nhibernateHandler.UpdateUser(type, userInfo);
             return Ok();
         }
     }

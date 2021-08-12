@@ -1,5 +1,4 @@
-﻿using API.Authorization;
-using API.Authorization.Utilities;
+﻿using API.Authorization.Utilities;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IdentityModel.Tokens.Jwt;
@@ -58,8 +57,8 @@ namespace API
 
             try
             {
-                var tokenInList = TokenManager.tokenList.Single(x => x.Contains(jwt));
-                TokenManager.tokenList.Remove(tokenInList);
+                var token = TokenManager.tokenList.Single(x => x.Contains(jwt));
+                TokenManager.tokenList.Remove(token);
 
                 var checkToken = tokenHandler.ValidateToken(jwt, validationParameters, out SecurityToken validateToken);
 

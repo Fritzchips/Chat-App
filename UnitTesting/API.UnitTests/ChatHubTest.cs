@@ -7,8 +7,6 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace UnitTesting.API.UnitTests
 {
@@ -63,7 +61,7 @@ namespace UnitTesting.API.UnitTests
         }
         
         [Test]
-        public void JoinChat_PartOfRoom_ReturnTrue()
+        public void JoinChat_PartOfRoom_ReturnFalse()
         {
             HubUser user = new HubUser
             {
@@ -73,16 +71,16 @@ namespace UnitTesting.API.UnitTests
             };
 
             var copy = userList.Where(x => x.UserId == user.UserId).FirstOrDefault();
-            bool real = (copy != null);
+            bool real = (copy == null);
 
-            Assert.IsTrue(real, "user is not added to userList");
+            Assert.IsFalse(real, "user is not added to userList");
         }
 
         [Test]
         public void OnDisconnectedAsync_RemoveUser_ReturnTrue()
         {
-            string connection = "12345";
-            var user = userList.Where(x => x.Id == connection).FirstOrDefault();
+            string connectionId = "12345";
+            var user = userList.Where(x => x.Id == connectionId).FirstOrDefault();
             userList.Remove(user);
             var test = (userList.Count == 0);
 
@@ -92,8 +90,8 @@ namespace UnitTesting.API.UnitTests
         [Test]
         public void JoinRoom_JoinGeneralGroup_ReturnTrue()
         {
-            string connection = "12345";
-            general.Add(connection);
+            string connectionId = "12345";
+            general.Add(connectionId);
             bool group = (general.Count > 1);
             Assert.IsTrue(group, "Added to general group");
         }
@@ -113,8 +111,8 @@ namespace UnitTesting.API.UnitTests
         [Test]
         public void LeaveRoom_ConnectionStringRemoval_ReturnTrue()
         {
-            string connection = "54321";
-            var user = general.Single(x => x.Contains(connection));
+            string connectionId = "54321";
+            var user = general.Single(x => x.Contains(connectionId));
             general.Remove(user);
             bool group = (general.Count < 1);
             Assert.IsTrue(group, "User was removed from group");

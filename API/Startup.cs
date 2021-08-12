@@ -8,7 +8,6 @@ using Microsoft.Extensions.Hosting;
 using API.Hubs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using API.Authorization;
 using Infrastructure;
 using API.Authorization.Utilities;
 
