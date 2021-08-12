@@ -1,0 +1,21 @@
+
+.main-page-container {
+    height: 100vh;
+    width: 100vw;
+    position: fixed;
+    left: 0;
+}
+
+.main-nav-height {
+    height: 100vh;
+}
+
+.main-channel-nav {
+    background-color: #04668C;
+    width: 200px;
+}
+
+.main-chatscreen {
+    width: 100%;
+    height: 100vh;
+}

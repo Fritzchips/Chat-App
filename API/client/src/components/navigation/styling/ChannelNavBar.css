@@ -1,0 +1,31 @@
+
+.channel-nav-cont {
+    max-height: 100vh;
+}
+
+.channel-nav-icon-indent {
+    margin-right: 5px;
+}
+
+.channel-nav-icon {
+    margin-right: 5px;
+    color: #5CD6FF;
+}
+
+.channel-nav-header {
+    font-size: 18px;
+    color: white;
+}
+
+.channel-nav-room {
+    color: white;
+}
+
+.channel-nav-space {
+    margin-top: 5px;
+}
+
+.channel-nav-people {
+    margin-right: 5px;
+    color: lightgreen;
+}

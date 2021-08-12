@@ -4,6 +4,7 @@ import { PeopleFill, CaretRightFill, CaretDownFill , CodeSquare, Globe, Collecti
 import { ChatContext} from '../../App';
 import { PAGE_CONTROL } from '../../hooks/useSessionData';
 import ActiveUserList from './ActiveUserList';
+import "./styling/ChannelNavBar.css";
 
 const ChannelNavBar = () => {
 
@@ -28,37 +29,34 @@ const ChannelNavBar = () => {
     };
 
     return (
-        <div style={{maxHeight: "100vh"}}>
+        <div className="channel-nav-cont">
                <br></br>
             <div onClick={showChannelHandler} >
-                {showChannel ? (<CaretDownFill style={{ marginRight: "5px" }} />) : (<CaretRightFill style={{ marginRight: "5px" }}/>)}
-                <CollectionFill style={{ marginRight: "5px", color: "#5CD6FF"}}/>
-                <span><strong style={{fontSize: "18px", color: "white"}}>Channels</strong></span>
+                {showChannel ? (<CaretDownFill className="channel-nav-icon-indent" />) : (<CaretRightFill className="channel-nav-icon-indent"/>)}
+                <CollectionFill className="channel-nav-icon"/>
+                <span><strong className="channel-nav-header">Channels</strong></span>
             </div>
             {showChannel ?
-                (<div>
-                    <hr></hr>
+                (<div className="channel-nav-room">
                     <div onClick={() => chat.dispatch({ type: PAGE_CONTROL.CHANGE_CHANNEL, value: "general" })} >
-                        <Globe style={{ marginRight: "5px", color: "#5CD6FF"}}/>
-                        <span style={{ color: "white" }}>General</span>
+                        <Globe className="channel-nav-icon"/>
+                        <span>General</span>
                     </div>
-                    <div onClick={() => chat.dispatch({ type: PAGE_CONTROL.CHANGE_CHANNEL, value: "random" })} style={{ marginTop: "5px" }}>
-                        <PatchQuestionFill style={{ marginRight: "5px", color: "#5CD6FF"}}/>
-                        <span style={{ color: "white" }}>Random</span>
+                    <div onClick={() => chat.dispatch({ type: PAGE_CONTROL.CHANGE_CHANNEL, value: "random" })} className="channel-nav-space">
+                        <PatchQuestionFill className="channel-nav-icon"/>
+                        <span>Random</span>
                     </div>
-                    <div onClick={() => chat.dispatch({ type: PAGE_CONTROL.CHANGE_CHANNEL, value: "coding" })} style={{ marginTop: "5px" }}>
-                        <CodeSquare style={{ marginRight: "5px", color: "#5CD6FF"}} />
-                        <span style={{ color: "white" }}>Coding</span>
+                    <div onClick={() => chat.dispatch({ type: PAGE_CONTROL.CHANGE_CHANNEL, value: "coding" })} className="channel-nav-space">
+                        <CodeSquare className="channel-nav-icon" />
+                        <span>Coding</span>
                     </div>
                 </div>) : (<></>)}
 
-            <hr></hr>
             <div onClick={showUsersHandler} >
-                {showUsers ? (<CaretDownFill style={{ marginRight: "5px" }} />) : (<CaretRightFill style={{ marginRight: "5px" }}/>)}
-                <PeopleFill style={{ marginRight: "5px" , color: "lightgreen"}}/>
-                <strong style={{ fontSize: "18px", color: "white" }}>Users</strong>
+                {showUsers ? (<CaretDownFill className="channel-nav-icon-indent" />) : (<CaretRightFill className="channel-nav-icon-indent"/>)}
+                <PeopleFill className="channel-nav-people"/>
+                <strong className="channel-nav-header">Users</strong>
             </div>
-            <hr></hr>
             {showUsers ? (<ActiveUserList />) : (<></>)}
         </div>
     );

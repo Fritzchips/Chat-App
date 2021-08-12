@@ -4,6 +4,7 @@ import Button from 'react-bootstrap/Button';
 import axios from 'axios';
 import { ChatContext } from '../../App';
 import { PAGE_CONTROL } from '../../hooks/useSessionData';
+import "./styling/LoginForm.css";
 
 
 
@@ -38,34 +39,21 @@ const LoginForm = () => {
         chat.dispatch({ type: PAGE_CONTROL.SAVE_TOKEN, value: token.data });
     };
 
-    const inputStyle = {
-        borderRadius: "20px",
-        maxWidth: "300px",
-        width: "300px"
-    };
-
-    const inputStyletwo = {
-        borderRadius: "20px",
-        maxWidth: "300px",
-        width: "300px"
-    };
-
-
     return (
-        <Form onSubmit={submitHandler} style={{ display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column" }}>
-            <h3 style={{ color: "white" }}>Login To Account</h3>
-            <Form.Group className="mb-3" controlId="usernamel">
-                <Form.Label style={{ color: "white" }}>User Name</Form.Label>
-                <Form.Control type="text" placeholder="Enter user name" required value={name} onChange={(e) => setName(e.target.value)} style={inputStyle} />
+        <Form onSubmit={submitHandler} className="login-form-container">
+            <h3>Login To Account</h3>
+            <Form.Group className="mb-3" >
+                <Form.Label >User Name</Form.Label>
+                <Form.Control type="text" placeholder="Enter user name" required value={name} onChange={(e) => setName(e.target.value)} id="login-input-one" />
             </Form.Group>
 
-            <Form.Group className="mb-3" controlId="password">
-                <Form.Label style={{ color: "white" }}>Password</Form.Label>
-                <Form.Control type="password" placeholder="Password" required value={password} onChange={(e) => setPassword(e.target.value)} style={inputStyle} />
+            <Form.Group className="mb-3" >
+                <Form.Label >Password</Form.Label>
+                <Form.Control type="password" placeholder="Password" required value={password} onChange={(e) => setPassword(e.target.value)} id="login-input-two" />
             </Form.Group>
             <Form.Text style={{ color: "red" }}>{outcome}</Form.Text>
             <br></br>
-            <Button variant="primary" type="submit" style={inputStyletwo}>Sign In</Button>
+            <Button variant="primary" type="submit" id="login-submit-btn" >Sign In</Button>
         </Form>
     );
 }

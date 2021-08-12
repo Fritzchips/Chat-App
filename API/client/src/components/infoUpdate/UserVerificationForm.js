@@ -8,6 +8,7 @@ import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { ModalContext } from '../navigation/HeaderNavBar';
+import "./styling/ModifyUser.css";
 
 
 const UserVerificationForm = () => {
@@ -48,8 +49,9 @@ const UserVerificationForm = () => {
     return (
         <>
             <Modal.Dialog>
-                <Modal.Header style={{ backgroundColor: "#023059" }} >
-                    <Modal.Title style={{ color: "white" }}>Verify your Name and Password  </Modal.Title><Button onClick={popup.modalHandler} style={{ marginLeft: "10px", backgroundColor: "#023059", border: "#023059" }}>X</Button>
+                <Modal.Header className="modal-head-foot">
+                    <Modal.Title className="modal-title-color">Verify your Name and Password  </Modal.Title>
+                    <Button onClick={popup.modalHandler} id="modal-exit-btn2">X</Button>
                 </Modal.Header>
 
                 <Modal.Body>
@@ -67,11 +69,11 @@ const UserVerificationForm = () => {
                             <Form.Control type="text" style={inputStyle} value={client.credentials.password} onChange={e => client.setCredentials({ type: CRED_CONTROL.PASSWORD_INPUT, value: e.target.value })} required />
                         </Form.Group>
                         <br></br>
-                        <Button type="submit" style={{ borderRadius: "10px", backgroundColor: "#04B2D9", border: "#04B2D9" }}>Submit</Button>
+                        <Button type="submit">Submit</Button>
                     </Form>
                 </Modal.Body>
 
-                <Modal.Footer className="d-flex justify-content-center" style={{ backgroundColor: "#023059" }}>
+                <Modal.Footer className="d-flex justify-content-center modal-head-foot">
                     <p>{client.credentials.outcome}</p>
                 </Modal.Footer>
             </Modal.Dialog>

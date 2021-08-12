@@ -1,0 +1,26 @@
+
+.login-container {
+    background-image: url(../../../images/login_background.jpg); 
+    position: fixed; 
+    left: 0; 
+    min-width: 100%; 
+    min-height: 100%; 
+    background-size: cover; 
+    background-position: center; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    color: white;
+}
+
+.moon-icon-style {
+    margin-left: 10px; 
+    color: #04B2D9;
+}
+
+#form-change-btn {
+    border-radius: 20px;
+    max-width: 300px;
+    width: 200px;
+    background-color: #023059;
+}

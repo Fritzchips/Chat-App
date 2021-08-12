@@ -1,0 +1,23 @@
+#user-flex {
+    align-items: flex-end; 
+    margin-right: 10%;
+}
+
+#chat-flex {
+    align-items: flex-start;
+    margin-left: 10%;
+}
+
+#user-msg-style {
+    background-color: #F2D57E;
+    border-radius: 10px; 
+    padding: 5px; 
+    max-width: 80%;
+}
+
+#chat-msg-style {
+    background-color: #92E5EB;
+    border-radius: 10px;
+    padding: 5px;
+    max-width: 80%;
+}

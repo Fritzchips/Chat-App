@@ -1,0 +1,40 @@
+
+.outer-modal-background {
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 100vw;
+}
+
+.modal-head-foot {
+    background-color: #023059;
+}
+
+.modal-title-color {
+    color: white;
+}
+
+#modal-exit-btn {
+    margin-left: 10px;
+    background-color: #023059; 
+    border: #023059;
+}
+
+#modal-exit-btn2 {
+    margin-left: 10px;
+    background-color: #023059;
+    border: #023059;
+}
+
+.modal-form-select {
+    margin-bottom: 20px;
+    width: 200px;
+}
+
+

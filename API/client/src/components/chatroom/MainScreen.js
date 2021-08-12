@@ -6,15 +6,12 @@ import axios from 'axios';
 import { ChatContext } from '../../App';
 import { PAGE_CONTROL } from '../../hooks/useSessionData';
 import HeaderNavBar from '../navigation/HeaderNavBar';
+import "./styling/MainScreen.css";
 
 
 const MainScreen = () => {
     const chat = useContext(ChatContext);
     const [channelNav, setChannelNav] = useState(true);
-
-    const activateRef = () => {
-
-    };
 
     const authAxios = axios.create({
         headers: {
@@ -82,15 +79,15 @@ const MainScreen = () => {
     };
 
     return (
-        <div className="d-flex flex-column" style={{ height: "100vh",width: "100vw", position: "fixed", left: "0"}}>
+        <div className="d-flex flex-column main-page-container" >
             <HeaderNavBar channelNavHandler={ channelNavHandler}/>
-            <span className="d-flex justify-content-between align-items-stretch" style={{height: "100vh"}}>
+            <span className="d-flex justify-content-between align-items-stretch main-nav-height">
                 {channelNav ?
-                    (<span style={{ backgroundColor: "#04668C", width: "200px" }}>
+                    (<span className="main-channel-nav">
                      <ChannelNavBar />
                     </span>) : <></>}
 
-                <span style={{ width: "100%", height: "100vh" }}>
+                <span className="main-chatscreen">
                     <ChatScreen  />
                 </span>
             </span>

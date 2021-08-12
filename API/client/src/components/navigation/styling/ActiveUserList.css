@@ -1,0 +1,14 @@
+
+.users-container {
+    height: 100vh;
+    overflow: auto;
+}
+
+.users-icon {
+    color: lightgreen;
+    margin-right: 5px;
+}
+
+.users-name {
+    color: white;
+}

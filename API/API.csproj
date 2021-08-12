@@ -5,10 +5,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="client\src\components\chatroom\NewFolder\**" />
     <Compile Remove="client\src\components\NewFolder\**" />
+    <Compile Remove="client\src\styling\**" />
+    <Content Remove="client\src\components\chatroom\NewFolder\**" />
     <Content Remove="client\src\components\NewFolder\**" />
+    <Content Remove="client\src\styling\**" />
+    <EmbeddedResource Remove="client\src\components\chatroom\NewFolder\**" />
     <EmbeddedResource Remove="client\src\components\NewFolder\**" />
+    <EmbeddedResource Remove="client\src\styling\**" />
+    <None Remove="client\src\components\chatroom\NewFolder\**" />
     <None Remove="client\src\components\NewFolder\**" />
+    <None Remove="client\src\styling\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -22,10 +30,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="client\src\styling\" />
   </ItemGroup>
 
 </Project>

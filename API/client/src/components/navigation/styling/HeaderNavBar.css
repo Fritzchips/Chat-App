@@ -1,0 +1,51 @@
+
+.head-nav-cont {
+    min-width: 100%;
+}
+
+.head-nav-style {
+    background-color: #023059; 
+    width: 100%;
+    color: white;
+    font-size: 20px;
+}
+
+.head-nav-left {
+    margin-left: 15px;
+}
+
+.head-nav-list {
+    margin-right: 5px;
+    color: #04B2D9;
+}
+
+.head-nav-stars {
+    color: #04B2D9;
+}
+
+.head-nav-title {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.head-nav-stars-invert {
+    transform: scale(-1, 1); 
+    color: #04B2D9;
+}
+
+.head-nav-right {
+    margin-right: 15px;
+}
+
+.head-nav-person {
+    margin-right: 10px;
+    color: lightgreen;
+}
+
+.head-nav-dropdown {
+    position: absolute;
+    background-color: #023059;
+    right: 0; 
+    padding: 10px; 
+    border-radius: 10px;
+}

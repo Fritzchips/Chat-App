@@ -1,0 +1,43 @@
+
+.login-form-container {
+    display: flex; 
+    align-items: center;
+    justify-content: center; 
+    flex-direction: column;
+}
+
+#login-input-one {
+    border-radius: 20px;
+    max-width: 300px;
+    width: 300px;
+}
+
+#login-input-two {
+    border-radius: 20px;
+    max-width: 300px;
+    width: 300px;
+}
+
+#login-submit-btn {
+    border-radius: 20px;
+    max-width: 300px;
+    width: 300px;
+}
+
+#register-input-one {
+    border-radius: 20px;
+    max-width: 300px;
+    width: 300px;
+}
+
+#register-input-two {
+    border-radius: 20px;
+    max-width: 300px;
+    width: 300px;
+}
+
+#register-submit-btn {
+    border-radius: 20px;
+    max-width: 300px;
+    width: 300px;
+}
