@@ -30,7 +30,7 @@ const RegisterForm = () => {
                 password: password
             });
             await axios.post(`api/login/signup/${newUserInfo}`);
-            setOutcome(`${name}'s account was made, Please Sign In`);
+            setOutcome(`${name}'s account was made, Please Login`);
         };
     };
 
@@ -40,14 +40,14 @@ const RegisterForm = () => {
             <h3 >Register New User</h3>
             <Form.Group className="mb-3">
                 <Form.Label >User Name</Form.Label>
-                <Form.Control type="text" placeholder="Enter user name" required value={name} onChange={(e) => setName(e.target.value)} id="register-input-one" />
+                <Form.Control type="text" placeholder="Enter user name" required value={name} onChange={(e) => setName(e.target.value)} id="register-input-one" maxLength="10" />
             </Form.Group>
 
             <Form.Group className="mb-3">
                 <Form.Label >Password</Form.Label>
-                <Form.Control type="password" placeholder="Password" required value={password} onChange={(e) => setPassword(e.target.value)} id="register-input-two" />
+                <Form.Control type="password" placeholder="Password" required value={password} onChange={(e) => setPassword(e.target.value)} id="register-input-two" maxLength="10"/>
             </Form.Group>
-            <Form.Text style={{ color: "red" }}>{outcome}</Form.Text>
+            <Form.Text id={outcome === "Sorry user already exist" ? "register-fail" : "register-pass"}>{outcome}</Form.Text>
             <br></br>
             <Button variant="primary" type="submit" id="register-submit-btn">Sign Up</Button>
         </Form>

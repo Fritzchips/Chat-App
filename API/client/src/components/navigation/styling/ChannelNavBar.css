@@ -25,6 +25,10 @@
     margin-top: 5px;
 }
 
+    .channel-nav-space:hover {
+        background-color: #074963;
+    }
+
 .channel-nav-people {
     margin-right: 5px;
     color: lightgreen;

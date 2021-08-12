@@ -10,7 +10,7 @@ import { ModalContext } from '../navigation/HeaderNavBar';
 import "./styling/ModifyUser.css";
 
 
-const UserModifyForm = ({modalHandler }) => {
+const UserModifyForm = () => {
     const chat = useContext(ChatContext);
     const client = useContext(FormChangeContext);
     const popup = useContext(ModalContext);
@@ -74,7 +74,7 @@ const UserModifyForm = ({modalHandler }) => {
                 </Modal.Body>
 
                 <Modal.Footer className="d-flex justify-content-center modal-head-foot" >
-                    <p>{client.credentials.outcome}</p>
+                    <strong className="modal-outcome">{client.credentials.outcome}</strong>
                 </Modal.Footer>
             </Modal.Dialog>
         </>

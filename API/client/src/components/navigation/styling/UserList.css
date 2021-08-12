@@ -12,3 +12,7 @@
 .users-name {
     color: white;
 }
+
+.users-row:hover {
+    background-color: #074963;
+}

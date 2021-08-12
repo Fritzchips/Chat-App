@@ -74,7 +74,7 @@ const UserVerificationForm = () => {
                 </Modal.Body>
 
                 <Modal.Footer className="d-flex justify-content-center modal-head-foot">
-                    <p>{client.credentials.outcome}</p>
+                    <strong className="modal-outcome">{client.credentials.outcome}</strong>
                 </Modal.Footer>
             </Modal.Dialog>
         </>

@@ -51,7 +51,7 @@ const reducer = (state, action) => {
             return (state = { ...state });
 
         case PAGE_CONTROL.LOAD_ACTIVE_USERS:
-                state.activeUsersList = [...action.value];
+             state.activeUsersList = [...action.value];
             return (state = { ...state });
 
         case PAGE_CONTROL.SAVE_CHANNEL_ID:

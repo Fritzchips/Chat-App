@@ -1,3 +1,8 @@
+
+.msg-spacing {
+    margin-bottom: 10px;
+}
+
 #user-flex {
     align-items: flex-end; 
     margin-right: 10%;

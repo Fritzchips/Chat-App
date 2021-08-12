@@ -41,3 +41,11 @@
     max-width: 300px;
     width: 300px;
 }
+
+#register-fail {
+    color: red;
+}
+
+#register-pass {
+    color: lightgreen;
+}

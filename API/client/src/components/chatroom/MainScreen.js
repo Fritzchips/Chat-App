@@ -27,7 +27,7 @@ const MainScreen = () => {
             };
             const channelInfo = await authAxios.get(`/api/channel/getchannel/${chat.session.currentChannel}`);
             const result = channelInfo.data;
-            await chat.dispatch({ type: PAGE_CONTROL.SAVE_CHANNEL_ID, value: result.id });
+            chat.dispatch({ type: PAGE_CONTROL.SAVE_CHANNEL_ID, value: result.id });
 
             if (chat.session.hubConnection === null) {
                 startConnection();
@@ -46,13 +46,12 @@ const MainScreen = () => {
             chat.dispatch({ type: PAGE_CONTROL.SAVE_HUB_CONNECTION, value: connection });
 
             connection.on("ReceiveMessage", (message, user) => {
-                const newMessage = { ...message, name: user };
-                chat.dispatch({ type: PAGE_CONTROL.ADD_NEW_MESSAGE, value: newMessage });
+                const roomMessage = { ...message, name: user };
+                chat.dispatch({ type: PAGE_CONTROL.ADD_NEW_MESSAGE, value: roomMessage });
             });
 
             connection.on("DataReceived", channelMessages => {
                 chat.dispatch({ type: PAGE_CONTROL.LOAD_CHANNEL_MESSAGES, value: channelMessages });
-
             });
 
             connection.on("UsersReceived", activeUserList => {

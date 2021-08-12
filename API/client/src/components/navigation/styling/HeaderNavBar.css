@@ -42,10 +42,21 @@
     color: lightgreen;
 }
 
+@media screen and (max-width: 400px) {
+    .head-nav-name {
+        display: none;
+    }
+}
+
+
 .head-nav-dropdown {
     position: absolute;
     background-color: #023059;
     right: 0; 
     padding: 10px; 
     border-radius: 10px;
+}
+
+.head-nav-drop-item:hover {
+    background-color: #04668C;
 }

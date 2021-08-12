@@ -52,12 +52,16 @@ const HeaderNavBar = ({ channelNavHandler}) => {
                 <div className="d-inline mx-2 head-nav-right" >
                     <div className="d-flex justify-content-center align-items-center" onClick={userMenuHandler}>
                         <PersonCircle className="head-nav-person" />
-                        <strong>{chat.session.userName}</strong>
+                        <strong className="head-nav-name">{chat.session.userName}</strong>
                     </div>
                     {userMenu ?
                         (<div className="head-nav-dropdown">
-                            <div onClick={modalHandler} >Settings</div>
-                            <div onClick={logoutHandler} >Log Out</div>
+                            {chat.session.userId !== "822455e0-1134-4d87-97b6-ad8201265f91" && chat.session.userName !== "Guest" ?
+                                (<div onClick={modalHandler} className="head-nav-drop-item">Settings</div>)
+                                : <></>}
+
+                            <div onClick={logoutHandler} className="head-nav-drop-item" >Log Out</div>
+
                         </div>) : <></>}
                 </div>
             </Navbar>

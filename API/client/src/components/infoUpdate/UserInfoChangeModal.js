@@ -10,7 +10,7 @@ import "./styling/ModifyUser.css";
 
 export const FormChangeContext = React.createContext();
 
-const UserInforChangeModal = ({ modalHandler }) => {
+const UserInforChangeModal = () => {
     const chat = useContext(ChatContext);
     const [credentials, setCredentials] = useCrendetialManager();
 
@@ -22,19 +22,18 @@ const UserInforChangeModal = ({ modalHandler }) => {
     });
 
     useEffect(() => {
+        const getUserInfo = async()=> {
+            const userData = await authAxios.get(`/api/user/getuser/${chat.session.userId}`);
+            const response = userData.data;
+            setCredentials({ type: CRED_CONTROL.SAVE_USER_INFO, value: response });
+        };
         getUserInfo();
     }, []);
-
-    const getUserInfo = async()=> {
-        const userData = await authAxios.get(`/api/user/getuser/${chat.session.userId}`);
-        const response = userData.data;
-        setCredentials({ type: CRED_CONTROL.SAVE_USER_INFO, value: response });
-    };
-        
+    
     return (
         <Container className="outer-modal-background">
             <FormChangeContext.Provider value={{ credentials: credentials, setCredentials: setCredentials }}>
-                {credentials.currentForm === "User Modify" ? <UserModifyForm modalHandler={modalHandler} /> : <UserVerificationForm modalHandler={ modalHandler}/>}
+                {credentials.currentForm === "User Modify" ? <UserModifyForm  /> : <UserVerificationForm />}
             </FormChangeContext.Provider>
         </Container>
     );

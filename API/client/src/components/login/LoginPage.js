@@ -4,7 +4,6 @@ import axios from 'axios';
 import { ChatContext } from '../../App';
 import { PAGE_CONTROL } from '../../hooks/useSessionData';
 import Container from 'react-bootstrap/Container';
-import stars from '../../images/login_background.jpg';
 import { MoonStarsFill } from 'react-bootstrap-icons';
 import LoginForm from './LoginForm';
 import RegisterForm from './RegisterForm';
@@ -18,7 +17,7 @@ const LoginPage = () => {
     const [nextForm, setNextForm] = useState('Register');
 
     const guestHandler = async() => {
-        const loginInfo = await axios.get(`api/login/signin/Guest/00000000`);
+        const loginInfo = await axios.get(`api/login/signin/Guest/0000000000`);
         const accountInfo = loginInfo.data;
         chat.dispatch({ type: PAGE_CONTROL.SAVE_USER_INFO, value: accountInfo });
         createToken(accountInfo.name, accountInfo.id);
@@ -48,9 +47,9 @@ const LoginPage = () => {
     };
 
     const formChangeHandler = () => {
-        if (formType == "Sign In") {
+        if (formType === "Sign In") {
             setFormType("Sign Up");
-            setNextForm("Log In");
+            setNextForm("Login");
         } else {
             setFormType("Sign In");
             setNextForm("Register");

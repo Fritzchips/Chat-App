@@ -3,7 +3,7 @@ import React, { useContext , useState} from 'react';
 import { PeopleFill, CaretRightFill, CaretDownFill , CodeSquare, Globe, CollectionFill, PatchQuestionFill} from 'react-bootstrap-icons';
 import { ChatContext} from '../../App';
 import { PAGE_CONTROL } from '../../hooks/useSessionData';
-import ActiveUserList from './ActiveUserList';
+import UserList from './UserList';
 import "./styling/ChannelNavBar.css";
 
 const ChannelNavBar = () => {
@@ -38,7 +38,7 @@ const ChannelNavBar = () => {
             </div>
             {showChannel ?
                 (<div className="channel-nav-room">
-                    <div onClick={() => chat.dispatch({ type: PAGE_CONTROL.CHANGE_CHANNEL, value: "general" })} >
+                    <div onClick={() => chat.dispatch({ type: PAGE_CONTROL.CHANGE_CHANNEL, value: "general" })} className="channel-nav-space">
                         <Globe className="channel-nav-icon"/>
                         <span>General</span>
                     </div>
@@ -57,7 +57,7 @@ const ChannelNavBar = () => {
                 <PeopleFill className="channel-nav-people"/>
                 <strong className="channel-nav-header">Users</strong>
             </div>
-            {showUsers ? (<ActiveUserList />) : (<></>)}
+            {showUsers ? (<UserList />) : (<></>)}
         </div>
     );
 };
