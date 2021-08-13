@@ -99,10 +99,7 @@ namespace API
                {
                    spa.UseReactDevelopmentServer(npmScript: "start");
                }
-           });
-            
-        }
-
-        
+           });          
+        }        
     }
 }

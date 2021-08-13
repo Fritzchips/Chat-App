@@ -3,6 +3,7 @@ import ChatMessageList from './ChatMessageList';
 import { ChatContext } from '../../App';
 import { v4 as uuidv4 } from 'uuid';
 import "./styling/ChatScreen.css";
+import ScrollableFeed from "react-scrollable-feed";
 
 const ChatScreen = () => {
     const chat = useContext(ChatContext);
@@ -33,9 +34,9 @@ const ChatScreen = () => {
                 <strong className="chat-room-name"># {chat.session.currentChannel} channel</strong>
             </div>
 
-            <div className="chat-message-list">
+            <ScrollableFeed className="chat-message-list">
                 <ChatMessageList />
-            </div>    
+            </ScrollableFeed>    
 
             <div className="align-self-baseline chat-inputfield">
                 <form  onSubmit={postHandler} >

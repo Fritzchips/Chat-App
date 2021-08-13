@@ -2,7 +2,6 @@ import React, { useContext } from 'react';
 import { FormChangeContext } from './UserInfoChangeModal';
 import { ChatContext } from '../../App';
 import { CRED_CONTROL } from '../../hooks/useCredentialManager';
-import { PAGE_CONTROL } from '../../hooks/useSessionData';
 import axios from 'axios';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
@@ -51,12 +50,12 @@ const UserVerificationForm = () => {
                         <Form.Text className="text-muted">Confirm your identity to make changes your account</Form.Text>
                         <Form.Group>
                             <Form.Label>Name</Form.Label>
-                            <Form.Control type="text" id="modal-ver-input" value={client.credentials.name} onChange={e => client.setCredentials({ type: CRED_CONTROL.NAME_INPUT, value: e.target.value })} required />
+                            <Form.Control type="text" maxLength="10" id="modal-ver-input" value={client.credentials.name} onChange={e => client.setCredentials({ type: CRED_CONTROL.NAME_INPUT, value: e.target.value })} required />
                         </Form.Group>
 
                         <Form.Group>
                             <Form.Label>Password</Form.Label>
-                            <Form.Control type="text" id="modal-ver-input-two" value={client.credentials.password} onChange={e => client.setCredentials({ type: CRED_CONTROL.PASSWORD_INPUT, value: e.target.value })} required />
+                            <Form.Control type="text" maxLength="10" id="modal-ver-input-two" value={client.credentials.password} onChange={e => client.setCredentials({ type: CRED_CONTROL.PASSWORD_INPUT, value: e.target.value })} required />
                         </Form.Group>
                         <br></br>
                         <Button type="submit">Submit</Button>

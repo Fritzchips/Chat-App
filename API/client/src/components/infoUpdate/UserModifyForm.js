@@ -56,12 +56,12 @@ const UserModifyForm = () => {
                         <p>Please Enter Your Desired <strong>{client.credentials.selectedField}</strong></p>
                         <Form.Group style={{ display: `${client.credentials.selectedField === "Password" ? "none" : "block"}` }}>
                             <Form.Label>New Name</Form.Label>
-                            <Form.Control type="text" id="modal-mod-input" value={client.credentials.name} onChange={e => client.setCredentials({ type: CRED_CONTROL.NAME_INPUT, value: e.target.value })} required={client.credentials.selectedField === "Password" ? false : true} />
+                            <Form.Control type="text" maxLength="10" id="modal-mod-input" value={client.credentials.name} onChange={e => client.setCredentials({ type: CRED_CONTROL.NAME_INPUT, value: e.target.value })} required={client.credentials.selectedField === "Password" ? false : true} />
                         </Form.Group>
 
                         <Form.Group style={{ display: `${client.credentials.selectedField === "Name" ? "none" : "block"}` }}>
                             <Form.Label>New Password</Form.Label>
-                            <Form.Control type="text" id="modal-mod-input-two" value={client.credentials.password} onChange={e => client.setCredentials({ type: CRED_CONTROL.PASSWORD_INPUT, value: e.target.value })} required={client.credentials.selectedField === "Name" ? false : true} />
+                            <Form.Control type="text" maxLength="10" id="modal-mod-input-two" value={client.credentials.password} onChange={e => client.setCredentials({ type: CRED_CONTROL.PASSWORD_INPUT, value: e.target.value })} required={client.credentials.selectedField === "Name" ? false : true} />
                         </Form.Group>
                         <br></br>
                         <Button type="submit">Verify</Button>
