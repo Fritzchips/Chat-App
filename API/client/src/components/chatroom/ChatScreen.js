@@ -40,7 +40,7 @@ const ChatScreen = () => {
 
             <div className="align-self-baseline chat-inputfield">
                 <form  onSubmit={postHandler} >
-                    <input type="text" required  value={message} onChange={e => setMessage(e.target.value)} className="chat-input-style"/>
+                    <input type="text" required  value={message} onChange={e => setMessage(e.target.value)} className="chat-input-style" maxLength="200"/>
                     <button type="submit" className="chat-button-style" >Post</button>
                 </form>
             </div>
