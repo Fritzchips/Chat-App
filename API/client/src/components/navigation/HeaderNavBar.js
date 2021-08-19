@@ -56,7 +56,7 @@ const HeaderNavBar = ({ channelNavHandler}) => {
                     </div>
                     {userMenu ?
                         (<div className="head-nav-dropdown">
-                            {chat.session.userId !== "f6bfbe52-8768-4f94-97d4-7c38aa338fc4" && chat.session.userName !== "Guest" ?
+                            {chat.session.userId !== "5bad7a56-3d70-4439-814f-5db0f39966f0" && chat.session.userName !== "Guest" ?
                                 (<div onClick={modalHandler} className="head-nav-drop-item">Settings</div>)
                                 : <></>}
 

@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Infrastructure;
 using API.Authorization.Utilities;
-using Microsoft.OpenApi.Models;
 
 namespace API
 {
