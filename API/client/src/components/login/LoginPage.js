@@ -28,7 +28,6 @@ const LoginPage = () => {
             if (localStorage.getItem("chatUser")) {
                 const data = JSON.parse(localStorage.getItem("chatUser"));
                 const valid = await axios.get(`/api/token/tokenvalidation/${data.jwToken}`);
-                console.log(data);
                 if (valid.data) {
                     chat.dispatch({ type: PAGE_CONTROL.LOAD_LOCAL_STORAGE, value: data });
                     await createToken(data.userName, data.userId);
