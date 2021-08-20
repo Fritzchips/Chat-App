@@ -21,12 +21,6 @@ jobs:
         with:
           dotnet-version: '5.0.x'
           include-prerelease: true
-          
-      - name: npm install 
-        run: npm install
-      
-      - name: npm build 
-        run: npm run build
   
       - name: Build with dotnet
         run: dotnet build --configuration Release
