@@ -84,18 +84,16 @@ namespace API
                 endpoints.MapHub<ChatHub>("/chatbox/chat");
             });
 
+            
             app.UseSpa(configuration: spa =>
-           {
-               spa.Options.SourcePath = "client";
-               if(env.IsDevelopment())
-               {
-                   spa.UseReactDevelopmentServer(npmScript: "start");
-               } else
-               {
-                   spa.UseReactDevelopmentServer(npmScript: "install");
-                   spa.UseReactDevelopmentServer(npmScript: "build");
-               }
-           });          
+            {
+                spa.Options.SourcePath = "client";
+                if (env.IsDevelopment())
+                {
+                spa.UseReactDevelopmentServer(npmScript: "start");
+                }
+            });
+                
         }        
     }
 }
