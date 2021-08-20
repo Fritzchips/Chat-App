@@ -21,7 +21,11 @@ jobs:
         with:
           dotnet-version: '5.0.x'
           include-prerelease: true
+<<<<<<< HEAD
   
+=======
+          
+>>>>>>> 092f6e93b50c975022c5329f0675368932bdb591
       - name: Build with dotnet
         run: dotnet build --configuration Release
 
@@ -32,9 +36,13 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: .net-app
+<<<<<<< HEAD
           path: ${{env.DOTNET_ROOT}}/myapp
           
       
+=======
+          path: ${{env.DOTNET_ROOT}}/myapp         
+>>>>>>> 092f6e93b50c975022c5329f0675368932bdb591
 
   deploy:
     runs-on: windows-latest
