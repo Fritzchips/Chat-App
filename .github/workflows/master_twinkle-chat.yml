@@ -22,11 +22,7 @@ jobs:
           dotnet-version: '5.0.x'
           include-prerelease: true
           
-      - name: npm install 
-        run: npm install --prefix client
       
-      - name: npm build 
-        run: npm run build --prefix client
   
       - name: Build with dotnet
         run: dotnet build --configuration Release
@@ -39,6 +35,13 @@ jobs:
         with:
           name: .net-app
           path: ${{env.DOTNET_ROOT}}/myapp
+          
+      - name: npm install 
+        run: npm install --prefix client
+      
+      - name: npm build 
+        run: npm run build --prefix client 
+          
 
   deploy:
     runs-on: windows-latest
