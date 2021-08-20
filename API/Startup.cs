@@ -90,7 +90,7 @@ namespace API
                if(env.IsDevelopment())
                {
                    spa.UseReactDevelopmentServer(npmScript: "start");
-               }
+               } 
            });          
         }        
     }

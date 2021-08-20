@@ -1,35 +1,28 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <UserSecretsId>b031c57a-3b25-46b8-9767-70335cd7c69f</UserSecretsId>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Remove="client\src\components\chatroom\NewFolder\**" />
-    <Compile Remove="client\src\components\NewFolder\**" />
-    <Compile Remove="client\src\styling\**" />
-    <Content Remove="client\src\components\chatroom\NewFolder\**" />
-    <Content Remove="client\src\components\NewFolder\**" />
-    <Content Remove="client\src\styling\**" />
-    <EmbeddedResource Remove="client\src\components\chatroom\NewFolder\**" />
-    <EmbeddedResource Remove="client\src\components\NewFolder\**" />
-    <EmbeddedResource Remove="client\src\styling\**" />
-    <None Remove="client\src\components\chatroom\NewFolder\**" />
-    <None Remove="client\src\components\NewFolder\**" />
-    <None Remove="client\src\styling\**" />
-  </ItemGroup>
-
+ 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.8" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="5.0.4" />
-    <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="5.0.8" />
-    <PackageReference Include="Microsoft.Identity.Web" Version="1.1.0" />
-    <PackageReference Include="Microsoft.Identity.Web.UI" Version="1.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.9" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="5.0.9" />
+    <PackageReference Include="Microsoft.AspNetCore.NodeServices" Version="3.1.18" />
+    <PackageReference Include="Microsoft.AspNetCore.SpaServices" Version="3.1.18" />
+    <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="5.0.9" />
+    <PackageReference Include="Microsoft.Identity.Web" Version="1.16.0" />
+    <PackageReference Include="Microsoft.Identity.Web.UI" Version="1.16.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.12.0" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.12.1" />
   </ItemGroup>
+
+	<ItemGroup>
+		<None Update="client\build\**">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />

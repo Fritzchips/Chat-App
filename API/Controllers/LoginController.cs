@@ -36,6 +36,6 @@ namespace API.Controllers
             User client = _nhibernateHandler.GetUserByString(name, password);
             return Ok(client);
         }
-        
+
     }
 }
