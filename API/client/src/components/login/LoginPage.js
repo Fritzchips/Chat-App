@@ -16,11 +16,12 @@ const LoginPage = () => {
     const [formType, setFormType] = useState('Sign In');
     const [nextForm, setNextForm] = useState('Register');
 
-    const guestHandler = async() => {
+    const guestHandler = async () => {
         const loginInfo = await axios.get(`api/login/signin/Guest/0000000000`);
         const accountInfo = loginInfo.data;
         chat.dispatch({ type: PAGE_CONTROL.SAVE_USER_INFO, value: accountInfo });
         createToken(accountInfo.name, accountInfo.id);
+        
     };
 
     useEffect(() => {
