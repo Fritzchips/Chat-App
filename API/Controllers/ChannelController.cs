@@ -15,7 +15,7 @@ namespace API.Controllers
             _nhibernateHandler = nhibernateHandler;
         }
         
-        [HttpGet("{action}/{name}")]
+        [Route("{action}/{name}")]
         public ActionResult GetChannel(string name)
         {
             var channelData = _nhibernateHandler.GetChannel(name);

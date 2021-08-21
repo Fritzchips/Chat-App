@@ -15,14 +15,14 @@ namespace API.Controllers
             _jwtAuthenticationManager = jwtAuthenticationManag;
         }
 
-        [HttpGet("{action}/{name}/{userId}")]
+        [Route("{action}/{name}/{userId}")]
         public ActionResult NewToken(string name, string userId)
         {
             var token = _jwtAuthenticationManager.TokenCreation(name, userId);
             return Ok(token);
         }
 
-        [HttpGet("{action}/{token}")]
+        [Route("{action}/{token}")]
         public bool TokenValidation(string token)
         {
             var value = _jwtAuthenticationManager.JwtValidation(token);

@@ -15,14 +15,14 @@ namespace API.Controllers
             _nhibernateHandler = nhibernateHandler;
         }
 
-        [HttpGet("{action}/{name}/{password}")]
+        [Route("{action}/{name}/{password}")]
         public ActionResult ConfirmUser(string name, string password)
         {
             var client = _nhibernateHandler.ConfirmUser(name, password);
             return Ok(client);
         }
 
-        [HttpPost("{action}/{userInfo}")]
+        [Route("{action}/{userInfo}")]
         public ActionResult SignUp(string userInfo)
         {
             var convertedUser = JsonConvert.DeserializeObject<User>(userInfo);
@@ -30,7 +30,7 @@ namespace API.Controllers
             return Ok(convertedUser.Name);
         }
 
-        [HttpGet("{action}/{name}/{password}")]
+        [Route("{action}/{name}/{password}")]
         public ActionResult SignIn(string name, string password)
         {
             User client = _nhibernateHandler.GetUserByString(name, password);
