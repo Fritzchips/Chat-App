@@ -25,6 +25,7 @@
 	
   <ItemGroup>
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
+	  <ProjectReference Include="..\Core\Core.csproj" />
   </ItemGroup>
 	
 	<ItemGroup>
@@ -54,12 +55,14 @@
 
 
 		<ItemGroup>
-			<DistFiles Include="$(SpaRoot)build\**" />
+			<!--<DistFiles Include="$(SpaRoot)build\**" />
 			<ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
-				<RelativePath>%(DistFiles.Identity)</RelativePath>
+				<RelativePath>%(DistFiles.Identity)</RelativePath>-->
+			<None Update="$(SpaRoot)build\**">
 				<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-				<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-			</ResolvedFileToPublish>
+			</None>
+				<!--<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+			</ResolvedFileToPublish>-->
 		</ItemGroup>
 	</Target>
 	
