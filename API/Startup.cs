@@ -31,7 +31,7 @@ namespace API
             services.AddSignalR();
             services.AddSpaStaticFiles(config =>
             {
-                config.RootPath = "client/build";
+                config.RootPath = "client/dist";
             });
 
             services.AddAuthentication(x =>
