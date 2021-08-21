@@ -17,14 +17,14 @@ namespace API.Controllers
             _nhibernateHandler = nhibernateHandler;
         }
 
-        [Route("{action}/{id}")]
+        [HttpGet("{action}/{id}")]
         public ActionResult GetUser(Guid id)
         {
             var client = _nhibernateHandler.GetUserById(id);
             return Ok(client);
         }
 
-        [Route("{action}/{type}/{user}")]
+        [HttpPost("{action}/{type}/{user}")]
         public ActionResult UpdateUser(string type, string user)
         {
             var userInfo = JsonConvert.DeserializeObject<User>(user);

@@ -1,8 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace API.Controllers
 {
@@ -15,14 +11,14 @@ namespace API.Controllers
             _jwtAuthenticationManager = jwtAuthenticationManag;
         }
 
-        [Route("{action}/{name}/{userId}")]
+        [HttpGet("{action}/{name}/{userId}")]
         public ActionResult NewToken(string name, string userId)
         {
             var token = _jwtAuthenticationManager.TokenCreation(name, userId);
             return Ok(token);
         }
 
-        [Route("{action}/{token}")]
+        [HttpGet("{action}/{token}")]
         public bool TokenValidation(string token)
         {
             var value = _jwtAuthenticationManager.JwtValidation(token);

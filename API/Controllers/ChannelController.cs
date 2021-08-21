@@ -1,6 +1,5 @@
 ﻿using Infrastructure;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers
@@ -15,7 +14,7 @@ namespace API.Controllers
             _nhibernateHandler = nhibernateHandler;
         }
         
-        [Route("{action}/{name}")]
+        [HttpGet("{action}/{name}")]
         public ActionResult GetChannel(string name)
         {
             var channelData = _nhibernateHandler.GetChannel(name);

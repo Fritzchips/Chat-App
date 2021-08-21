@@ -1,7 +1,6 @@
 ﻿using Core;
 using Infrastructure;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using Newtonsoft.Json;
 
 namespace API.Controllers
@@ -15,14 +14,14 @@ namespace API.Controllers
             _nhibernateHandler = nhibernateHandler;
         }
 
-        [Route("{action}/{name}/{password}")]
+        [HttpGet("{action}/{name}/{password}")]
         public ActionResult ConfirmUser(string name, string password)
         {
             var client = _nhibernateHandler.ConfirmUser(name, password);
             return Ok(client);
         }
 
-        [Route("{action}/{userInfo}")]
+        [HttpPost("{action}/{userInfo}")]
         public ActionResult SignUp(string userInfo)
         {
             var convertedUser = JsonConvert.DeserializeObject<User>(userInfo);
@@ -30,7 +29,7 @@ namespace API.Controllers
             return Ok(convertedUser.Name);
         }
 
-        [Route("{action}/{name}/{password}")]
+        [HttpGet("{action}/{name}/{password}")]
         public ActionResult SignIn(string name, string password)
         {
             User client = _nhibernateHandler.GetUserByString(name, password);
