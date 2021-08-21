@@ -3,6 +3,11 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <UserSecretsId>b031c57a-3b25-46b8-9767-70335cd7c69f</UserSecretsId>
+	  <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
+	  <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
+	  <IsPackable>false</IsPackable>
+	  <SpaRoot>client\</SpaRoot>
+	  <DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)node_modules\**</DefaultItemExcludes>
   </PropertyGroup>
  
   <ItemGroup>
@@ -18,21 +23,44 @@
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.12.1" />
   </ItemGroup>
 
-    <Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
-	    <!-- As part of publishing, ensure the JS resources are freshly built in production mode -->
-	    <Exec WorkingDirectory="$(SpaRoot)client" Command="npm install" />
-	    <Exec WorkingDirectory="$(SpaRoot)client" Command="npm run build" />
+	<!-- RoundTheCode.ReactSignalR.csproj -->
+	<ItemGroup>
+		<Content Remove="$(SpaRoot)**" />
+		<None Remove="$(SpaRoot)**" />
+		<None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
+	</ItemGroup>
 
-	    <!-- Include the newly-built files in the publish output -->
-	    <ItemGroup>
-		    <DistFiles Include="$(SpaRoot)build\**" />
-		    <ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
-			    <RelativePath>%(DistFiles.Identity)</RelativePath>
-			    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-		    </ResolvedFileToPublish>
-	    </ItemGroup>
-    </Target>
+	<!-- RoundTheCode.ReactSignalR.csproj -->
+	<Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition="'$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
+		<!-- Ensure Node.js is installed -->
+		<Exec Command="node --version" ContinueOnError="true">
+			<Output TaskParameter="ExitCode" PropertyName="ErrorCode" />
+		</Exec>
 
+		<Error Condition="'$(ErrorCode)' != '0'" Text="Node.js is required to build and run this project. To continue, please install Node.js from https://nodejs.org/, and then restart your command prompt or IDE." />
+
+		<Message Importance="high" Text="Restoring dependencies using 'npm'. This may take several minutes..." />
+
+		<Exec WorkingDirectory="$(SpaRoot)" Command="npm install" />
+	</Target>
+
+	<!-- RoundTheCode.ReactSignalR.csproj -->
+	<Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
+		<!-- As part of publishing, ensure the JS resources are freshly built in production mode -->
+		<Exec WorkingDirectory="$(SpaRoot)" Command="npm install" />
+		<Exec WorkingDirectory="$(SpaRoot)" Command="npm run build" />
+
+		<!-- Include the newly-built files in the publish output -->
+		<ItemGroup>
+			<DistFiles Include="$(SpaRoot)build\**" />
+			<ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
+				<RelativePath>%(DistFiles.Identity)</RelativePath>
+				<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+				<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+			</ResolvedFileToPublish>
+		</ItemGroup>
+	</Target>
+	
 
   <ItemGroup>
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
