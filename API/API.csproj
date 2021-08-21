@@ -22,7 +22,11 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.12.1" />
   </ItemGroup>
-
+	
+  <ItemGroup>
+    <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
+  </ItemGroup>
+	
 	<!-- RoundTheCode.ReactSignalR.csproj -->
 	<ItemGroup>
 		<Content Remove="$(SpaRoot)**" />
@@ -62,8 +66,6 @@
 	</Target>
 	
 
-  <ItemGroup>
-    <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
-  </ItemGroup>
+  
 
 </Project>
