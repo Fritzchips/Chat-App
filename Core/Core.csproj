@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>D:\.NetProjects\ChatApp\Core\Core.xml</DocumentationFile>
+    <DocumentationFile></DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,19 +16,19 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Mappings\Channel.hbm.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		<CopyToPublishDirectory>Always</CopyToPublishDirectory>
     </EmbeddedResource>	  
     <EmbeddedResource Include="Mappings\Message.hbm.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		<CopyToPublishDirectory>Always</CopyToPublishDirectory>
     </EmbeddedResource>	  
     <EmbeddedResource Include="Mappings\User.hbm.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		<CopyToPublishDirectory>Always</CopyToPublishDirectory>
     </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>
     <None Update="hibernate.cfg.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		<CopyToPublishDirectory>Always</CopyToPublishDirectory>
     </None>
   </ItemGroup>
 	
