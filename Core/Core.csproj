@@ -8,6 +8,12 @@
     <DocumentationFile></DocumentationFile>
   </PropertyGroup>
 
+	<ItemGroup>
+		<PackageReference Include="NHibernate" Version="5.3.9" />
+		<PackageReference Include="NHibernate.Extensions.NpgSql" Version="5.0.9" />
+		<PackageReference Include="Npgsql" Version="5.0.7" />
+	</ItemGroup>
+
   <ItemGroup>
     <None Remove="Mappings\Channel.hbm.xml" />
     <None Remove="Mappings\Message.hbm.xml" />
@@ -15,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+	  
     <EmbeddedResource Include="Mappings\Channel.hbm.xml">
 		<CopyToPublishDirectory>Always</CopyToPublishDirectory>
     </EmbeddedResource>	  
@@ -31,6 +38,6 @@
 		<CopyToPublishDirectory>Always</CopyToPublishDirectory>
     </None>
   </ItemGroup>
-	
+
 	
 </Project>
