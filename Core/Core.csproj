@@ -4,6 +4,10 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>D:\.NetProjects\ChatApp\Core\Core.xml</DocumentationFile>
+  </PropertyGroup>
+
   <ItemGroup>
     <None Remove="Mappings\Channel.hbm.xml" />
     <None Remove="Mappings\Message.hbm.xml" />
@@ -11,9 +15,21 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Mappings\Channel.hbm.xml" />	  
-    <EmbeddedResource Include="Mappings\Message.hbm.xml" />	  
-    <EmbeddedResource Include="Mappings\User.hbm.xml" />
+    <EmbeddedResource Include="Mappings\Channel.hbm.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>	  
+    <EmbeddedResource Include="Mappings\Message.hbm.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>	  
+    <EmbeddedResource Include="Mappings\User.hbm.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="hibernate.cfg.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 	
 	
