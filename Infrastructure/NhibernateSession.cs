@@ -8,13 +8,13 @@ namespace Infrastructure
         public static ISession OpenSession()
         {
             var configuration = new Configuration();
-            var configurationPath = "../Core/hibernate.cfg.xml";
+            var configurationPath = "Mappings/hibernate.cfg.xml";
             configuration.Configure(configurationPath);
-            var messageConfigurationFile = "../Core/Mappings/Message.hbm.xml";
+            var messageConfigurationFile = "Mappings/Message.hbm.xml";
             configuration.AddFile(messageConfigurationFile);
-            var channelConfigurationFile = "../Core/Mappings/Channel.hbm.xml";
+            var channelConfigurationFile = "Mappings/Channel.hbm.xml";
             configuration.AddFile(channelConfigurationFile);
-            var userConfigurationFile = "../Core/Mappings/User.hbm.xml";
+            var userConfigurationFile = "Mappings/User.hbm.xml";
             configuration.AddFile(userConfigurationFile);
             ISessionFactory sessionFactory = configuration.BuildSessionFactory();
             return sessionFactory.OpenSession();

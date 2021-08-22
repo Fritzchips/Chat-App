@@ -27,7 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="hibernate.cfg.xml">
+    <None Update="Mappings\hibernate.cfg.xml">
 		<CopyToPublishDirectory>Always</CopyToPublishDirectory>
     </None>
   </ItemGroup>
