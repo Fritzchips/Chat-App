@@ -2,16 +2,15 @@
 using NHibernate.Cfg;
 using System;
 
-namespace Core
+namespace Infrastructure
 {
     public class NhibernateSession
     {
-        
         public static ISession OpenSession()
         {
             var configuration = new Configuration();
             try
-            {     
+            {
                 var configurationPath = "Mappings/hibernate.cfg.xml";
                 configuration.Configure(configurationPath);
                 var messageConfigurationFile = "Mappings/Message.hbm.xml";
@@ -38,6 +37,5 @@ namespace Core
             }
 
         }
-        
     }
 }
