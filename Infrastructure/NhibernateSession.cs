@@ -11,7 +11,7 @@ namespace Infrastructure
             var configuration = new Configuration();
             try
             {
-                var configurationPath = "Mappings/hibernate.cfg.xml";
+                var configurationPath = "hibernate.cfg.xml";
                 configuration.Configure(configurationPath);
                 var messageConfigurationFile = "Mappings/Message.hbm.xml";
                 configuration.AddFile(messageConfigurationFile);
