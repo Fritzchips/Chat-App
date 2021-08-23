@@ -3,7 +3,6 @@ import ChatMessageList from './ChatMessageList';
 import { ChatContext } from '../../App';
 import { v4 as uuidv4 } from 'uuid';
 import "./styling/ChatScreen.css";
-import ScrollableFeed from "react-scrollable-feed";
 
 const ChatScreen = () => {
     const chat = useContext(ChatContext);
@@ -28,22 +27,21 @@ const ChatScreen = () => {
     };
 
     return (
-        <div className="d-flex flex-column chat-background">
+        <div>
+            <div className="d-flex flex-column  chat-background">
             
-            <div className="chat-header">
-                <strong className="chat-room-name"># {chat.session.currentChannel} channel</strong>
+                <div className="chat-header">
+                    <strong className="chat-room-name"># {chat.session.currentChannel} channel</strong>
+                </div>
+
+                <div className="chat-message-list">
+                    <ChatMessageList /> 
+                </div>
             </div>
-
-            <ScrollableFeed className="chat-message-list">
-                <ChatMessageList />
-            </ScrollableFeed>    
-
-            <div className="align-self-baseline chat-inputfield">
-                <form  onSubmit={postHandler} >
+                <form onSubmit={postHandler} className="chat-inputfield" >
                     <input type="text" required  value={message} onChange={e => setMessage(e.target.value)} className="chat-input-style" maxLength="200"/>
                     <button type="submit" className="chat-button-style" >Post</button>
                 </form>
-            </div>
         </div>      
     );
 }

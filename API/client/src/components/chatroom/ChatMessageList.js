@@ -7,7 +7,7 @@ const ChatMessageList = () => {
     const chat = useContext(ChatContext);
 
     return (
-        <div className="d-flex flex-column" >
+        <div className="d-flex flex-column msg-max-height" >
             <ScrollableFeed forceScroll="true">
             {chat.session.messageList.length > 0 ? chat.session.messageList.map(message => (
                 <div key={message.id} className="msg-spacing">

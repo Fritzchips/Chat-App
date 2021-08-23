@@ -9,10 +9,10 @@ namespace Infrastructure
         public static ISession OpenSession()
         {
             var configuration = new Configuration();
+            var configurationPath = "hibernate.cfg.xml";
+            configuration.Configure(configurationPath);
             try
             {
-                var configurationPath = "hibernate.cfg.xml";
-                configuration.Configure(configurationPath);
                 var messageConfigurationFile = "Mappings/Message.hbm.xml";
                 configuration.AddFile(messageConfigurationFile);
                 var channelConfigurationFile = "Mappings/Channel.hbm.xml";
@@ -24,8 +24,6 @@ namespace Infrastructure
             }
             catch (Exception)
             {
-                var configurationPath = "../Core/Mappings/hibernate.cfg.xml";
-                configuration.Configure(configurationPath);
                 var messageConfigurationFile = "../Core/Mappings/Message.hbm.xml";
                 configuration.AddFile(messageConfigurationFile);
                 var channelConfigurationFile = "../Core/Mappings/Channel.hbm.xml";

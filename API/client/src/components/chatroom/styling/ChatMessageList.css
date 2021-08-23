@@ -1,4 +1,20 @@
 
+.msg-max-height{
+    max-height: 80vh;
+}
+
+@media screen and (max-height: 660px) {
+    .msg-max-height {
+        max-height: 70vh;
+    }
+}
+
+@media screen and (max-height: 400px) {
+    .msg-max-height {
+        max-height: 50vh;
+    }
+}
+
 .msg-spacing {
     margin-bottom: 10px;
 }

@@ -9,6 +9,7 @@
 		</property>
 		<property name="connection.connection_string">
 			Server=hansken.db.elephantsql.com;Database=yfdmeedi;Port=5432;User Id=yfdmeedi;Password=b6o1Apr60-IP2Awk02Dqct_heiGLRnaa;
+			<!--Server=localhost;Database=twinkle_db;Port=5432;User Id=postgres;Password=Marian0321;-->
 		</property>
 		<property name="dialect">
 			NHibernate.Dialect.PostgreSQL83Dialect
