@@ -5,26 +5,20 @@ import { ChatContext } from '../../App';
 import { PAGE_CONTROL } from '../../hooks/useSessionData';
 import UserInfoChangeModal from '../infoUpdate/UserInfoChangeModal';
 import "./styling/HeaderNavBar.css";
+import { ModalContext } from '../chatroom/MainScreen';
 
-export const ModalContext = React.createContext();
+
 
 const HeaderNavBar = ({ channelNavHandler}) => {
     const chat = useContext(ChatContext);
-    const [modal, setModal] = useState(false);
+    
     const [userMenu, setUserMenu] = useState(false);
+    const popup = useContext(ModalContext);
 
     const logoutHandler = () => {
         localStorage.clear();
         chat.session.hubConnection.stop();
         chat.dispatch({ type: PAGE_CONTROL.LOG_OUT });
-    };
-
-    const modalHandler = () => {
-        if (modal) {
-            setModal(false);
-        } else {
-            setModal(true);
-        };
     };
 
     const userMenuHandler = () => {
@@ -34,7 +28,6 @@ const HeaderNavBar = ({ channelNavHandler}) => {
             setUserMenu(true);
         };
     };
-
 
     return (
         <div className="head-nav-cont">
@@ -57,7 +50,7 @@ const HeaderNavBar = ({ channelNavHandler}) => {
                     {userMenu ?
                         (<div className="head-nav-dropdown">
                             {chat.session.userId !== "5bad7a56-3d70-4439-814f-5db0f39966f0" && chat.session.userName !== "Guest" ?
-                                (<div onClick={modalHandler} className="head-nav-drop-item">Settings</div>)
+                                (<div onClick={popup.modalHandler} className="head-nav-drop-item">Settings</div>)
                                 : <></>}
 
                             <div onClick={logoutHandler} className="head-nav-drop-item" >Log Out</div>
@@ -65,9 +58,9 @@ const HeaderNavBar = ({ channelNavHandler}) => {
                         </div>) : <></>}
                 </div>
             </Navbar>
-            <ModalContext.Provider value={{ modalHandler: modalHandler }}>
-                {modal ? (<UserInfoChangeModal />) : <></>}
-            </ModalContext.Provider>
+            
+            {popup.modal ? (<UserInfoChangeModal />) : <></>}
+            
        </div>
     );
 };

@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Infrastructure;
 using API.Authorization.Utilities;
+using NHibernate.NetCore;
+using NHibernate;
 
 namespace API
 {
@@ -21,10 +23,8 @@ namespace API
             _configuration = configuration;
         }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            
             services.Configure<JwtConfig>(_configuration.GetSection("JwtConfig"));
             
             services.AddControllers();
@@ -57,10 +57,18 @@ namespace API
             });
 
             services.AddSingleton<IJwtAuthenticationHandler>(new JwtAuthenticationHandler(_configuration["JwtConfig:Secret"]));
-            services.AddSingleton<INhibernateHandler>(new NhibernateHandler());
+
+            services.AddSingleton<INhibernateSession>(new NhibernateSession
+                (_configuration["Database:Server"],
+                _configuration["Database:Database"],
+                _configuration["Database:UserId"],
+                _configuration["Database:Password"]));
+
+            services.AddSingleton<INhibernateHandler>(x =>
+                new NhibernateHandler(x.GetService<INhibernateSession>()));
+            
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())

@@ -13,6 +13,21 @@
     color: white;
 }
 
+.login-box {
+    height: 70vh;
+    width: 100vw;
+}
+
+@media screen and (max-height: 480px) {
+    .login-box {
+        overflow: auto;
+    }
+}
+
+.login-box {
+    
+}
+
 .moon-icon-style {
     margin-left: 10px; 
     color: #04B2D9;

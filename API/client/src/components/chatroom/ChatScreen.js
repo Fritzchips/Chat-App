@@ -3,10 +3,13 @@ import ChatMessageList from './ChatMessageList';
 import { ChatContext } from '../../App';
 import { v4 as uuidv4 } from 'uuid';
 import "./styling/ChatScreen.css";
+import { ModalContext } from './MainScreen';
 
 const ChatScreen = () => {
     const chat = useContext(ChatContext);
     const [message, setMessage] = useState('');
+    const popup = useContext(ModalContext);
+
 
     useEffect(() => {
         setMessage('');
@@ -38,7 +41,8 @@ const ChatScreen = () => {
                     <ChatMessageList /> 
                 </div>
             </div>
-                <form onSubmit={postHandler} className="chat-inputfield" >
+
+            <form onSubmit={postHandler} className="chat-inputfield" style={{display: popup.modal ? "none" : "block"}}>
                     <input type="text" required  value={message} onChange={e => setMessage(e.target.value)} className="chat-input-style" maxLength="200"/>
                     <button type="submit" className="chat-button-style" >Post</button>
                 </form>

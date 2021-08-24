@@ -4,13 +4,16 @@ using System;
 
 namespace Infrastructure
 {
-    public class NhibernateSession
+    public class NhibernateSession : INhibernateSession
     {
-        public static ISession OpenSession()
+        private readonly Configuration _configuration;
+
+        public NhibernateSession(string server, string database, string userId, string password)
         {
             var configuration = new Configuration();
             var configurationPath = "hibernate.cfg.xml";
             configuration.Configure(configurationPath);
+            configuration.SetProperty(NHibernate.Cfg.Environment.ConnectionString, $"server={server};database={database};user id={userId};password={password}");
             try
             {
                 var messageConfigurationFile = "Mappings/Message.hbm.xml";
@@ -19,8 +22,8 @@ namespace Infrastructure
                 configuration.AddFile(channelConfigurationFile);
                 var userConfigurationFile = "Mappings/User.hbm.xml";
                 configuration.AddFile(userConfigurationFile);
-                ISessionFactory sessionFactory = configuration.BuildSessionFactory();
-                return sessionFactory.OpenSession();
+                _configuration = configuration;
+
             }
             catch (Exception)
             {
@@ -30,10 +33,15 @@ namespace Infrastructure
                 configuration.AddFile(channelConfigurationFile);
                 var userConfigurationFile = "../Core/Mappings/User.hbm.xml";
                 configuration.AddFile(userConfigurationFile);
-                ISessionFactory sessionFactory = configuration.BuildSessionFactory();
-                return sessionFactory.OpenSession();
-            }
+                _configuration = configuration;
 
+            }
+        }
+        public ISession OpenSession()
+        {   
+                ISessionFactory sessionFactory = _configuration.BuildSessionFactory();
+                return sessionFactory.OpenSession();
+         
         }
     }
 }

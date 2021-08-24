@@ -47,7 +47,7 @@ const RegisterForm = () => {
                 <Form.Label >Password</Form.Label>
                 <Form.Control type="password" placeholder="Password" required value={password} onChange={(e) => setPassword(e.target.value)} id="register-input-two" maxLength="10"/>
             </Form.Group>
-            <Form.Text id={outcome === "Sorry user already exist" ? "register-fail" : "register-pass"}>{outcome}</Form.Text>
+            <Form.Text id={outcome === "Sorry User is already taken" ? "register-fail" : "register-pass"}>{outcome}</Form.Text>
             <br></br>
             <Button variant="primary" type="submit" id="register-submit-btn">Sign Up</Button>
         </Form>

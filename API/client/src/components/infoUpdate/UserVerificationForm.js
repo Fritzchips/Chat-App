@@ -6,7 +6,7 @@ import axios from 'axios';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import { ModalContext } from '../navigation/HeaderNavBar';
+import { ModalContext } from '../chatroom/MainScreen';
 import "./styling/ModifyUser.css";
 
 

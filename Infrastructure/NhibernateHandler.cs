@@ -7,14 +7,17 @@ namespace Infrastructure
 {
     public class NhibernateHandler : INhibernateHandler
     {
-        public NhibernateHandler()
+        private readonly INhibernateSession _NhibernateSession;
+
+        public NhibernateHandler(INhibernateSession nhibernateSession)
         {
+            _NhibernateSession = nhibernateSession;
         }
 
         public Channel GetChannel(string name)
         {
             Channel channelData;
-            using (ISession session = NhibernateSession.OpenSession())
+            using (ISession session = _NhibernateSession.OpenSession())
             {
                 using (ITransaction transaction = session.BeginTransaction())
                 {
@@ -29,7 +32,7 @@ namespace Infrastructure
 
         public bool ConfirmUser(string name, string password)
         {
-            using (ISession session = NhibernateSession.OpenSession())
+            using (ISession session = _NhibernateSession.OpenSession())
             {
                 using (ITransaction transaction = session.BeginTransaction())
                 {
@@ -50,7 +53,7 @@ namespace Infrastructure
 
         public bool CreateUser(User userInfo)
         {
-            using (ISession session = NhibernateSession.OpenSession())
+            using (ISession session = _NhibernateSession.OpenSession())
             {
                 using (ITransaction transaction = session.BeginTransaction())
                 {
@@ -64,7 +67,7 @@ namespace Infrastructure
         public User GetUserById(Guid userId)
         {
             User client;
-            using (ISession session = NhibernateSession.OpenSession())
+            using (ISession session = _NhibernateSession.OpenSession())
             {
                 using (ITransaction transaction = session.BeginTransaction())
                 {
@@ -79,7 +82,7 @@ namespace Infrastructure
         public User GetUserByString(string name, string password)
         {
             User client;
-            using (ISession session = NhibernateSession.OpenSession())
+            using (ISession session = _NhibernateSession.OpenSession())
             {
                 using (ITransaction transaction = session.BeginTransaction())
                 {
@@ -93,7 +96,7 @@ namespace Infrastructure
 
         public User UpdateUser(string type, User userInfo)
         {
-            using (ISession session = NhibernateSession.OpenSession())
+            using (ISession session = _NhibernateSession.OpenSession())
             {
                 using (ITransaction transaction = session.BeginTransaction())
                 {
@@ -119,7 +122,7 @@ namespace Infrastructure
 
         public bool CreateMessage(Message message)
         {
-            using (ISession session = NhibernateSession.OpenSession())
+            using (ISession session = _NhibernateSession.OpenSession())
             {
                 using (ITransaction transaction = session.BeginTransaction())
                 {
@@ -132,7 +135,7 @@ namespace Infrastructure
 
         public object GetMessages(Guid channelId)
         {
-            using (ISession session = NhibernateSession.OpenSession())
+            using (ISession session = _NhibernateSession.OpenSession())
             {
                 using (ITransaction transaction = session.BeginTransaction())
                 {

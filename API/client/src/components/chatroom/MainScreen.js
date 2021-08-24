@@ -8,10 +8,12 @@ import { PAGE_CONTROL } from '../../hooks/useSessionData';
 import HeaderNavBar from '../navigation/HeaderNavBar';
 import "./styling/MainScreen.css";
 
+export const ModalContext = React.createContext();
 
 const MainScreen = () => {
     const chat = useContext(ChatContext);
     const [channelNav, setChannelNav] = useState(true);
+    const [modal, setModal] = useState(false);
 
     const authAxios = axios.create({
         headers: {
@@ -38,7 +40,13 @@ const MainScreen = () => {
         connectToChat();
     }, [chat.session.currentChannel]);
 
-    
+    const modalHandler = () => {
+        if (modal) {
+            setModal(false);
+        } else {
+            setModal(true);
+        };
+    };
 
     const startConnection = async () => {
         try {
@@ -79,17 +87,21 @@ const MainScreen = () => {
 
     return (
         <div className="d-flex flex-column main-page-container" >
-            <HeaderNavBar channelNavHandler={ channelNavHandler}/>
-            <span className="d-flex justify-content-between align-items-stretch main-nav-height">
+            <ModalContext.Provider value={{ modal: modal, modalHandler: modalHandler }}>
+                <HeaderNavBar channelNavHandler={channelNavHandler} />
+
+                <span className="d-flex justify-content-between align-items-stretch main-nav-height">
                 {channelNav ?
                     (<span className="main-channel-nav">
                      <ChannelNavBar />
-                    </span>) : <></>}
+                        </span>) : <></>}
 
                 <span className="main-chatscreen">
-                    <ChatScreen  />
+                    <ChatScreen />                            
                 </span>
+
             </span>
+            </ModalContext.Provider>
         </div>        
     );
 }

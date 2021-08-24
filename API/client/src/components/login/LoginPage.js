@@ -57,8 +57,8 @@ const LoginPage = () => {
     };
 
     return (
-        <Container className="login-container">
-            <div>
+        <Container className="login-container" fluid>
+            <div className="login-box">
                 <h1>Welcome to Twinkle <MoonStarsFill className="moon-icon-style"/> </h1>
                 <div>
                     {formType === "Sign In" ? <LoginForm /> : <RegisterForm />}
