@@ -54,6 +54,9 @@ In order to run this application on your local machine, follow these steps in or
 
 3 - cd into `API` directory then cd `client` and run `npm i`
 
+4 - create `appsettings.development.json` file, populate with any JWT secret and database values
+ ![devsettings](./API/client/src/images/dev_settings.gif)
+
 4 - then `cd ..` and run `dotnet watch run`
 
 5 - Navigate to `localhost:5000` in your browser
