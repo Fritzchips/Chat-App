@@ -28,9 +28,9 @@ Chat Room:
 
 Chat Screen:
 
-- Message Screen: See `Real-Time` messages from the channel
+- Message Screen: see `Real-Time` messages from the channel
 
-- Input: Post a message with up to 200 characters to the channel
+- Input: post a message with up to 200 characters to the channel
 
 
 ## Summary
@@ -50,7 +50,7 @@ In order to run this application on your local machine, follow these steps in or
 
 1 - Clone repo to local machine
 
-2 - cd into `ChatApp` from where directory is saved
+2 - cd into `Chat-App` from where directory is saved
 
 3 - cd into `API` directory then cd `client` and run `npm i`
 
