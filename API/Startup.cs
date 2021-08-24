@@ -26,6 +26,7 @@ namespace API
         public void ConfigureServices(IServiceCollection services)
         {
             services.Configure<JwtConfig>(_configuration.GetSection("JwtConfig"));
+            services.Configure<DatabaseConfig>(_configuration.GetSection("Database"));
             
             services.AddControllers();
             services.AddSignalR();
