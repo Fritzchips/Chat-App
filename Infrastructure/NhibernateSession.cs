@@ -11,7 +11,7 @@ namespace Infrastructure
         public NhibernateSession(string server, string database, string userId, string password)
         {
             var configuration = new Configuration();
-            var configurationPath = "hibernate.cfg.xml";
+            var configurationPath = "nhibernate.cfg.xml";
             configuration.Configure(configurationPath);
             configuration.SetProperty(NHibernate.Cfg.Environment.ConnectionString, $"server={server};database={database};user id={userId};password={password}");
             try
