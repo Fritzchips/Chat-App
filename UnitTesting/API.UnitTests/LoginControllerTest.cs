@@ -2,7 +2,9 @@
 using Core;
 using Infrastructure;
 using Moq;
+using Newtonsoft.Json;
 using NUnit.Framework;
+using System;
 
 namespace UnitTesting.API.UnitTests
 {
@@ -19,67 +21,38 @@ namespace UnitTesting.API.UnitTests
         }       
 
         [Test]
-        public void ConfirmUser_UserExist_ReturnTrue()
+        public void ConfirmUser_UserExist_ConfirmNhibernateMethodConfirmUserIsCalled()
         {
             string name = "Tom";
             string password = "Jerry";
-            User user = new User
-            {
-                Name = name,
-                Password = password
-            };
 
-            _nhibernateHandler.Setup(x => x.ConfirmUser(name, password)).Returns(true);
-
-            Assert.IsTrue(true, "User exist");
-        }
-        
-        [Test]
-        public void ConfirmUser_UserDoesntExist_ReturnFalse()
-        {
-            string name = "Tom";
-            string password = "Jerry";
-            User user = new User
-            {
-                Name = name,
-                Password = password
-            };
-
-            _nhibernateHandler.Setup(x => x.ConfirmUser(name, password)).Returns(false);
-
-            Assert.IsFalse(false, "User exist");
+            _login.ConfirmUser(name, password);
+            _nhibernateHandler.Verify(x => x.ConfirmUser(name, password), Times.Once);
         }
 
         [Test]
-        public void SignUp_CreateNewUser_ReturnsTrue()
+        public void SignUp_CreateNewUser_ConfirmNhibernateMethodCreateUserIsCalled()
         {
-            string name = "Tom";
-            string password = "Jerry";
-            User user = new User
+            User userInfo = new User
             {
-                Name = name,
-                Password = password
+                Id = Guid.NewGuid(),
+                Name = "Tom",
+                Password = "Jerry"
             };
+            var newUserCredentials = JsonConvert.SerializeObject(userInfo);
 
-            _nhibernateHandler.Setup(x => x.CreateUser(user)).Returns(true);
-
-            Assert.IsTrue(true, "user was created");
+            _login.SignUp(newUserCredentials);
+            _nhibernateHandler.Verify(x => x.CreateUser(It.IsAny<User>()), Times.Once);
         }
 
         [Test]
-        public void SignIn_GetUserInfo_ReturnsUserInfo()
+        public void SignIn_GetUserInfo_ConfirmNhibernateMethodGetUserByStringIsCalled()
         {
             string name = "Tom";
             string password = "Jerry";
-            User user = new User
-            {
-                Name = name,
-                Password = password
-            };
 
-            _nhibernateHandler.Setup(x => x.GetUserByString(name, password)).Returns(user);
-
-            Assert.AreEqual(name, user.Name);
+            _login.SignIn(name, password);
+            _nhibernateHandler.Verify(x => x.GetUserByString(name, password), Times.Once);
         }
     }
 }

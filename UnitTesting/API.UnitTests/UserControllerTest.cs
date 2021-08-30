@@ -2,6 +2,7 @@
 using Core;
 using Infrastructure;
 using Moq;
+using Newtonsoft.Json;
 using NUnit.Framework;
 using System;
 
@@ -27,17 +28,15 @@ namespace UnitTesting.API.UnitTests
         }
 
         [Test]
-        public void GetUser_ReturnsUser()
+        public void GetUser_GetUserInfo_ConfirmNhibernateMethodGetUserByIdIsCalled()
         {
             Guid id = client.Id;
-
-            _nhibernateHandler.Setup(x => x.GetUserById(id)).Returns(client);
-
-            Assert.AreEqual(id, client.Id);
+            _user.GetUser(id);
+            _nhibernateHandler.Verify(x => x.GetUserById(id), Times.Once);
         }
 
         [Test]
-        public void UpdateUser_UpdateByName_ReturnUpdatedClient()
+        public void UpdateUser_UserInfoUpdated_ConfirmNhibernateMethodUpdateUserIsCalled()
         {
             string type = "Name";
             string name = "Jimmy";
@@ -48,46 +47,11 @@ namespace UnitTesting.API.UnitTests
                 Id = client.Id
             };
 
-            _nhibernateHandler.Setup(x => x.UpdateUser(type, client)).Returns(updatedClient);
+            var clientCredentials = JsonConvert.SerializeObject(updatedClient);
 
-            Assert.AreEqual(name , updatedClient.Name);
+            _user.UpdateUser(type, clientCredentials);
+            _nhibernateHandler.Verify(x => x.UpdateUser(type, It.IsAny<User>()), Times.Once);
         }
         
-        [Test]
-        public void UpdateUser_UpdateByPassword_ReturnUpdatedClient()
-        {
-            string type = "Password";
-            string password = "Cricket";
-            User updatedClient = new User
-            {
-                Name = client.Name,
-                Password = password,
-                Id = client.Id
-            };
-
-            _nhibernateHandler.Setup(x => x.UpdateUser(type, client)).Returns(updatedClient);
-
-            Assert.AreEqual(password , updatedClient.Password);
-        }
-        
-        [Test]
-        public void UpdateUser_UpdateByNameAndPassword_ReturnTrue()
-        {
-            string type = "Name and Password";
-            string name = "Jimmy";
-            string password = "Cricket";
-            User updatedClient = new User
-            {
-                Name = name,
-                Password = password,
-                Id = client.Id
-            };
-
-            _nhibernateHandler.Setup(x => x.UpdateUser(type, client)).Returns(updatedClient);
-
-            bool result = (name == updatedClient.Name && password == updatedClient.Password);
-
-            Assert.IsTrue(result , "Name and Password was updated");
-        }
     }
 }

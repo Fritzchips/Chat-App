@@ -20,45 +20,39 @@ namespace UnitTesting.API.UnitTests
         [SetUp]
         public void SetUp()
         {
+
             userList = new HashSet<HubUser>()
             { 
                 new HubUser{ Name = "Starwalker", Id = "12345", UserId = new Guid("24d953f6-6ccd-4bc8-9457-ad7e005a8194")}
             };
 
             general = new List<string>() { "54321" };
-
             _chatHub = new ChatHub(_nhibernateHandler.Object);
         }
 
         [Test]
-        public void SendMessage_SaveMessageToNhibernate_ReturnTrue()
+        public async void SendMessage_SaveMessageToNhibernate_ReturnTrue()
         {
-            Message message = new Message()
-            {
-                Context = "Hello World",
-                Date = DateTime.Now
-            };
-
-            _nhibernateHandler.Setup(x => x.CreateMessage(message)).Returns(true);
-
-            Assert.IsTrue(true, "Message was saved to database");
+            await _chatHub.SendMessage(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>());
+            _nhibernateHandler.Verify(x => x.CreateMessage(It.IsAny<Message>()), Times.Once);
         }
 
-        [Test]
-        public void JoinChat_IsntPartOfRoom_ReturnTrue()
-        {
-            HubUser user = new HubUser
-            {
-                Name = "Obiwan",
-                Id = "12345",
-                UserId = new Guid("00c0c252-5707-4cb5-a8af-ad790120e659")
-            };
+        //[Test]
+        //public void JoinChat_IsntPartOfRoom_ReturnTrue()
+        //{
+        //    HubUser user = new HubUser
+        //    {
+        //        Name = "Obiwan",
+        //        Id = "12345",
+        //        UserId = new Guid("00c0c252-5707-4cb5-a8af-ad790120e659")
+        //    };
+        //   _chatHub.Verify(x => x.JoinChat(user.Name, user.UserId), Times.Once);
 
-            var copy = userList.Where(x => x.UserId == user.UserId).FirstOrDefault();
-            bool real = (copy == null);
+        //    var copy = userList.Where(x => x.UserId == user.UserId).FirstOrDefault();
+        //    bool real = (copy == null);
 
-            Assert.IsTrue(real, "user is added to userList");
-        }
+        //    Assert.IsTrue(real, "user is added to userList");
+        //}
         
         [Test]
         public void JoinChat_PartOfRoom_ReturnFalse()

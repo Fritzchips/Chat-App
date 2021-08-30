@@ -24,43 +24,23 @@ namespace UnitTesting.API.UnitTests
         }
 
         [Test]
-        public void NewToken_CreateJwtStringToken_ReturnsTrue()
+        public void NewToken_CreateJwtStringToken_ConfirmJwtAuthenticationManagerMethodTokenCreationIsCalled()
         {
             string name = "michael";
             string userId = "123456";
-            string jwt = "qwerty123";
-            _jwtAuthenticationManager.Setup(x => x.TokenCreation(name, userId)).Returns(jwt);
 
-            Assert.IsTrue(true , "Token is created");
+            _tokens.NewToken(name, userId);
+            _jwtAuthenticationManager.Verify(x => x.TokenCreation(name, userId), Times.Once);
         }
 
         [Test]
-        public void TokenValidation_TokenIsValid_ReturnTrue()
+        public void TokenValidation_TokenIsValid_ConfirmJwtAuthenticationManagerMethodJwtValidationIsCalled()
         {
             string jwt = "123";
-            _jwtAuthenticationManager.Setup(x =>x.JwtValidation(jwt)).Returns(true);
-            Assert.IsTrue(true, "Token is Authenticated");
+            _tokens.TokenValidation(jwt);
+            _jwtAuthenticationManager.Verify(x => x.JwtValidation(jwt), Times.Once);
         }
         
-        [Test]
-        public void TokenValidation_TokenIsExpired_ReturnTrue()
-        {
-            string jwt = "expired";
-            _jwtAuthenticationManager.Setup(x =>x.JwtValidation(jwt)).Returns(true);
-            bool value = (jwt == "expired");
-
-            Assert.IsTrue(value, "Token Is Valid but expired");
-        }
-
-        [Test]
-        public void TokenValidation_TokenIsNotInTokenList_ReturnFalse()
-        {
-            string jwt = "192";
-            _jwtAuthenticationManager.Setup(x => x.JwtValidation(jwt)).Returns(false);
-            bool value = tokenList.Contains(jwt);
-
-            Assert.IsFalse(value, "This Token is not part of the system");
-        }
     }
 }
 

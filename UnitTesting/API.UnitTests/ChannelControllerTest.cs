@@ -19,19 +19,12 @@ namespace UnitTesting.API.UnitTests
         }
 
         [Test]
-        public void GetChannel_ReturnChannelInfo()
+        public void GetChannel_ConfirmNhibernateMethodGetChannelIsCalled()
         {
             var channelName = "general";
-            var channelId = Guid.NewGuid();
-            var channelInfo = new Channel
-            {
-                Id = channelId,
-                Name = channelName
-            };
 
-            _nhibernateHandler.Setup(x => x.GetChannel(channelName)).Returns(channelInfo);
-
-            Assert.AreEqual(channelName, channelInfo.Name);
+            _channel.GetChannel(channelName);
+            _nhibernateHandler.Verify(x => x.GetChannel(channelName), Times.Once);
             
         }
     }
