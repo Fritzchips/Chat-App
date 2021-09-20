@@ -68,4 +68,4 @@ In order to run this application on your local machine, follow these steps in or
 
 ---
 
-- **Fritz Solibio** - _Software Development Mastermind Student_
+- **Fritz Solibio** - _Software Developer_ [LinkedIn](https://www.linkedin.com/in/fritz-solibio-4aa9b321b/) | [Website](https://www.fritzsolibio.ca/)
